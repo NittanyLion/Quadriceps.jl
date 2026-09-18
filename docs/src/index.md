@@ -27,13 +27,15 @@ The product of one-dimensional Gauss rules is such a rule with ``q^d`` nodes, wh
 | Le, ``d = 5``, ``p = 21`` | 161051 | 10984 |
 
 The package exports two functions, [`ghpos`](@ref) and [`lepos`](@ref), modeled on
-`gausshermite` and `gausslegendre` from FastGaussQuadrature.jl.
+`gausshermite(q)` and `gausslegendre(q)` from FastGaussQuadrature.jl: `q` is the number of nodes
+of the one-dimensional Gauss rule, and the rule returned has its degree, ``p = 2q - 1``.
 
 ```julia
 using Quadriceps
 
-X, w = ghpos(3, 7)          # 27 nodes for N(0, I₃), exact to degree 7
-X, w = lepos(2, 9)          # 17 nodes for the uniform density on [0,1]²
+X, w = ghpos(3, 4)          # 27 nodes for N(0, I₃), as exact as the 4×4×4 Gauss–Hermite grid (degree 7)
+X, w = lepos(2, 5)          # 17 nodes for the uniform density on [0,1]², degree 9
+X, w = ghpos(3; p = 7)      # the first rule again, requested by degree
 ```
 
 * [Guide](guide.md): conventions, the two keyword arguments, accuracy.

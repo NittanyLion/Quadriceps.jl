@@ -115,19 +115,20 @@ end
 # --- docs/src/rules.md ------------------------------------------------------------------------
 open(joinpath(PKG, "docs", "src", "rules.md"), "w") do io
     println(io, "# Stored rules\n")
-    println(io, "Written by `build/build_data.jl` on $(today()). `n`: number of nodes; `ρ = n^(1/d) / q` with")
-    println(io, "`q = (p+1)/2`: the node count relative to the `q^d` Gauss product grid (1.00 is that grid, smaller")
+    println(io, "Written by `build/build_data.jl` on $(today()). `q`: the argument of `ghpos(d, q)` and `lepos(d, q)`;")
+    println(io, "`p = 2q - 1`: degree of exactness; `n`: number of nodes; `ρ = n^(1/d) / q`: the node count")
+    println(io, "relative to the `q^d` Gauss product grid (1.00 is that grid, smaller")
     println(io, "is better); Möller: Möller's lower bound on `n` (**bold** `n`: bound attained, proven minimal);")
     println(io, "rel. err.: largest relative monomial error of the stored `Float64` rule; origin: `own`, or the")
     println(io, "published rule it is, or descends from (see [Credits](credits.md)).\n")
     for (fam, title) in ((:gh, "GH — Gaussian weight"), (:le, "Le — uniform weight on the cube"))
         println(io, "## $title\n")
         for d in sort!(unique(r.d for r in infos if r.family ≡ fam))
-            println(io, "### d = $d\n\n| p | n | ρ | Möller | rel. err. | origin |\n|---:|---:|---:|---:|---:|:---|")
+            println(io, "### d = $d\n\n| q | p | n | ρ | Möller | rel. err. | origin |\n|---:|---:|---:|---:|---:|---:|:---|")
             for r in infos
                 (r.family ≡ fam && r.d == d) || continue
                 ρ = r.n^(1 / d) / ((r.p + 1) ÷ 2)
-                @printf(io, "| %d | %s | %.2f | %s | %.1e | %s |\n", r.p, r.n == r.moller ? "**$(r.n)**" : string(r.n), ρ,
+                @printf(io, "| %d | %d | %s | %.2f | %s | %.1e | %s |\n", (r.p + 1) ÷ 2, r.p, r.n == r.moller ? "**$(r.n)**" : string(r.n), ρ,
                         r.moller < 0 ? "—" : string(r.moller), r.relerr, r.origin)
             end
             println(io)

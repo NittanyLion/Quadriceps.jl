@@ -3,11 +3,11 @@
 ## What is returned
 
 ```julia
-X, w = ghpos(d, p)
-X, w = lepos(d, p)
+X, w = ghpos(d, q)          # or ghpos(d; p = …)
+X, w = lepos(d, q)          # or lepos(d; p = …)
 ```
 
-`d ≥ 1` is the dimension and `p ≥ 0` the degree of exactness. `X` is an `n × d`
+`d ≥ 1` is the dimension; `q` and `p` are explained in the next section. `X` is an `n × d`
 `Matrix{Float64}` with one node per row, and `w` a `Vector{Float64}` of `n` strictly positive
 weights. An integral is approximated by
 
@@ -18,10 +18,27 @@ sum(w[i] * f(view(X, i, :)) for i in eachindex(w))
 Every call returns fresh arrays, so the result may be modified freely. Rule files are parsed on
 first use and cached, so later calls for the same rule cost a copy.
 
-The signatures follow `gausshermite(n; normalize)` and `gausslegendre(n)` of
-FastGaussQuadrature.jl. In several dimensions the number of nodes does not determine a rule, so
-the pair `(d, p)` takes the place of `n`. For `d = 1` the rule with `n` nodes has degree
-`2n - 1`.
+## `q` or `p`
+
+The signatures follow `gausshermite(q; normalize)` and `gausslegendre(q)` of
+FastGaussQuadrature.jl, where `q` is the number of nodes of the one-dimensional Gauss rule. That
+rule is exact to degree ``2q - 1``, and so is its `d`-fold product, the ``q^d``-node grid.
+`ghpos(d, q)` and `lepos(d, q)` return a rule of that same degree, ``p = 2q - 1``, with fewer
+nodes than the grid. So `q` keeps its one-dimensional meaning: it says which Gauss grid the rule
+stands in for. It is not the number of nodes returned, except for `d = 1`, where the result is
+the `q`-node Gauss rule itself.
+
+A second method takes the degree, as a required keyword:
+
+```julia
+ghpos(3; p = 7) == ghpos(3, 4)      # true
+lepos(2; p = 12)                    # any p ≥ 0; served by the rule for p = 13
+```
+
+Rules are stored at odd degrees. A request is served by the smallest stored rule of degree
+`≥ p`, since a rule exact to a higher degree is exact to degree `p`; an even `p` therefore gets
+the rule for `p + 1`. The helpers [`Quadriceps.nnodes`](@ref) and
+[`Quadriceps.ruleinfo`](@ref) accept `q` or `p` in the same two ways.
 
 ## Weights and the `normalize` keyword
 
@@ -37,8 +54,8 @@ same as in FastGaussQuadrature; only the default differs.
 | [`lepos`](@ref) | uniform density on ``[0,1]^d``; ``\sum w_i = 1`` | ``ω = 1`` on ``[-1,1]^d``; ``\sum w_i = 2^d`` |
 
 With `normalize = false` both functions follow FastGaussQuadrature's default conventions, so
-that `ghpos(1, 2n - 1; normalize = false)` is `gausshermite(n)` and
-`lepos(1, 2n - 1; normalize = false)` is `gausslegendre(n)`, up to the shape of `X`. The two
+that `ghpos(1, q; normalize = false)` is `gausshermite(q)` and
+`lepos(1, q; normalize = false)` is `gausslegendre(q)`, up to the shape of `X`. The two
 frames are related by
 
 ```math
@@ -52,7 +69,7 @@ Other Gaussian and rectangular weights follow by a change of variables. For
 rule of the same degree for ``Y``:
 
 ```julia
-X, w = ghpos(3, 9)
+X, w = ghpos(3, 5)
 Y = μ' .+ X * L'            # rows are the nodes for N(μ, LL')
 ```
 
@@ -63,11 +80,9 @@ with the same weights.
 
 Rules are stored for ``2 ≤ d ≤ 5`` and odd degrees up to a ceiling that depends on the family
 and on ``d`` (see [Stored rules](rules.md)). One dimension needs no storage: the Gauss rule
-with ``p ÷ 2 + 1`` nodes is optimal and is computed on the fly.
+is optimal and is computed on the fly.
 
-A request `(d, p)` is served by the smallest stored rule of dimension `d` and degree `≥ p`. A
-rule exact to a higher degree is exact to degree `p`, so an even `p` gets the rule for `p + 1`.
-When there is no such rule:
+When no stored rule of dimension `d` has degree `≥ p`:
 
 * with `pragmatic = false`, the default, the functions throw an `ArgumentError` whose message
   says how far the stored rules for that dimension go;
@@ -82,13 +97,13 @@ Gauss rule, and returns the combination with the fewest nodes. The columns of `X
 order of the factors, and the first factor varies slowest along the rows.
 
 ```julia
-julia> ghpos(7, 9)
-ERROR: ArgumentError: no stored positive-weight GH rule for d = 7, p = 9 (no rules are stored for d = 7); …
+julia> ghpos(7, 5)
+ERROR: ArgumentError: no stored positive-weight GH rule for d = 7, q = 5 (p = 9): no rules are stored for d = 7; …
 
-julia> X, w = ghpos(7, 9; pragmatic = true); size(X)
+julia> X, w = ghpos(7, 5; pragmatic = true); size(X)
 (4392, 7)
 
-julia> [(r.d, r.n) for r in Quadriceps.ruleinfo(:gh, 7, 9; pragmatic = true)]
+julia> [(r.d, r.n) for r in Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)]
 2-element Vector{Tuple{Int64, Int64}}:
  (2, 18)
  (5, 244)
@@ -96,7 +111,7 @@ julia> [(r.d, r.n) for r in Quadriceps.ruleinfo(:gh, 7, 9; pragmatic = true)]
 
 The product grid for that cell has ``5^7 = 78125`` nodes. When the degree, not the dimension,
 is out of range, the saving is smaller, because a one-dimensional Gauss factor is unavoidable:
-`lepos(3, 47; pragmatic = true)` has 9312 nodes (a 24-node Gauss rule times the 388-node rule
+`lepos(3, 24; pragmatic = true)` has 9312 nodes (a 24-node Gauss rule times the 388-node rule
 for ``d = 2``), against 13824 for the grid.
 
 `pragmatic = true` changes nothing for a request that a stored rule covers, with one proviso:
@@ -140,8 +155,8 @@ Everywhere else "smallest" means smallest known to the author, not smallest poss
 using Quadriceps: available, nnodes, ruleinfo
 
 [(r.p, r.n) for r in available(:le) if r.d == 4]     # degrees and node counts, Le, d = 4
-nnodes(:gh, 5, 13)                                    # 1135
-ruleinfo(:le, 3, 41)[1].origin                        # "derived: Diallo and Worku 2026, …"
+nnodes(:gh, 5, 7)                                     # 1135 (q = 7, degree 13)
+ruleinfo(:le, 3; p = 41)[1].origin                       # "derived: Diallo and Worku 2026, …"
 ```
 
 Each rule is a plain text file `data/<family>/<family>_d<d>_p<p>_n<n>.csv`: comment lines

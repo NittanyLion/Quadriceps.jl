@@ -51,11 +51,12 @@ function cheapest(index::Catalog, family::Symbol, d::Integer, p::Integer)
 end
 
 function norule(family::Symbol, d::Integer, p::Integer, index::Catalog)
-    name = family ≡ :gh ? "ghpos" : "lepos"
     ps = [info.p for info in values(index) if info.family ≡ family && info.d == d]
-    have = isempty(ps) ? "no rules are stored for d = $d" : "stored rules for d = $d reach p = $(maximum(ps))"
-    ArgumentError("no stored positive-weight $(family ≡ :gh ? "GH" : "Le") rule for d = $d, p = $p ($have); " *
-                  "$name($d, $p; pragmatic = true) returns the cheapest tensor product of lower-dimensional rules instead")
+    have = isempty(ps) ? "no rules are stored for d = $d" :
+           "stored rules for d = $d reach q = $((maximum(ps) + 1) ÷ 2), p = $(maximum(ps))"
+    at = isodd(p) ? "q = $((p + 1) ÷ 2) (p = $p)" : "p = $p"
+    ArgumentError("no stored positive-weight $(family ≡ :gh ? "GH" : "Le") rule for d = $d, $at: $have; " *
+                  "pragmatic = true returns the cheapest tensor product of lower-dimensional rules instead")
 end
 
 function plan(index::Catalog, family::Symbol, d::Integer, p::Integer, pragmatic::Bool)

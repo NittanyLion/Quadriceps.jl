@@ -33,7 +33,7 @@ rule is exact to rounding. The element type of `X` and `w` sets the arithmetic: 
 `normalize = false` must be checked in the normalized frame.
 
 ```julia
-X, w = ghpos(4, 9)
+X, w = ghpos(4, 5)                           # degree 2·5 - 1 = 9
 Quadriceps.exactness_error(X, w, 9, :gh)     # ≈ 4e-16
 ```
 """

@@ -4,22 +4,22 @@ Positive-weight cubature rules in several dimensions, for two weights:
 
 | function | weight (default) | one-dimensional cousin |
 |---|---|---|
-| `ghpos(d, p)` | standard normal density `N(0, I_d)` on `R^d` | `gausshermite` |
-| `lepos(d, p)` | uniform density on `[0,1]^d` | `gausslegendre` |
+| `ghpos(d, q)` | standard normal density `N(0, I_d)` on `R^d` | `gausshermite(q)` |
+| `lepos(d, q)` | uniform density on `[0,1]^d` | `gausslegendre(q)` |
 
 A rule of degree `p` is a set of `n` nodes `x_i ∈ R^d` and weights `w_i > 0` with
 `Σ w_i f(x_i) = ∫ f(x) ω(x) dx` for every polynomial `f` of total degree `≤ p`. The product of
-one-dimensional Gauss rules does this with `q^d` nodes, `q = (p+1)/2`. The rules stored here do
-it with far fewer: 244 nodes instead of 3125 for the Gaussian weight at `d = 5, p = 9`, 10984
+`q`-node one-dimensional Gauss rules does this for `p = 2q - 1` with `q^d` nodes. The rules
+stored here do it with far fewer: 244 nodes instead of 3125 for the Gaussian weight at `d = 5, p = 9`, 10984
 instead of 161051 for the cube at `d = 5, p = 21`. They are the smallest positive-weight rules
 known to the author, 148 in all:
 
-| `d` | GH degrees | largest GH rule | Le degrees | largest Le rule |
+| `d` | GH | largest GH rule | Le | largest Le rule |
 |---|---|---|---|---|
-| 2 | 1, 3, …, 43 | 482 nodes | 1, 3, …, 77 | 1032 nodes |
-| 3 | 1, 3, …, 35 | 4750 nodes | 1, 3, …, 45 | 4308 nodes |
-| 4 | 1, 3, …, 23 | 3238 nodes | 1, 3, …, 23 | 3244 nodes |
-| 5 | 1, 3, …, 21 | 13199 nodes | 1, 3, …, 21 | 10984 nodes |
+| 2 | `q ≤ 22` (`p ≤ 43`) | 482 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
+| 3 | `q ≤ 18` (`p ≤ 35`) | 4749 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
+| 4 | `q ≤ 12` (`p ≤ 23`) | 3238 nodes | `q ≤ 12` (`p ≤ 23`) | 3244 nodes |
+| 5 | `q ≤ 11` (`p ≤ 21`) | 13199 nodes | `q ≤ 11` (`p ≤ 21`) | 10984 nodes |
 
 The full list, with node counts, Möller's lower bound, measured accuracy and the origin of each
 rule, is in [`docs/src/rules.md`](docs/src/rules.md).
@@ -40,17 +40,25 @@ Julia 1.10 or later. The only dependency is FastGaussQuadrature.jl.
 ```julia
 using Quadriceps
 
-X, w = ghpos(3, 7)              # d = 3, degree 7: X is 27×3 (one node per row), w has length 27
+X, w = ghpos(3, 4)              # d = 3, q = 4 (degree 7): X is 27×3 (one node per row), w has length 27
 f(x) = x[1]^2 * x[2]^4
 sum(w[i] * f(X[i, :]) for i in eachindex(w))        # E[Z₁² Z₂⁴] = 3.0
 
-X, w = lepos(2, 9)              # 17 nodes on the unit square
+X, w = lepos(2, 5)              # q = 5 (degree 9): 17 nodes on the unit square instead of 25
 sum(w .* X[:, 1] .^ 3 .* X[:, 2] .^ 2)              # 1/4 · 1/3
+
+ghpos(3; p = 7) == ghpos(3, 4)  # true: the keyword p requests a rule by its degree
 ```
 
-Both functions take the dimension `d ≥ 1` and the degree `p ≥ 0` and return `(X, w)`, in the
-manner of `gausshermite(n)` and `gausslegendre(n)` from FastGaussQuadrature.jl, with `(d, p)` in
-place of the number of nodes. `X` is an `n × d` matrix, `w` a vector of `n` positive weights.
+Both functions follow `gausshermite(q)` and `gausslegendre(q)` from FastGaussQuadrature.jl, with
+the dimension `d ≥ 1` in front. There, `q` is the number of nodes of the one-dimensional Gauss
+rule, which is exact to degree `2q - 1`. Here, `ghpos(d, q)` returns a `d`-dimensional rule of
+that same degree `p = 2q - 1`: a replacement for the `q^d`-node product grid, and for `d = 1`
+the `q`-node Gauss rule itself. `X` is an `n × d` matrix, `w` a vector of `n` positive weights.
+
+To ask for a degree instead, use the method with the keyword `p`: `ghpos(d; p = 7)`,
+`lepos(d; p = 12)`. Any `p ≥ 0` is accepted. Rules are stored at odd degrees and a request is
+served by the smallest stored rule of degree `≥ p`, so an even `p` gets the rule for `p + 1`.
 
 ### `normalize`
 
@@ -64,12 +72,13 @@ FastGaussQuadrature's default, with the same meaning of the keyword:
 | `ghpos` | weight `(2π)^(-d/2) exp(-|x|²/2)`; weights sum to 1 | weight `exp(-|x|²)`; weights sum to `π^(d/2)` |
 | `lepos` | uniform density on `[0,1]^d`; weights sum to 1 | `∫ f(x) dx` over `[-1,1]^d`; weights sum to `2^d` |
 
-So `ghpos(1, 2n-1; normalize = false)` is `gausshermite(n)` and `lepos(1, 2n-1; normalize = false)`
-is `gausslegendre(n)`, up to the shape of `X`.
+So `ghpos(1, q; normalize = false)` is `gausshermite(q)`, `ghpos(1, q)` is
+`gausshermite(q; normalize = true)`, and `lepos(1, q; normalize = false)` is `gausslegendre(q)`,
+up to the shape of `X`.
 
 ### `pragmatic`
 
-Rules are stored for `2 ≤ d ≤ 5` up to the degrees in the table above. For any other `(d, p)`:
+Rules are stored for `2 ≤ d ≤ 5` up to the ceilings in the table above. For any other request:
 
 * `pragmatic = false` (the default) throws an `ArgumentError`, which says how far the stored
   rules go;
@@ -79,12 +88,12 @@ Rules are stored for `2 ≤ d ≤ 5` up to the degrees in the table above. For a
   smaller than the plain product grid whenever a stored rule can be a factor.
 
 ```julia
-ghpos(7, 9)                             # ArgumentError: no stored rule in seven dimensions
-X, w = ghpos(7, 9; pragmatic = true)    # 4392 nodes: (d = 2, n = 18) × (d = 5, n = 244); the grid has 78125
-X, w = lepos(3, 47; pragmatic = true)   # 9312 nodes: Gauss (24) × (d = 2, n = 388); the grid has 13824
+ghpos(7, 5)                             # ArgumentError: no stored rule in seven dimensions
+X, w = ghpos(7, 5; pragmatic = true)    # 4392 nodes: (d = 2, n = 18) × (d = 5, n = 244); the grid has 78125
+X, w = lepos(3, 24; pragmatic = true)   # 9312 nodes: Gauss (24) × (d = 2, n = 388); the grid has 13824
 
-Quadriceps.nnodes(:gh, 10, 5; pragmatic = true)     # 1024, without building the rule
-Quadriceps.ruleinfo(:gh, 7, 9; pragmatic = true)    # the factors, with their origins
+Quadriceps.nnodes(:gh, 10, 3; pragmatic = true)     # 1024, without building the rule
+Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)    # the factors, with their origins
 ```
 
 With `pragmatic = true` a request that a stored rule covers returns that stored rule, as without
@@ -94,13 +103,13 @@ that a product matches.)
 
 ### Other details
 
-* `d = 1` gives the Gauss rule with `p ÷ 2 + 1` nodes, as an `n × 1` matrix.
-* Rules are stored at odd degrees. A request is served by the smallest stored rule of degree
-  `≥ p`, so an even `p` gets the rule for `p + 1`.
+* `d = 1` gives the Gauss rule with `q` nodes (`p ÷ 2 + 1` when `p` is given), as an `n × 1`
+  matrix.
 * Every call returns fresh arrays. Rule files are parsed on first use and cached.
 * Unexported helpers: `Quadriceps.available(family)` lists the stored rules,
-  `Quadriceps.nnodes(family, d, p; pragmatic)` gives a node count without building the rule,
-  `Quadriceps.ruleinfo(family, d, p; pragmatic)` describes the rule and its origin, and
+  `Quadriceps.nnodes(family, d, q; pragmatic)` gives a node count without building the rule,
+  `Quadriceps.ruleinfo(family, d, q; pragmatic)` describes the rule and its origin (both also
+  take `p` as a keyword in place of `q`), and
   `Quadriceps.exactness_error(X, w, p, family)` measures how exact a rule is. `family` is `:gh`
   or `:le`.
 

@@ -14,9 +14,13 @@ The two exported functions mirror `gausshermite` and `gausslegendre` from
 FastGaussQuadrature.jl:
 
 ```julia
-X, w = ghpos(3, 7)      # 27 nodes; X is 27×3, w has length 27
-X, w = lepos(2, 9)      # 17 nodes on the unit square
+X, w = ghpos(3, 4)        # as exact as the 4×4×4 Gauss–Hermite grid (degree 7), with 27 nodes
+X, w = ghpos(3; p = 7)    # the same rule, requested by degree
+X, w = lepos(2, 5)        # degree 9 on the unit square: 17 nodes instead of 25
 ```
+
+The second argument `q` is the number of nodes of the one-dimensional Gauss rule whose
+exactness is wanted, as in `gausshermite(q)`; the degree is `p = 2q - 1`.
 
 Unexported but public: [`Quadriceps.available`](@ref), [`Quadriceps.nnodes`](@ref),
 [`Quadriceps.ruleinfo`](@ref), [`Quadriceps.exactness_error`](@ref).
