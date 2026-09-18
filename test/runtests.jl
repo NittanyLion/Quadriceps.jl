@@ -1,4 +1,5 @@
 using Quadriceps, Test
+using Aqua
 using FastGaussQuadrature: gausshermite, gausslegendre
 using Quadriceps: available, nnodes, ruleinfo, exactness_error
 
@@ -6,6 +7,10 @@ using Quadriceps: available, nnodes, ruleinfo, exactness_error
 const GATE = 1e-11
 
 @testset "Quadriceps" begin
+
+    @testset "Aqua" begin
+        Aqua.test_all(Quadriceps)
+    end
 
     @testset "catalog" begin
         @test !isempty(available(:gh)) && !isempty(available(:le))

@@ -1,7 +1,7 @@
 # Quadriceps.jl
 
 !!! note "Paper and data deposit"
-    J. Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv:
+    Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv:
     [ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA); Zenodo deposit, DOI:
     [ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA). Both links will be filled in on publication.
 

@@ -1,8 +1,12 @@
+<p align="center"><img src="docs/src/assets/logo.svg" alt="Quadriceps logo" width="200"></p>
+
 # Quadriceps.jl
 
 [![CI](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
+[![Authored by Joris Pinkse](https://img.shields.io/badge/authored%20by-Joris%20Pinkse-blue.svg)](https://github.com/NittanyLion)
 
-> **Paper:** J. Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
+> **Paper:** Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
 >
 > **Data deposit:** Zenodo — DOI: **[ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA)** (link to be filled in on publication)
 
