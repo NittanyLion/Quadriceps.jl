@@ -80,6 +80,7 @@ sibling() {
   mkdir -p "$dir/$data"
   rsync -a --delete "$PKG/data/" "$dir/$data/"
   sed 's|(credits.md)|(NOTICE.md)|' "$PKG/docs/src/rules.md" > "$dir/RULES.md"
+  sed -e 's|(credits.md)|(NOTICE.md)|' -e 's|^# Data format|# Data format of rules.bin|' "$PKG/docs/src/format.md" > "$dir/FORMAT.md"
   cp "$PKG/NOTICE.md" "$dir/NOTICE.md"
   clean "$dir" && return 0
   if ( cd "$dir" && nice -n 19 "$@" ) >"$STATE/test-$(basename "$dir").log" 2>&1; then

@@ -2,7 +2,7 @@
 
 Most stored rules were computed by the package author. The others are rules from the
 literature, or descend from one. The `origin` of each rule ([Stored rules](rules.md),
-[`Quadriceps.ruleinfo`](@ref), `data/index.tsv`, and the header of each rule file) is one of:
+[`Quadriceps.ruleinfo`](@ref), `data/index.tsv`, and the `source_id` in `data/rules.bin`) is one of:
 
 * `own` — computed by the author, with no published rule as its starting point;
 * `transcribed: …` — the published rule itself, copied in;

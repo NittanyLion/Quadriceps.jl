@@ -1,5 +1,10 @@
 # Quadriceps.jl
 
+!!! note "Paper and data deposit"
+    J. Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv:
+    [ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA); Zenodo deposit, DOI:
+    [ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA). Both links will be filled in on publication.
+
 Positive-weight cubature rules in several dimensions, for the Gaussian weight and for the
 uniform weight on the cube.
 
@@ -39,5 +44,6 @@ X, w = ghpos(3; p = 7)      # the first rule again, requested by degree
 
 * [Guide](guide.md): conventions, the two keyword arguments, accuracy.
 * [Stored rules](rules.md): every rule, with its node count, Möller's bound, error and origin.
+* [Data format](format.md): the single binary file that holds the rules.
 * [Reference](api.md): docstrings.
 * [Credits](credits.md): whose rules these are, and what to cite.

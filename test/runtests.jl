@@ -113,6 +113,24 @@ const GATE = 1e-11
         @test_throws ArgumentError ghpos(60, 16; pragmatic = true)
     end
 
+    @testset "data file" begin
+        using Quadriceps: readbinindex, readblock, writebin, binpath, BIN, INDEX
+        @test startswith(readline(binpath()), "QUADRICEPS1 fmt=1 endian=little cells=$(length(INDEX)) index_fields=8 float=binary64")
+        @test keys(BIN) == keys(INDEX)
+        @test all(BIN[k].n == r.n && BIN[k].source_id == r.source_id && BIN[k].nbytes == r.n * (r.d + 1) * 8 for (k, r) in INDEX)
+        @test filesize(binpath()) == maximum(e.offset + e.nbytes for e in values(BIN))      # no slack
+        @test isempty([f for (_, _, fs) in walkdir(dirname(binpath())) for f in fs if endswith(f, ".csv")])
+        # round trip through a second file
+        rules = Dict(k => (ghpos(k[2]; p = k[3])..., 7) for k in [(:gh, 2, 5), (:gh, 3, 7)])
+        rules[(:le, 2, 9)] = (lepos(2; p = 9)..., 16)
+        mktempdir() do dir
+            path = writebin(joinpath(dir, "t.bin"), rules)
+            bin = readbinindex(path)
+            @test keys(bin) == keys(rules)
+            @test all(readblock(path, bin[k], k[2]) == rules[k][1:2] && bin[k].source_id == rules[k][3] for k in keys(rules))
+        end
+    end
+
     @testset "results are copies" begin
         X, w = ghpos(2, 3)
         X .= 0; w .= 0

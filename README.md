@@ -1,5 +1,9 @@
 # Quadriceps.jl
 
+> **Paper:** J. Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
+>
+> **Data deposit:** Zenodo — DOI: **[ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA)** (link to be filled in on publication)
+
 Positive-weight cubature rules in several dimensions, for two weights:
 
 | function | weight (default) | one-dimensional cousin |
@@ -111,7 +115,9 @@ that a product matches.)
 
 * `d = 1` gives the Gauss rule with `q` nodes (`p ÷ 2 + 1` when `p` is given), as an `n × 1`
   matrix.
-* Every call returns fresh arrays. Rule files are parsed on first use and cached.
+* Every call returns fresh arrays. A rule is read from the data file on first use and cached.
+* All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog;
+  [`docs/src/format.md`](docs/src/format.md) specifies the format.
 * Unexported helpers: `Quadriceps.available(family)` lists the stored rules,
   `Quadriceps.nnodes(family, d, q; pragmatic)` gives a node count without building the rule,
   `Quadriceps.ruleinfo(family, d, q; pragmatic)` describes the rule and its origin (both also

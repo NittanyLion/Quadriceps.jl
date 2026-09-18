@@ -2,11 +2,24 @@
 
 Guidance for coding agents (and people) working in this repository.
 
+## Paper and deposit — links to fill in
+
+The rules are described in J. Pinkse, *Positive weight Hermite and Legendre quadrature rules*,
+and deposited on Zenodo. Neither is public yet, so the links are placeholders:
+
+* arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)**
+* Zenodo: **[ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA)**
+
+When the author supplies them, replace the tokens `ARXIV-LINK-TBA` and `ZENODO-DOI-TBA`
+everywhere they occur (`grep -rn 'LINK-TBA\|DOI-TBA' .`), in all three packages (Quadriceps.jl,
+quadriceps-py, quadriceps-r), and drop the "to be filled in" remarks. Keep the block at the top
+of `README.md`.
+
 ## What this is
 
 Quadriceps.jl serves positive-weight cubature rules for two weights: the Gaussian weight (GH,
-`ghpos`) and the uniform weight on the cube (Le, `lepos`). The rules are data: 148 text files
-under `data/`, selected from the rule bank of the author's designed-quadrature project. The
+`ghpos`) and the uniform weight on the cube (Le, `lepos`). The rules are data: one binary file,
+`data/rules.bin`, selected from the rule bank of the author's designed-quadrature project. The
 code is small; it looks rules up, builds tensor products when asked, and checks exactness.
 
 ## Layout
@@ -14,11 +27,11 @@ code is small; it looks rules up, builds tensor products when asked, and checks 
 | path | what it holds |
 |---|---|
 | `src/Quadriceps.jl` | module, exports (`ghpos`, `lepos`), `public` names |
-| `src/index.jl` | `RuleInfo`, the catalog (`INDEX`, read from `data/index.tsv` in `__init__`), rule-file parser, cache, `available` |
+| `src/index.jl` | `RuleInfo`, the catalog (`INDEX`, read from `data/index.tsv` in `__init__`), reader and writer of `data/rules.bin` (format `QUADRICEPS1`), cache, `available` |
 | `src/plan.jl` | which rule answers a request: `beststored`, `atom`, `cheapest` (dynamic program over splits of `d`), the no-rule error, `gauss1d`, `tensor`, `materialize` |
 | `src/api.jl` | `ghpos`, `lepos`, `nnodes`, `ruleinfo`: the `(d, q)` methods and the `(d; p)` methods, and the `normalize = false` transforms |
 | `src/verify.jl` | `exactness_error`: largest relative monomial error against closed-form moments |
-| `data/<family>/*.csv`, `data/index.tsv` | the rules and their catalog — **generated, never edited by hand** |
+| `data/rules.bin`, `data/index.tsv` | all rules in one binary file, and their catalog — **generated, never edited by hand**; format in `docs/src/format.md` |
 | `build/build_data.jl` | regenerates `data/`, `docs/src/rules.md` and the generated blocks of `README.md` from the rule bank (own environment in `build/`) |
 | `build/update.sh` | the unattended updater (hourly cron on one machine): rebuild, test, commit, push, then sync the sister packages `../quadriceps-py` and `../quadriceps-r` |
 | `docs/` | Documenter.jl site (own environment); `docs/src/rules.md` is generated |
@@ -60,6 +73,11 @@ only on the author's machines; everything else works from a plain clone.
 * **Matrix shape.** `X` is `n × d`, one node per row, also for `d = 1`.
 
 ## Data rules
+
+* **One binary file.** The rules are stored in `data/rules.bin` only. Never add per-rule CSV or
+  other text files to this repository or to the twins; the history was purged of them on
+  2026-09-18 at the author's request. A format change needs a new magic/`fmt`, a matching
+  change in all three readers, and `docs/src/format.md`.
 
 * Do not edit `data/`, `docs/src/rules.md` or the `GENERATED` blocks of `README.md` by hand;
   change `build/build_data.jl` and rerun it. The bank changes over time and `build/update.sh`

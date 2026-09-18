@@ -1,8 +1,8 @@
 # Third-party notice
 
-Most rules in `data/` were computed by the package author. Some are, or descend from, rules
-published by others. `data/index.tsv` (column `origin`) and the header of every rule file say
-which; `Quadriceps.ruleinfo` reports it at run time. The relations are:
+Most rules in the data file (`rules.bin`) were computed by the package author. Some are, or
+descend from, rules published by others. The catalog `index.tsv` (column `origin`) and the
+`source_id` of each rule in `rules.bin` say which; `ruleinfo` reports it at run time. The relations are:
 
 * **transcribed** — the published rule itself, copied in; no search of the author's was involved;
 * **same-rule** — the author's search converged to a rule identical to a published one (matched
@@ -11,7 +11,7 @@ which; `Quadriceps.ruleinfo` reports it at run time. The relations are:
   `(d, p)` and went below its node count; the count is new, the starting point is theirs.
 
 Anyone using one of these rules should cite the source named in its `origin`. Full references
-are in `docs/src/credits.md`.
+are in `docs/src/credits.md` of Quadriceps.jl.
 
 ## Rules derived from Diallo and Worku's data (MIT license)
 
@@ -19,7 +19,7 @@ The Le rules `d = 2, p = 77` and `d = 3, p = 27, 29, …, 45` descend from the r
 M. Diallo and Z. A. Worku, *High-order symmetric positive interior quadrature rules on two and
 three dimensional domains*, arXiv:2601.14488 (2026), data at
 `github.com/mdiallo-fula/SymmetricPositiveInteriorCubatures.jl`, which is released under the
-MIT license. Those files are modified copies in the sense of that license, whose notice
+MIT license. Those rules are modified copies in the sense of that license, whose notice
 follows and applies to them:
 
 ```

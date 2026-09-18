@@ -9,6 +9,7 @@ makedocs(
         "Home" => "index.md",
         "Guide" => "guide.md",
         "Stored rules" => "rules.md",
+        "Data format" => "format.md",
         "Reference" => "api.md",
         "Credits" => "credits.md",
     ],

@@ -1,150 +1,151 @@
 # Quadriceps.jl rule catalog — written by build/build_data.jl; do not edit by hand
-family	d	p	n	moller	relerr	minweight	interior	origin	file
-gh	2	1	1	1	0.000e+00	1.000000e+00	yes	own	gh_d2_p1_n1.csv
-gh	2	3	4	4	2.220e-16	1.398499e-01	yes	own	gh_d2_p3_n4.csv
-gh	2	5	7	7	2.220e-16	8.333333e-02	yes	same-rule: Stroud 1971, E_2^{r^2}:5-4 (identified 2026-09-11; same up to rotation, which the Gaussian weight permits)	gh_d2_p5_n7.csv
-gh	2	7	12	12	4.737e-16	8.285084e-03	yes	own	gh_d2_p7_n12.csv
-gh	2	9	18	17	9.474e-16	9.400916e-07	yes	transcribed: Haegemans and Piessens 1977	gh_d2_p9_n18.csv
-gh	2	11	25	24	5.921e-16	1.175292e-07	yes	transcribed: Haegemans and Piessens 1976, hexagonal	gh_d2_p11_n25.csv
-gh	2	13	34	31	7.218e-16	3.858457e-07	yes	transcribed: Cools and Haegemans 1988	gh_d2_p13_n34.csv
-gh	2	15	44	40	4.307e-16	4.702143e-06	yes	own	gh_d2_p15_n44.csv
-gh	2	17	55	49	9.189e-16	6.672687e-07	yes	own	gh_d2_p17_n55.csv
-gh	2	19	68	60	5.743e-16	3.147106e-07	yes	own	gh_d2_p19_n68.csv
-gh	2	21	82	71	8.649e-16	1.353885e-10	yes	own	gh_d2_p21_n82.csv
-gh	2	23	97	84	7.204e-16	4.220105e-13	yes	own	gh_d2_p23_n97.csv
-gh	2	25	114	97	7.283e-16	9.411532e-11	yes	own	gh_d2_p25_n114.csv
-gh	2	27	132	112	1.158e-15	3.993119e-15	yes	own	gh_d2_p27_n132.csv
-gh	2	29	153	127	1.080e-15	3.739485e-14	yes	own	gh_d2_p29_n153.csv
-gh	2	31	178	144	6.176e-16	2.977893e-13	yes	own	gh_d2_p31_n178.csv
-gh	2	33	208	161	8.020e-13	2.691462e-13	yes	own	gh_d2_p33_n208.csv
-gh	2	35	264	180	1.167e-15	4.854778e-15	yes	own	gh_d2_p35_n264.csv
-gh	2	37	357	199	1.931e-12	8.461358e-22	yes	own	gh_d2_p37_n357.csv
-gh	2	39	394	220	4.122e-12	6.177614e-24	yes	own	gh_d2_p39_n394.csv
-gh	2	41	439	241	7.368e-12	7.618084e-28	yes	own	gh_d2_p41_n439.csv
-gh	2	43	482	264	8.468e-12	2.145253e-29	yes	own	gh_d2_p43_n482.csv
-gh	3	1	1	1	0.000e+00	1.000000e+00	yes	own	gh_d3_p1_n1.csv
-gh	3	3	6	6	2.776e-17	1.491498e-01	yes	own	gh_d3_p3_n6.csv
-gh	3	5	13	13	2.961e-16	5.000000e-02	yes	transcribed: Stroud 1971, icosahedral (closed form)	gh_d3_p5_n13.csv
-gh	3	7	27	26	4.737e-16	5.195469e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1)	gh_d3_p7_n27.csv
-gh	3	9	45	43	4.060e-16	4.629630e-04	yes	same-rule: Konyaev 1977, rule 1 for the weight exp(-rho^2) (identified 2026-09-16 against the closed form printed in Dokl. Akad. Nauk SSSR 233 no. 5, 784-787; same up to rotation, node displacement 9.7e-16)	gh_d3_p9_n45.csv
-gh	3	11	77	68	8.421e-16	1.239467e-07	yes	own	gh_d3_p11_n77.csv
-gh	3	13	128	99	4.439e-16	2.264376e-06	yes	own	gh_d3_p13_n128.csv
-gh	3	15	184	140	2.100e-15	3.411525e-13	yes	own	gh_d3_p15_n184.csv
-gh	3	17	264	189	6.892e-16	3.913587e-09	yes	own	gh_d3_p17_n264.csv
-gh	3	19	354	250	1.078e-15	4.180546e-09	yes	own	gh_d3_p19_n354.csv
-gh	3	21	476	321	4.666e-16	5.465487e-10	yes	own	gh_d3_p21_n476.csv
-gh	3	23	597	406	5.847e-16	6.377046e-12	yes	own	gh_d3_p23_n597.csv
-gh	3	25	776	503	5.462e-16	7.166525e-12	yes	own	gh_d3_p25_n776.csv
-gh	3	27	966	616	7.399e-16	2.440775e-13	yes	own	gh_d3_p27_n966.csv
-gh	3	29	1242	743	5.601e-16	1.171016e-12	yes	own	gh_d3_p29_n1242.csv
-gh	3	31	1848	888	1.219e-12	3.825130e-13	yes	own	gh_d3_p31_n1848.csv
-gh	3	33	2226	1049	3.396e-12	3.080125e-14	yes	own	gh_d3_p33_n2226.csv
-gh	3	35	4749	1230	3.872e-12	2.144144e-26	yes	own	gh_d3_p35_n4749.csv
-gh	4	1	1	1	0.000e+00	1.000000e+00	yes	own	gh_d4_p1_n1.csv
-gh	4	3	8	8	2.220e-16	1.178522e-01	yes	own	gh_d4_p3_n8.csv
-gh	4	5	22	21	4.441e-16	5.567184e-03	yes	own	gh_d4_p5_n22.csv
-gh	4	7	49	48	9.474e-16	5.898367e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1)	gh_d4_p7_n49.csv
-gh	4	9	116	91	4.737e-16	5.941785e-06	yes	own	gh_d4_p9_n116.csv
-gh	4	11	193	160	1.776e-15	1.309825e-07	yes	own	gh_d4_p11_n193.csv
-gh	4	13	414	259	4.060e-16	4.640473e-06	yes	own	gh_d4_p13_n414.csv
-gh	4	15	577	400	5.000e-15	1.086122e-08	yes	own	gh_d4_p15_n577.csv
-gh	4	17	1056	589	3.947e-16	3.356994e-09	yes	own	gh_d4_p17_n1056.csv
-gh	4	19	1505	840	5.743e-16	2.606992e-09	yes	own	gh_d4_p19_n1505.csv
-gh	4	21	2318	1161	6.486e-16	5.525601e-11	yes	own	gh_d4_p21_n2318.csv
-gh	4	23	3238	1568	7.283e-16	2.958027e-12	yes	own	gh_d4_p23_n3238.csv
-gh	5	1	1	1	0.000e+00	1.000000e+00	yes	own	gh_d5_p1_n1.csv
-gh	5	3	10	10	4.441e-16	1.000000e-01	yes	same-rule: Stroud 1971, E_n^{r^2}:3-1 (identified 2026-09-11, displacement 0.0; order 2N = 10 at N=5)	gh_d5_p3_n10.csv
-gh	5	5	32	31	2.961e-16	6.415099e-03	yes	transcribed: Stroud and Secrest 1963, E5r2:5-1	gh_d5_p5_n32.csv
-gh	5	7	83	80	7.105e-16	6.858711e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 (identified 2026-09-11, compare_rules.jl over B_5)	gh_d5_p7_n83.csv
-gh	5	9	244	171	3.947e-15	6.618270e-07	yes	own	gh_d5_p9_n244.csv
-gh	5	11	485	332	7.895e-16	1.578040e-06	yes	own	gh_d5_p11_n485.csv
-gh	5	13	1135	591	6.999e-16	1.287714e-06	yes	own	gh_d5_p13_n1135.csv
-gh	5	15	1767	992	7.895e-16	6.027352e-12	yes	own	gh_d5_p15_n1767.csv
-gh	5	17	3986	1581	1.776e-15	2.115044e-14	yes	own	gh_d5_p17_n3986.csv
-gh	5	19	7174	2422	4.663e-15	3.553242e-12	yes	own	gh_d5_p19_n7174.csv
-gh	5	21	13199	3583	9.125e-15	8.424488e-11	yes	own	gh_d5_p21_n13199.csv
-le	2	1	1	1	0.000e+00	1.000000e+00	yes	own	le_d2_p1_n1.csv
-le	2	3	4	4	5.551e-17	2.087571e-01	yes	own	le_d2_p3_n4.csv
-le	2	5	7	7	5.551e-17	9.795308e-02	yes	own	le_d2_p5_n7.csv
-le	2	7	12	12	2.776e-16	4.067088e-02	yes	own	le_d2_p7_n12.csv
-le	2	9	17	17	5.551e-17	2.221984e-02	yes	same-rule: Festa and Sommariva 2012, SMR09 (count first published by Moller 1976)	le_d2_p9_n17.csv
-le	2	11	24	24	1.110e-16	6.434395e-03	yes	own	le_d2_p11_n24.csv
-le	2	13	33	31	1.110e-16	7.497960e-03	yes	same-rule: Festa and Sommariva 2012, SMR13	le_d2_p13_n33.csv
-le	2	15	43	40	1.110e-16	2.399496e-03	yes	same-rule: Festa and Sommariva 2012, SMR15	le_d2_p15_n43.csv
-le	2	17	54	49	1.110e-16	2.287453e-03	yes	own	le_d2_p17_n54.csv
-le	2	19	67	60	6.939e-17	1.046620e-03	yes	own	le_d2_p19_n67.csv
-le	2	21	81	71	2.220e-16	1.661768e-03	yes	own	le_d2_p21_n81.csv
-le	2	23	96	84	5.551e-17	6.113048e-04	yes	own	le_d2_p23_n96.csv
-le	2	25	113	97	2.776e-17	3.647569e-06	yes	transcribed: Festa and Sommariva 2012, SMR25	le_d2_p25_n113.csv
-le	2	27	131	112	2.220e-16	2.573336e-04	yes	own	le_d2_p27_n131.csv
-le	2	29	150	127	1.110e-16	1.753277e-04	yes	own	le_d2_p29_n150.csv
-le	2	31	171	144	2.220e-16	1.641750e-04	yes	own	le_d2_p31_n171.csv
-le	2	33	194	161	2.220e-16	1.621446e-04	yes	own	le_d2_p33_n194.csv
-le	2	35	216	180	2.220e-16	1.664493e-04	yes	own	le_d2_p35_n216.csv
-le	2	37	242	199	1.110e-16	2.112763e-04	yes	own	le_d2_p37_n242.csv
-le	2	39	268	220	1.110e-16	6.117957e-05	yes	own	le_d2_p39_n268.csv
-le	2	41	294	241	5.551e-17	7.414332e-05	yes	own	le_d2_p41_n294.csv
-le	2	43	324	264	1.110e-16	6.516295e-05	yes	own	le_d2_p43_n324.csv
-le	2	45	356	287	2.220e-16	4.411974e-05	yes	own	le_d2_p45_n356.csv
-le	2	47	388	312	1.110e-16	4.763416e-05	yes	own	le_d2_p47_n388.csv
-le	2	49	422	337	5.551e-17	7.855637e-05	yes	own	le_d2_p49_n422.csv
-le	2	51	456	364	5.551e-17	6.295091e-05	yes	own	le_d2_p51_n456.csv
-le	2	53	492	391	5.551e-17	4.908801e-05	yes	own	le_d2_p53_n492.csv
-le	2	55	528	420	5.551e-17	2.196017e-05	yes	own	le_d2_p55_n528.csv
-le	2	57	570	449	5.551e-17	1.939503e-05	yes	own	le_d2_p57_n570.csv
-le	2	59	606	480	3.331e-16	1.073973e-05	yes	own	le_d2_p59_n606.csv
-le	2	61	642	511	5.551e-17	9.496125e-06	yes	own	le_d2_p61_n642.csv
-le	2	63	692	544	1.110e-16	9.317281e-06	yes	own	le_d2_p63_n692.csv
-le	2	65	732	577	1.110e-16	1.478792e-05	yes	own	le_d2_p65_n732.csv
-le	2	67	780	612	5.551e-17	7.907664e-06	yes	own	le_d2_p67_n780.csv
-le	2	69	826	647	1.110e-16	7.015165e-06	yes	own	le_d2_p69_n826.csv
-le	2	71	872	684	5.551e-17	1.419597e-05	yes	own	le_d2_p71_n872.csv
-le	2	73	922	721	1.110e-16	1.231460e-05	yes	own	le_d2_p73_n922.csv
-le	2	75	980	760	2.220e-16	1.035265e-05	yes	own	le_d2_p75_n980.csv
-le	2	77	1032	799	5.551e-17	5.123054e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d2_p77_n1049 for the same cell	le_d2_p77_n1032.csv
-le	3	1	1	1	0.000e+00	1.000000e+00	yes	own	le_d3_p1_n1.csv
-le	3	3	6	6	2.220e-16	1.495627e-01	yes	own	le_d3_p3_n6.csv
-le	3	5	13	13	5.551e-17	6.252678e-02	yes	own	le_d3_p5_n13.csv
-le	3	7	26	26	1.110e-16	9.325386e-03	yes	own	le_d3_p7_n26.csv
-le	3	9	48	43	2.220e-16	3.575154e-03	yes	own	le_d3_p9_n48.csv
-le	3	11	82	68	2.220e-16	7.236143e-04	yes	own	le_d3_p11_n82.csv
-le	3	13	128	99	2.220e-16	5.143101e-04	yes	own	le_d3_p13_n128.csv
-le	3	15	188	140	4.441e-16	3.473087e-04	yes	own	le_d3_p15_n188.csv
-le	3	17	266	189	5.551e-17	3.405745e-04	yes	own	le_d3_p17_n266.csv
-le	3	19	360	250	3.331e-16	8.984255e-05	yes	own	le_d3_p19_n360.csv
-le	3	21	476	321	1.110e-16	8.933983e-05	yes	own	le_d3_p21_n476.csv
-le	3	23	612	406	2.220e-16	5.922559e-05	yes	own	le_d3_p23_n612.csv
-le	3	25	776	503	4.441e-16	2.542530e-05	yes	own	le_d3_p25_n776.csv
-le	3	27	964	616	5.551e-17	3.171086e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p27_n984 for the same cell	le_d3_p27_n964.csv
-le	3	29	1184	743	1.110e-16	1.128774e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p29_n1258 for the same cell	le_d3_p29_n1184.csv
-le	3	31	1432	888	2.220e-16	1.334490e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p31_n1478 for the same cell	le_d3_p31_n1432.csv
-le	3	33	1714	1049	2.220e-16	6.970576e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p33_n1787 for the same cell	le_d3_p33_n1714.csv
-le	3	35	2028	1230	6.106e-14	9.991170e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell	le_d3_p35_n2028.csv
-le	3	37	2380	1429	6.717e-14	5.914547e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell	le_d3_p37_n2380.csv
-le	3	39	2770	1650	3.302e-13	4.411826e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell	le_d3_p39_n2770.csv
-le	3	41	3200	1891	1.430e-13	3.560539e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell	le_d3_p41_n3200.csv
-le	3	43	3704	2156	1.665e-15	1.523870e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p43_n3870 for the same cell	le_d3_p43_n3704.csv
-le	3	45	4308	2443	9.992e-16	1.025680e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p45_n4414 for the same cell	le_d3_p45_n4308.csv
-le	4	1	1	1	0.000e+00	1.000000e+00	yes	own	le_d4_p1_n1.csv
-le	4	3	8	8	5.551e-17	1.151680e-01	yes	own	le_d4_p3_n8.csv
-le	4	5	21	21	1.110e-16	3.613783e-02	yes	own	le_d4_p5_n21.csv
-le	4	7	54	48	5.551e-17	3.141333e-03	yes	own	le_d4_p7_n54.csv
-le	4	9	120	91	5.551e-17	1.202148e-03	yes	own	le_d4_p9_n120.csv
-le	4	11	234	160	4.441e-16	3.008778e-04	yes	own	le_d4_p11_n234.csv
-le	4	13	416	259	4.441e-16	2.113866e-04	yes	own	le_d4_p13_n416.csv
-le	4	15	690	400	1.110e-16	9.599123e-05	yes	own	le_d4_p15_n690.csv
-le	4	17	1078	589	2.220e-16	3.643559e-05	yes	own	le_d4_p17_n1078.csv
-le	4	19	1612	840	3.331e-16	2.058213e-05	yes	own	le_d4_p19_n1612.csv
-le	4	21	2322	1161	6.661e-16	1.039722e-05	yes	own	le_d4_p21_n2322.csv
-le	4	23	3244	1568	1.528e-13	3.935392e-06	yes	own	le_d4_p23_n3244.csv
-le	5	1	1	1	0.000e+00	1.000000e+00	yes	own	le_d5_p1_n1.csv
-le	5	3	10	10	2.220e-16	8.502385e-02	yes	own	le_d5_p3_n10.csv
-le	5	5	32	31	5.551e-17	2.174715e-02	yes	own	le_d5_p5_n32.csv
-le	5	7	100	80	2.220e-16	2.018937e-03	yes	own	le_d5_p7_n100.csv
-le	5	9	266	171	5.551e-17	5.733282e-04	yes	own	le_d5_p9_n266.csv
-le	5	11	602	332	5.551e-16	1.671805e-04	yes	own	le_d5_p11_n602.csv
-le	5	13	1212	591	2.220e-16	3.693651e-05	yes	own	le_d5_p13_n1212.csv
-le	5	15	2506	992	3.331e-16	4.297903e-05	yes	own	le_d5_p15_n2506.csv
-le	5	17	3936	1581	4.441e-16	1.346780e-05	yes	own	le_d5_p17_n3936.csv
-le	5	19	6826	2422	4.940e-14	5.855746e-06	yes	own	le_d5_p19_n6826.csv
-le	5	21	10984	3583	4.630e-13	2.233637e-06	yes	own	le_d5_p21_n10984.csv
+# the rules themselves are in rules.bin; bankfile and sha256 name the bank file each rule was taken from
+family	d	p	n	moller	relerr	minweight	interior	origin	source_id	bankfile	sha256
+gh	2	1	1	1	0.000e+00	1.000000e+00	yes	own	0	hermite_d2_p1_n1.csv	26c8dfde0c398f46e97b7e003644b0d27e252aafffe3f96a22e4f649541a3cd0
+gh	2	3	4	4	2.220e-16	1.398499e-01	yes	own	0	hermite_d2_p3_n4.csv	0b430abc7b6884ed957b89ab497b1d7e52435a0b0d73c43627469079c723fe19
+gh	2	5	7	7	2.220e-16	8.333333e-02	yes	same-rule: Stroud 1971, E_2^{r^2}:5-4 (identified 2026-09-11; same up to rotation, which the Gaussian weight permits)	10	hermite_d2_p5_n7.csv	f00a39474ffad1521527e385f34ecf053454eb159dd040046b969244e7827f9a
+gh	2	7	12	12	4.737e-16	8.285084e-03	yes	own	0	hermite_d2_p7_n12.csv	4b2d079fabc5b38fae324b16290b7ed6d0204b3122694b6e5333070e110a8a93
+gh	2	9	18	17	9.474e-16	9.400916e-07	yes	transcribed: Haegemans and Piessens 1977	13	hermite_d2_p9_n18.csv	bae2d03a79f87315645f88b3081b1f8c4fe1cf02e8abd0188916827a212d578a
+gh	2	11	25	24	5.921e-16	1.175292e-07	yes	transcribed: Haegemans and Piessens 1976, hexagonal	12	hermite_d2_p11_n25.csv	c1354e95f21825c27a8fc9a7dbea0bec15711d9ef989c956022912f866a654d2
+gh	2	13	34	31	7.218e-16	3.858457e-07	yes	transcribed: Cools and Haegemans 1988	14	hermite_d2_p13_n34.csv	fba579e6eb29748f12b236867bcc80baf776a03b6eec64c07f11c18de6bc6997
+gh	2	15	44	40	4.307e-16	4.702143e-06	yes	own	0	hermite_d2_p15_n44.csv	70d1cb152133f223a7c46597e5f1ab1505c50ab263d43dc1368387bcc3508bfe
+gh	2	17	55	49	9.189e-16	6.672687e-07	yes	own	0	hermite_d2_p17_n55.csv	15df2474baa3062dcfc894da4fe068ba9d4892ac0a6e2205ef96af9e9bd61945
+gh	2	19	68	60	5.743e-16	3.147106e-07	yes	own	0	hermite_d2_p19_n68.csv	f8907ef23df635b23cf685a36b122a4db135d50a55013736dd1d5eb96466535a
+gh	2	21	82	71	8.649e-16	1.353885e-10	yes	own	0	hermite_d2_p21_n82.csv	ed9f494bfec741e4356acc8e5082dff49ecde041c42bb9ba0f3cae295009b45b
+gh	2	23	97	84	7.204e-16	4.220105e-13	yes	own	0	hermite_d2_p23_n97.csv	2162a7c21157b985591ae8625f8dc6edc007deed0d7a134678491a655eae3215
+gh	2	25	114	97	7.283e-16	9.411532e-11	yes	own	0	hermite_d2_p25_n114.csv	baf1212b30b2054cb355b74fb66b0e633e85287ea9b69090c1be9d97a3b0173e
+gh	2	27	132	112	1.158e-15	3.993119e-15	yes	own	0	hermite_d2_p27_n132.csv	8870f8cf2bc7ed04b71cb15435fcab9d80febb653187dcd8389a588d094b7724
+gh	2	29	153	127	1.080e-15	3.739485e-14	yes	own	0	hermite_d2_p29_n153.csv	5944fcf3a787dfcc7a5e791437324838cde043899b5a8fcf73f83aa34e49face
+gh	2	31	178	144	6.176e-16	2.977893e-13	yes	own	0	hermite_d2_p31_n178.csv	5f12c5b2bbab3b797cd3e928ca7a1de8b513d7f75869e5d85da0e090e02be0f0
+gh	2	33	208	161	8.020e-13	2.691462e-13	yes	own	0	hermite_d2_p33_n208.csv	9c79b342faabedbd1c5d325df76fc4adc5fb00cadd57c759a58af62ad2c8aa0c
+gh	2	35	264	180	1.167e-15	4.854778e-15	yes	own	0	hermite_d2_p35_n264.csv	59bbb22c407fb460fe5b1a76d9018cb37821761636dc0f8243b8089125db2075
+gh	2	37	357	199	1.931e-12	8.461358e-22	yes	own	0	hermite_d2_p37_n357.csv	ff4346a49a50dc09516f18b3c1473e01cb3226615700ee201589a54c6e6c5877
+gh	2	39	394	220	4.122e-12	6.177614e-24	yes	own	0	hermite_d2_p39_n394.csv	5f461e13b87dfb700997db2c10133c2b071fdafb55ca34601a0957f0dccfe0a3
+gh	2	41	439	241	7.368e-12	7.618084e-28	yes	own	0	hermite_d2_p41_n439.csv	74e245c696aa888f906245940f298f6789549dbe8201fefb98c0a05762cf2424
+gh	2	43	482	264	8.468e-12	2.145253e-29	yes	own	0	hermite_d2_p43_n482.csv	612a4d9d0f8c2c5d8d9021cf2c92a85ff16d76a53d75c7f7f688931af4dd8479
+gh	3	1	1	1	0.000e+00	1.000000e+00	yes	own	0	hermite_d3_p1_n1.csv	942a59f571ad2c25936dea810d597465c58902cdeb06fc0c5a205fb507043cf5
+gh	3	3	6	6	2.776e-17	1.491498e-01	yes	own	0	hermite_d3_p3_n6.csv	d9ccff33815cd7e17fa192800d4dc5a858df5242c47260102cdeff9ac0df0b7f
+gh	3	5	13	13	2.961e-16	5.000000e-02	yes	transcribed: Stroud 1971, icosahedral (closed form)	10	hermite_d3_p5_n13.csv	891b2f4ed715fdcc593e77bb381f48ef8b8b6babcf6170545711083c9cebf6b1
+gh	3	7	27	26	4.737e-16	5.195469e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1)	10	hermite_d3_p7_n27.csv	38bd48851c90011091a8b1e19a9cb3b29dd1987c1dd135c45ee753a424dd9b28
+gh	3	9	45	43	4.060e-16	4.629630e-04	yes	same-rule: Konyaev 1977, rule 1 for the weight exp(-rho^2) (identified 2026-09-16 against the closed form printed in Dokl. Akad. Nauk SSSR 233 no. 5, 784-787; same up to rotation, node displacement 9.7e-16)	15	hermite_d3_p9_n45.csv	f9e7006d6ac3f62b90bd735cb8feb9fa68c4f05e27490c902653e4043fad325c
+gh	3	11	77	68	8.421e-16	1.239467e-07	yes	own	0	hermite_d3_p11_n77.csv	9fb190ef6aa2a3c93e148af9f15a54144890718588b6fe1b9ed9cb6b6abedc86
+gh	3	13	128	99	4.439e-16	2.264376e-06	yes	own	0	hermite_d3_p13_n128.csv	15815917a9b1ac953987a6ad501016aa4aad4c2fc13ba302cadd692a6d670015
+gh	3	15	184	140	2.100e-15	3.411525e-13	yes	own	0	hermite_d3_p15_n184.csv	2765990343d768dc497e040fc29bbf99ade964647150af9368be714c0e8e73c2
+gh	3	17	264	189	6.892e-16	3.913587e-09	yes	own	0	hermite_d3_p17_n264.csv	4fd21e84f1d39e4e84e9fd83843171189dac7915d1b67b9a39d54c27cabec251
+gh	3	19	354	250	1.078e-15	4.180546e-09	yes	own	0	hermite_d3_p19_n354.csv	e3f582712b3f5398034391e3669f0c7db89cae5200fd18c4e51d6fa5c85bdadf
+gh	3	21	476	321	4.666e-16	5.465487e-10	yes	own	0	hermite_d3_p21_n476.csv	66407249c8dd5958af0c7f8651b81d9930749a1e2891d620e5c77a64908f8a23
+gh	3	23	597	406	5.847e-16	6.377046e-12	yes	own	0	hermite_d3_p23_n597.csv	957194f3de632fcb13a83f87df9fc8f1adf9c99cf7a7ddcb833f79043c2a3c9c
+gh	3	25	776	503	5.462e-16	7.166525e-12	yes	own	0	hermite_d3_p25_n776.csv	300d4f16456d5decf956a4810ad277c87c9e7e3e8a4bc20b518392673fb44ecc
+gh	3	27	966	616	7.399e-16	2.440775e-13	yes	own	0	hermite_d3_p27_n966.csv	2cde1b42ef97422ddecb378e359ea1820a4832214bd5ae2998d0dda841ebe17a
+gh	3	29	1242	743	5.601e-16	1.171016e-12	yes	own	0	hermite_d3_p29_n1242.csv	ccb8a224912f3fef7323f1130bc5a232abd9a05dfa2646fcf3c57182f1a0da04
+gh	3	31	1848	888	1.219e-12	3.825130e-13	yes	own	0	hermite_d3_p31_n1848.csv	4f9359e6c7d8ba2d7b3f0e72f4a88b7bc43406effa76696b26629f7470b1de7d
+gh	3	33	2226	1049	3.396e-12	3.080125e-14	yes	own	0	hermite_d3_p33_n2226.csv	ad22754b477ab87b6d897414249154a2a331603ef07d86b2a083dfb00622d1f4
+gh	3	35	4749	1230	3.872e-12	2.144144e-26	yes	own	0	hermite_d3_p35_n4749.csv	dee1c2119894bdf03ea45a44dc562e08393fb31ac34853e7781f118856a75b96
+gh	4	1	1	1	0.000e+00	1.000000e+00	yes	own	0	hermite_d4_p1_n1.csv	801ea0a44cb23130b1144d35f034eff8810d321ccf0c60926a9b0c041894a7fd
+gh	4	3	8	8	2.220e-16	1.178522e-01	yes	own	0	hermite_d4_p3_n8.csv	a7392b90996c73d977fe7ccab4e8b13b4856a640592c766bcba6383d4addeda8
+gh	4	5	22	21	4.441e-16	5.567184e-03	yes	own	0	hermite_d4_p5_n22.csv	20c0f1d77584efd92b464c90a1ea22fc29af92b0a379ff8bca04d4458235d455
+gh	4	7	49	48	9.474e-16	5.898367e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1)	10	hermite_d4_p7_n49.csv	a223189919502f166e3413eecef5e16f97f500744969c943956baa999218c4af
+gh	4	9	116	91	4.737e-16	5.941785e-06	yes	own	0	hermite_d4_p9_n116.csv	e588d4f805a07152ae139189aefab2d7097c1242b2de138a46ed3c5f8a1df117
+gh	4	11	193	160	1.776e-15	1.309825e-07	yes	own	0	hermite_d4_p11_n193.csv	a3ff1bb574e1959f4a0fb79587b0e8590fe4934ec1780c1822e1a31cd1504eb5
+gh	4	13	414	259	4.060e-16	4.640473e-06	yes	own	0	hermite_d4_p13_n414.csv	868dd1585cc7599e5752a3d383b513b85bdddcef421dbb2a46466b8119384274
+gh	4	15	577	400	5.000e-15	1.086122e-08	yes	own	0	hermite_d4_p15_n577.csv	190790e85d96d2715b22d85b88248736b351af1bd77157737fe6791d63742538
+gh	4	17	1056	589	3.947e-16	3.356994e-09	yes	own	0	hermite_d4_p17_n1056.csv	7d47fdd04aded4f9686744a6670657218b045539ad06e8daecb06eff7e40aeca
+gh	4	19	1505	840	5.743e-16	2.606992e-09	yes	own	0	hermite_d4_p19_n1505.csv	751be6c83e75829dc63aeb95a7a1cce43518cb574e90ac0c605bcdf1e37c2b05
+gh	4	21	2318	1161	6.486e-16	5.525601e-11	yes	own	0	hermite_d4_p21_n2318.csv	6f87a075e40d31aa55cf59c28609265ff00cf84237a101ab06a6df1d291a1fe7
+gh	4	23	3238	1568	7.283e-16	2.958027e-12	yes	own	0	hermite_d4_p23_n3238.csv	ec177298203d2c6d2a63088619f990b2eeb77ce7fe796ed888a9fd31e5122b1f
+gh	5	1	1	1	0.000e+00	1.000000e+00	yes	own	0	hermite_d5_p1_n1.csv	eca9608586d9bd908381f0ed53d1c2b9cd9aab8afc948729ec6894489cdbffb9
+gh	5	3	10	10	4.441e-16	1.000000e-01	yes	same-rule: Stroud 1971, E_n^{r^2}:3-1 (identified 2026-09-11, displacement 0.0; order 2N = 10 at N=5)	10	hermite_d5_p3_n10.csv	79eeb5b5da007a6a081be439b8fabaf2610bb7ec2648ce25a6dd53fbe1ff53f6
+gh	5	5	32	31	2.961e-16	6.415099e-03	yes	transcribed: Stroud and Secrest 1963, E5r2:5-1	11	hermite_d5_p5_n32.csv	20407f31d011320fad7b6412125726965ef174b5868572a463bfbb588c0add10
+gh	5	7	83	80	7.105e-16	6.858711e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 (identified 2026-09-11, compare_rules.jl over B_5)	10	hermite_d5_p7_n83.csv	c8590eb000a99d04b8002044a60a81863430164e0a45005ba64bf8d96fb68f72
+gh	5	9	244	171	3.947e-15	6.618270e-07	yes	own	0	hermite_d5_p9_n244.csv	14c8af96df1e154eebf7c557fefcc40a55681e3e818db276fa42f9dd1efdc7e0
+gh	5	11	485	332	7.895e-16	1.578040e-06	yes	own	0	hermite_d5_p11_n485.csv	4f5c0508f804632fae67f23834990ed5d61165e246ba80986e16b348d38f2d82
+gh	5	13	1135	591	6.999e-16	1.287714e-06	yes	own	0	hermite_d5_p13_n1135.csv	3ef2f7deb6f2452acd4b715610eb2a86aadbb77d1d62613089bca3a4110db01b
+gh	5	15	1767	992	7.895e-16	6.027352e-12	yes	own	0	hermite_d5_p15_n1767.csv	b62c649d3abff4744e4426ce1a7ddf40dd6a18e60cbb6a91302463016757fa89
+gh	5	17	3986	1581	1.776e-15	2.115044e-14	yes	own	0	hermite_d5_p17_n3986.csv	b7efa6958cc4e292ea8f91d78a923032f1d27b7961eb0df64c358af035ee0b0a
+gh	5	19	7174	2422	4.663e-15	3.553242e-12	yes	own	0	hermite_d5_p19_n7174.csv	95805ac436731267b2cc155672bcefaea953866af077ccf46998ab3921c20b1e
+gh	5	21	13199	3583	9.125e-15	8.424488e-11	yes	own	0	hermite_d5_p21_n13199.csv	06410fcb91b6bad859f189eb52471d98346eeb170fa329d539e767180fb9e6c1
+le	2	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d2_p1_n1.csv	7712d57a84885a42bf5d2f08c356dd682b9a7d357174400ebf6f64329fc176b1
+le	2	3	4	4	5.551e-17	2.087571e-01	yes	own	0	legendre_d2_p3_n4.csv	24ed0871f026f6a4cebde9f6c3dda10012a3fa4a946418eebcf438af8087b2c7
+le	2	5	7	7	5.551e-17	9.795308e-02	yes	own	0	legendre_d2_p5_n7.csv	1e1aa3173ca7d026c25d3197c99129b1bb4be9a7236614583db98563d7b36d30
+le	2	7	12	12	2.776e-16	4.067088e-02	yes	own	0	legendre_d2_p7_n12.csv	cb8d37a6e7b967ded0708afadf0b4d70f38f0fc52c5d65818e79f789617a1892
+le	2	9	17	17	5.551e-17	2.221984e-02	yes	same-rule: Festa and Sommariva 2012, SMR09 (count first published by Moller 1976)	16	legendre_d2_p9_n17.csv	2a1a9b88c026f04c09d9074e371b763385811c8e5a18cf205762e62e06b4aa29
+le	2	11	24	24	1.110e-16	6.434395e-03	yes	own	0	legendre_d2_p11_n24.csv	ec7d7dff8f5e235187ff143fcfba0195d38157b08276c7a0706bd59a60917b5d
+le	2	13	33	31	1.110e-16	7.497960e-03	yes	same-rule: Festa and Sommariva 2012, SMR13	16	legendre_d2_p13_n33.csv	2439efd59a9ba42bb613134e3a011b9280dca5639b7d6869dd7da2b32073b908
+le	2	15	43	40	1.110e-16	2.399496e-03	yes	same-rule: Festa and Sommariva 2012, SMR15	16	legendre_d2_p15_n43.csv	bcc579df22441183e01fe7640f37d8561d3ee897e8b9b8ec44b1a09e01d7a08e
+le	2	17	54	49	1.110e-16	2.287453e-03	yes	own	0	legendre_d2_p17_n54.csv	8eee26ad79048453e6a9bcf6bd5c0807ae9e02158b298ec9acddc6368217fc56
+le	2	19	67	60	6.939e-17	1.046620e-03	yes	own	0	legendre_d2_p19_n67.csv	374baf0fc6c2469858dbc5773414f0e60ce328353b6806267953aad8d47e2a7d
+le	2	21	81	71	2.220e-16	1.661768e-03	yes	own	0	legendre_d2_p21_n81.csv	26964de468251b4d88e24c6732dbbd5ecc4c842b600e5f838f9792f9d7538962
+le	2	23	96	84	5.551e-17	6.113048e-04	yes	own	0	legendre_d2_p23_n96.csv	b80828e2e04aaa95fb4f62f3fd08c5298b45362c882cbd1870262571c67f92c9
+le	2	25	113	97	2.776e-17	3.647569e-06	yes	transcribed: Festa and Sommariva 2012, SMR25	16	legendre_d2_p25_n113.csv	61da0f1a6d003eb2e0071dfb8fda2d96a74ee3b17fceca890ca44ab9e54d13bf
+le	2	27	131	112	2.220e-16	2.573336e-04	yes	own	0	legendre_d2_p27_n131.csv	0d6fdb289817b0dbb8dd5b5a22f494ccaf4dd2f4f941ad3e7bfd104b57fc0bcf
+le	2	29	150	127	1.110e-16	1.753277e-04	yes	own	0	legendre_d2_p29_n150.csv	31fdbf4fd8865541c683f7d5bac5c42ef18acda0fea91c8261ad4ae10691ada3
+le	2	31	171	144	2.220e-16	1.641750e-04	yes	own	0	legendre_d2_p31_n171.csv	8c0dcfc3257d4efb8f87ed8685ad551d94812ee7e7c087864f7c0f2f96a925fc
+le	2	33	194	161	2.220e-16	1.621446e-04	yes	own	0	legendre_d2_p33_n194.csv	74bbb35f2eb24d28f80c154d26ab764f717425bb135cdd6bca991beee83bde38
+le	2	35	216	180	2.220e-16	1.664493e-04	yes	own	0	legendre_d2_p35_n216.csv	b755cd7af4840c9ea24674d1bb09b024bd2cf17eb627e4ee27f2965d188b8606
+le	2	37	242	199	1.110e-16	2.112763e-04	yes	own	0	legendre_d2_p37_n242.csv	23ce5609f5a3b094837cb0f2869e1a603ef8bf84277ed2875ff1199b98db8134
+le	2	39	268	220	1.110e-16	6.117957e-05	yes	own	0	legendre_d2_p39_n268.csv	d3f95df554b96c7ac90b45a6a6dab5c3c96afcf925f024a8d0b3654018f6a97b
+le	2	41	294	241	5.551e-17	7.414332e-05	yes	own	0	legendre_d2_p41_n294.csv	9ef5553356d4a4aabade73c0d662d8f7712d5a2accacb342d51c166ab5da1079
+le	2	43	324	264	1.110e-16	6.516295e-05	yes	own	0	legendre_d2_p43_n324.csv	c7394f40b7a988bae44fd56e115404624f29d961f2e7c1baced60f52126c868e
+le	2	45	356	287	2.220e-16	4.411974e-05	yes	own	0	legendre_d2_p45_n356.csv	13fd882d3ab3f7fda6131a4b1d0bc8629a18cf90f04ac2ac11a2d1f28eeb7079
+le	2	47	388	312	1.110e-16	4.763416e-05	yes	own	0	legendre_d2_p47_n388.csv	9e301f3cc7706ac691fc93d2d87340323713b930fd1f3383c577cd47250a93cf
+le	2	49	422	337	5.551e-17	7.855637e-05	yes	own	0	legendre_d2_p49_n422.csv	2fc593e5fcab0fc2b3f2f0e4d652381953fda179597c42bbb5bcee9ff5d712f7
+le	2	51	456	364	5.551e-17	6.295091e-05	yes	own	0	legendre_d2_p51_n456.csv	d29ec0bbc4f7e7ce756ee861a40cf7a1af73a995343650eded7798f6741beb00
+le	2	53	492	391	5.551e-17	4.908801e-05	yes	own	0	legendre_d2_p53_n492.csv	92dab05bbc5f701400dee3cc125488d5ffdfa94b153beff179c3126912126f87
+le	2	55	528	420	5.551e-17	2.196017e-05	yes	own	0	legendre_d2_p55_n528.csv	94211d2bef6b5cd3fe9fdda938a641194b848dbea9a56b247ba25b5059e9e336
+le	2	57	570	449	5.551e-17	1.939503e-05	yes	own	0	legendre_d2_p57_n570.csv	5304a130efe3a01cd63bdd29b37ed115f475462fb38b45b1d63b6a257e25a2b4
+le	2	59	606	480	3.331e-16	1.073973e-05	yes	own	0	legendre_d2_p59_n606.csv	c3be9aa913c3d7838bebf6c70787054b5632ea81180b7f1a961307f66c593ba5
+le	2	61	642	511	5.551e-17	9.496125e-06	yes	own	0	legendre_d2_p61_n642.csv	27d4aeea621211c2a5dbd19a35f1b6b52c9d3a30ed5b2a3ac15f1799e3d4218d
+le	2	63	692	544	1.110e-16	9.317281e-06	yes	own	0	legendre_d2_p63_n692.csv	b59e3b068ed1db7842acfd7ff6188a38453863eaa3a27ccb93589e8813621757
+le	2	65	732	577	1.110e-16	1.478792e-05	yes	own	0	legendre_d2_p65_n732.csv	8134aab11e81de76cd50d8601d70ae39a911075a06da800872956c374500b5e7
+le	2	67	780	612	5.551e-17	7.907664e-06	yes	own	0	legendre_d2_p67_n780.csv	bb7bade1eaa129ab40e1378985b6c5cac1fca7bd1622b058804970da2cb5dbb2
+le	2	69	826	647	1.110e-16	7.015165e-06	yes	own	0	legendre_d2_p69_n826.csv	193cc106bc4af996f6f3e5fefd706adaafd230321a0a750bbd3e2cb1a2467bee
+le	2	71	872	684	5.551e-17	1.419597e-05	yes	own	0	legendre_d2_p71_n872.csv	8d7f3a78811f15da49b043e749de5c295612eef72db85939083cd451a3545f75
+le	2	73	922	721	1.110e-16	1.231460e-05	yes	own	0	legendre_d2_p73_n922.csv	0acf799f0480828376f506392d7f275b1bffd69d8e328af56176555d52e43b30
+le	2	75	980	760	2.220e-16	1.035265e-05	yes	own	0	legendre_d2_p75_n980.csv	a7a1e2cfdbbd9e032cbaa16cbb994093ddd684bf538a60141f4ac5da406b5472
+le	2	77	1032	799	5.551e-17	5.123054e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d2_p77_n1049 for the same cell	3	legendre_d2_p77_n1032.csv	9ebe596eb9a460db5b47d65cf1a3d2f846a51835c73d1bf413c83e3a15040569
+le	3	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d3_p1_n1.csv	34cf016ed78ceee10a8c92f890ae1dbfde7d8d3a53bfbe5a4486751fbcb4dd16
+le	3	3	6	6	2.220e-16	1.495627e-01	yes	own	0	legendre_d3_p3_n6.csv	16f4a5cbb9204abe7f741fd688da6c90a3778926712f84726a47660a69523284
+le	3	5	13	13	5.551e-17	6.252678e-02	yes	own	0	legendre_d3_p5_n13.csv	3c3adf7309286158b54d64ccb4fb9f50dadb04ed33acf89659677da01e2b64dc
+le	3	7	26	26	1.110e-16	9.325386e-03	yes	own	0	legendre_d3_p7_n26.csv	45e11b4d445d7f0f6c7c4f7a2118be17a4c2622e244a8d56e77300c2b43455bd
+le	3	9	48	43	2.220e-16	3.575154e-03	yes	own	0	legendre_d3_p9_n48.csv	bf1f9394491702acf6160440cee226f6d04a732c9a42e179050c593446606681
+le	3	11	82	68	2.220e-16	7.236143e-04	yes	own	0	legendre_d3_p11_n82.csv	94ca49d1be8d6e9da23a984702dc0734c521b97662d8e7e698bcd04142f7f054
+le	3	13	128	99	2.220e-16	5.143101e-04	yes	own	0	legendre_d3_p13_n128.csv	5bff6538557289bb380f13878ef91d6a909e1878eb0171b2624b7b9a04818e4f
+le	3	15	188	140	4.441e-16	3.473087e-04	yes	own	0	legendre_d3_p15_n188.csv	2e5246fe074a5261574816eabe1f1eda82e71eacef8fd0c37d7bdfaa8ba00ae5
+le	3	17	266	189	5.551e-17	3.405745e-04	yes	own	0	legendre_d3_p17_n266.csv	5509828bd47bbb38a0394fe41af7db35ea29769efd1a236f05ee45f2bf8847fd
+le	3	19	360	250	3.331e-16	8.984255e-05	yes	own	0	legendre_d3_p19_n360.csv	889b64815e4acbb8c0d095940969fe26fb5275103308f3c62c7c58ca837cf2b4
+le	3	21	476	321	1.110e-16	8.933983e-05	yes	own	0	legendre_d3_p21_n476.csv	0165a14d78ad8187251ebc490ee4194079450877c7f11e1da3d813ae0fa89a74
+le	3	23	612	406	2.220e-16	5.922559e-05	yes	own	0	legendre_d3_p23_n612.csv	08b8628793371a8028eefa6ed777208365db281ec34cdd8daf03cc0c28b52177
+le	3	25	776	503	4.441e-16	2.542530e-05	yes	own	0	legendre_d3_p25_n776.csv	afc6f3627ecc41eab6f5a5d1cbb95eb4e5158e36b5ff3df3a4c75509184fa0f6
+le	3	27	964	616	5.551e-17	3.171086e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p27_n984 for the same cell	3	legendre_d3_p27_n964.csv	0cd22aa482cfdfbb0666a24d93aa3867d354b599711b94e281ecc002473a1ec5
+le	3	29	1184	743	1.110e-16	1.128774e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p29_n1258 for the same cell	3	legendre_d3_p29_n1184.csv	9fc0ddf720eddca7cdaecd3aaeddadecb9131b1e290c06978e541e7237857da9
+le	3	31	1432	888	2.220e-16	1.334490e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p31_n1478 for the same cell	3	legendre_d3_p31_n1432.csv	4221c7ca8715da286b970e17cc0a13742b00c8781db25a25b60bfe4fc8590949
+le	3	33	1714	1049	2.220e-16	6.970576e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p33_n1787 for the same cell	3	legendre_d3_p33_n1714.csv	4c9856a3fa6cd4e4a88332afeb2f3909a891d4e90cd331e0826181bdfa0230e0
+le	3	35	2028	1230	6.106e-14	9.991170e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell	3	legendre_d3_p35_n2028.csv	3c4e01dbae76026d2d962b09e030c59a0cae8456c2c0a7db5bb17ea8517b39b5
+le	3	37	2380	1429	6.717e-14	5.914547e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell	3	legendre_d3_p37_n2380.csv	0e2ace558f6fcce6eb27517e959b6cb454863837cfdaeaab367437f85d8928ad
+le	3	39	2770	1650	3.302e-13	4.411826e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell	3	legendre_d3_p39_n2770.csv	af12cc900505cb638370b7598a05642825d158d27a9c9b096298c1a08a63aa0e
+le	3	41	3200	1891	1.430e-13	3.560539e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell	3	legendre_d3_p41_n3200.csv	758fab5e18ffcf143148f76dc0468ae2f6ce8d5be7313eb2405fd5642dc4561b
+le	3	43	3704	2156	1.665e-15	1.523870e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p43_n3870 for the same cell	3	legendre_d3_p43_n3704.csv	1528af845875dd5309eab8cfd92c604450cd7f81fc2afcd8d0dad743e64bb3cd
+le	3	45	4308	2443	9.992e-16	1.025680e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p45_n4414 for the same cell	3	legendre_d3_p45_n4308.csv	a45ed1ef47a0b12d444d7b9aaaa50af4c18b949f1342fc46f24f6a3e0d504c23
+le	4	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d4_p1_n1.csv	6103f3fa1023cc75a72604c629fab0e191e1374cc886d4b77ef51f4c0457c6e5
+le	4	3	8	8	5.551e-17	1.151680e-01	yes	own	0	legendre_d4_p3_n8.csv	522f0205946add5dd99ffd8eceb1fe9c1a016368efd2c1eec33146765ccdd0cb
+le	4	5	21	21	1.110e-16	3.613783e-02	yes	own	0	legendre_d4_p5_n21.csv	41486a2b237a43e207e7df7ed0ba03729ce9bb366513217f7e0cb93391633fa9
+le	4	7	54	48	5.551e-17	3.141333e-03	yes	own	0	legendre_d4_p7_n54.csv	d8b50815159178968a231b6a844489ee6cb4b1907b85e31b7bd9415586275667
+le	4	9	120	91	5.551e-17	1.202148e-03	yes	own	0	legendre_d4_p9_n120.csv	906c8370320c21c5a268d54a0fc729b4152b8d1ee69752e3ce2f8874bb186b63
+le	4	11	234	160	4.441e-16	3.008778e-04	yes	own	0	legendre_d4_p11_n234.csv	d5c276c73e3d68ff7f2256d16460a2874888c1b766927b42e3044c779164c4ab
+le	4	13	416	259	4.441e-16	2.113866e-04	yes	own	0	legendre_d4_p13_n416.csv	3dcbe5f181cfc56ae3b5c3f0ffce616c9682b4faeb066a883cbccb61e01b7c32
+le	4	15	690	400	1.110e-16	9.599123e-05	yes	own	0	legendre_d4_p15_n690.csv	a1d55a9df06a2c90975fc26c86dd9874282ace9d44145c7c6c4020726c10e97f
+le	4	17	1078	589	2.220e-16	3.643559e-05	yes	own	0	legendre_d4_p17_n1078.csv	36d568b973c52e36ce4cca5f27be468b0ef091e358f9e805e74fde38fb46167e
+le	4	19	1612	840	3.331e-16	2.058213e-05	yes	own	0	legendre_d4_p19_n1612.csv	3205fc94a23989cdd309545f5ade61ae19bd30f8b84a23b4562607630fb1aac3
+le	4	21	2322	1161	6.661e-16	1.039722e-05	yes	own	0	legendre_d4_p21_n2322.csv	3b8816f4bda5b2c55e474ba6a6a9c223c214c7d48625f460d245facf4a45b7c8
+le	4	23	3244	1568	1.528e-13	3.935392e-06	yes	own	0	legendre_d4_p23_n3244.csv	0bd21c4a417a1999eb65099ba76ad0c0027f1eac2e0bb865487cea48b7cebacd
+le	5	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d5_p1_n1.csv	0c5a53d60fcf302f48ecdb8ee9adef8781db7777c27162ada6149c0201d47702
+le	5	3	10	10	2.220e-16	8.502385e-02	yes	own	0	legendre_d5_p3_n10.csv	6b1197719e240f45e3c90a80424915810ddb96c606c4c8d22104b694f60f7ee5
+le	5	5	32	31	5.551e-17	2.174715e-02	yes	own	0	legendre_d5_p5_n32.csv	3fa1338e51d89275c7ea951d02286fc29697f741083af5f5983d6272320ad041
+le	5	7	100	80	2.220e-16	2.018937e-03	yes	own	0	legendre_d5_p7_n100.csv	006bdf5ff8e0ef9ba4fbaf6531dd8a0fd269707174718768802af21b9ad4ad9f
+le	5	9	266	171	5.551e-17	5.733282e-04	yes	own	0	legendre_d5_p9_n266.csv	8b73e8c9fc88e864e873b9a4f01bd75f32be79b0f6bbc2b0ea04aee261ac4bed
+le	5	11	602	332	5.551e-16	1.671805e-04	yes	own	0	legendre_d5_p11_n602.csv	53fc59703bb1fe662d22d0389389c8fe0772ffdfd3f8acc4979771ea8e2f2338
+le	5	13	1212	591	2.220e-16	3.693651e-05	yes	own	0	legendre_d5_p13_n1212.csv	ff82733ec6842c53d14c6d901c06528e3c9c1a5e212e7bd5e2f15bb5fc077341
+le	5	15	2506	992	3.331e-16	4.297903e-05	yes	own	0	legendre_d5_p15_n2506.csv	d4103e9a8fa4d731015e1821f2c6ef7cec12e448fe9097ce040f089ac86c4e25
+le	5	17	3936	1581	4.441e-16	1.346780e-05	yes	own	0	legendre_d5_p17_n3936.csv	8d4605a206ebb0d6a5f167edd8c79d5e7308e0498bcfc0780c9eaed51fb6036a
+le	5	19	6826	2422	4.940e-14	5.855746e-06	yes	own	0	legendre_d5_p19_n6826.csv	451019df70aa60c9a29079fe90fb2b9c7a386713b7062b7ee3ee003bc29804f7
+le	5	21	10984	3583	4.630e-13	2.233637e-06	yes	own	0	legendre_d5_p21_n10984.csv	99d5357928b2ed51bd3457ac44e675bf9d49e3dbd969254b6ea36302ba89d1c3

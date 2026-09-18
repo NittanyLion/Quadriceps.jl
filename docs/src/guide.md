@@ -156,6 +156,5 @@ nnodes(:gh, 5, 7)                                     # q = 7, degree 13
 ruleinfo(:le, 3; p = 41)[1].origin
 ```
 
-Each rule is a plain text file `data/<family>/<family>_d<d>_p<p>_n<n>.csv`: comment lines
-starting with `#` (weight, column names, origin, source), then one node per line as
-`x_1,…,x_d,w`, in the normalized frame. `data/index.tsv` is the catalog.
+All rules are stored in one binary file, `data/rules.bin`; `data/index.tsv` is the catalog that
+goes with it. [Data format](format.md) specifies both.

@@ -24,11 +24,14 @@
 #   4   the set of rules that are not the author's own would change; NOTICE.md and
 #       docs/src/credits.md need a person, so data/ is left alone
 #
+# The rules go into ONE binary file, data/rules.bin (format QUADRICEPS1, docs/src/format.md);
+# data/index.tsv is the catalog that goes with it. No per-rule text files are written.
+#
 # Also rewrites docs/src/rules.md and the generated blocks of README.md. The output carries no
 # dates, so a rebuild from an unchanged bank changes no file.
 
 using Quadriceps, Printf, SHA
-using Quadriceps: RuleInfo, Catalog, cheapest, readrule, readindex, exactness_error
+using Quadriceps: RuleInfo, Catalog, cheapest, readindex, readbinindex, readblock, writebin, exactness_error
 
 const GATE = 1e-11
 const PKG  = dirname(@__DIR__)
@@ -38,6 +41,29 @@ const SYNC = length(POS) ≥ 1 ? POS[1] : joinpath(homedir(), "Dropbox", "oldDes
 const NEW  = joinpath(PKG, "data.new")
 const BANK = joinpath(SYNC, "project", "julia", "rules")
 const FAM  = Dict("hermite" => :gh, "legendre" => :le)
+
+# A bank file: one node per line, x_1,…,x_d,w; lines starting with '#' are comments.
+function readrule(path::AbstractString)
+    M = [parse.(Float64, split(strip(l), ',')) for l in eachline(path) if !isempty(strip(l)) && !startswith(strip(l), '#')]
+    d = length(M[1]) - 1
+    all(r -> length(r) == d + 1, M) || error("$path: ragged rows")
+    A = permutedims(reduce(hcat, M))
+    A[:, 1:d], A[:, d+1]
+end
+
+# source_id, the integer form of the origin stored in rules.bin. 0–15 as in GHBEST1
+# (bestknown_gh/NOTES.md §7); 3 and 16 are new here. Keep docs/src/format.md in step.
+const SOURCE_IDS = ["Stroud and Secrest 1963" => 11, "Stroud 1971" => 10, "Haegemans and Piessens 1976" => 12,
+                    "Haegemans and Piessens 1977" => 13, "Cools and Haegemans 1988" => 14, "Konyaev 1977" => 15,
+                    "Festa and Sommariva 2012" => 16]
+function source_id(org)
+    org == "own" && return 0
+    startswith(org, "derived: Diallo and Worku") && return 3
+    for (name, id) in SOURCE_IDS
+        occursin(name, org) && return id
+    end
+    99                                                    # a published source without an id yet
+end
 
 rows(path) = [split(l, '\t') for l in eachline(path) if !isempty(l) && !startswith(l, '#')]
 
@@ -80,8 +106,9 @@ const WEIGHT = Dict(:gh => "standard normal N(0, I_d), density (2π)^(-d/2) exp(
                     :le => "uniform density on [0,1]^d; weights sum to 1")
 index = Catalog()
 dropped = String[]
-rm(NEW; recursive = true, force = true)
-foreach(fam -> mkpath(joinpath(NEW, String(fam))), (:gh, :le))
+rm(NEW; recursive = true, force = true); mkpath(NEW)
+rules = Dict{Tuple{Symbol,Int,Int},Tuple{Matrix{Float64},Vector{Float64},Int}}()
+provenance = Dict{Tuple{Symbol,Int,Int},Tuple{String,String}}()
 for key in sort!(collect(keys(cands)); by = k -> (k[2], k[3], k[1]))      # lower dimensions first
     fam, d, p = key
     for (n, f) in cands[key]
@@ -97,19 +124,10 @@ for key in sort!(collect(keys(cands)); by = k -> (k[2], k[3], k[1]))      # lowe
             break
         end
         inside = fam ≡ :gh || all(x -> 0 < x < 1, X)
-        name = "$(fam)_d$(d)_p$(p)_n$(n).csv"
         org = origin(f)
-        open(joinpath(NEW, String(fam), name), "w") do io
-            println(io, "# Quadriceps.jl — $(fam ≡ :gh ? "GH" : "Le") rule, d = $d, degree p = $p, n = $n nodes, all weights positive")
-            println(io, "# weight: ", WEIGHT[fam])
-            println(io, "# columns: ", join(["x$k" for k in 1:d], ","), ",w")
-            println(io, "# origin: ", org)
-            println(io, "# source: bank file $f, sha256 ", bytes2hex(sha256(read(joinpath(BANK, f)))))
-            for i in 1:n
-                println(io, join((repr(X[i, k]) for k in 1:d), ","), ",", repr(w[i]))
-            end
-        end
-        index[key] = RuleInfo(fam, d, p, n, mb, err, minimum(w), inside, org, name)
+        rules[key] = (X, w, source_id(org))
+        provenance[key] = (f, bytes2hex(sha256(read(joinpath(BANK, f)))))
+        index[key] = RuleInfo(fam, d, p, n, mb, err, minimum(w), inside, org, source_id(org))
         break
     end
 end
@@ -118,18 +136,21 @@ end
 infos = sort!(collect(values(index)); by = r -> (r.family, r.d, r.p))
 open(joinpath(NEW, "index.tsv"), "w") do io
     println(io, "# Quadriceps.jl rule catalog — written by build/build_data.jl; do not edit by hand")
-    println(io, "family\td\tp\tn\tmoller\trelerr\tminweight\tinterior\torigin\tfile")
+    println(io, "# the rules themselves are in rules.bin; bankfile and sha256 name the bank file each rule was taken from")
+    println(io, "family\td\tp\tn\tmoller\trelerr\tminweight\tinterior\torigin\tsource_id\tbankfile\tsha256")
     for r in infos
-        @printf(io, "%s\t%d\t%d\t%d\t%d\t%.3e\t%.6e\t%s\t%s\t%s\n", r.family, r.d, r.p, r.n, r.moller, r.relerr,
-                r.minweight, r.interior ? "yes" : "no", r.origin, r.file)
+        @printf(io, "%s\t%d\t%d\t%d\t%d\t%.3e\t%.6e\t%s\t%s\t%d\t%s\t%s\n", r.family, r.d, r.p, r.n, r.moller, r.relerr,
+                r.minweight, r.interior ? "yes" : "no", r.origin, r.source_id, provenance[(r.family, r.d, r.p)]...)
     end
 end
+writebin(joinpath(NEW, "rules.bin"), rules)
 
 # --- compare with what is stored now, then swap -----------------------------------------------
 old = readindex(joinpath(PKG, "data", "index.tsv"))
 kind(r) = first(split(r.origin, ':'))
 cellname(k) = "$(k[1] ≡ :gh ? "GH" : "Le") d=$(k[2]) p=$(k[3])"
-sha(dir, r) = bytes2hex(sha256(read(joinpath(dir, String(r.family), r.file))))
+oldbin = readbinindex(joinpath(PKG, "data", "rules.bin"))
+same(k) = haskey(oldbin, k) && readblock(joinpath(PKG, "data", "rules.bin"), oldbin[k], k[2]) == rules[k][1:2]
 worse = String[]; credit = String[]; changes = String[]
 for (k, o) in old
     haskey(index, k) || (push!(worse, "$(cellname(k)): n=$(o.n) would disappear"); continue)
@@ -144,7 +165,7 @@ for k in sort!(collect(union(keys(old), keys(index))); by = k -> (k[1], k[2], k[
         push!(changes, "$(cellname(k)): new, n=$(r.n)")
     elseif old[k].n ≠ r.n
         push!(changes, "$(cellname(k)): n $(old[k].n) → $(r.n)")
-    elseif sha(joinpath(PKG, "data"), old[k]) ≠ sha(NEW, r)
+    elseif !same(k)
         push!(changes, "$(cellname(k)): n=$(r.n), rule replaced")
     end
 end
