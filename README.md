@@ -73,7 +73,7 @@ FastGaussQuadrature's default, with the same meaning of the keyword:
 
 | | `normalize = true` (default) | `normalize = false` (FastGaussQuadrature's convention) |
 |---|---|---|
-| `ghpos` | weight `(2π)^(-d/2) exp(-|x|²/2)`; weights sum to 1 | weight `exp(-|x|²)`; weights sum to `π^(d/2)` |
+| `ghpos` | weight `(2π)^(-d/2) exp(-‖x‖²/2)`; weights sum to 1 | weight `exp(-‖x‖²)`; weights sum to `π^(d/2)` |
 | `lepos` | uniform density on `[0,1]^d`; weights sum to 1 | `∫ f(x) dx` over `[-1,1]^d`; weights sum to `2^d` |
 
 So `ghpos(1, q; normalize = false)` is `gausshermite(q)`, `ghpos(1, q)` is
