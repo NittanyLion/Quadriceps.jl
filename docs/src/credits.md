@@ -1,7 +1,13 @@
 # Credits
 
-Most stored rules were computed by the package author. The others are rules from the
-literature, or descend from one. The `origin` of each rule ([Stored rules](rules.md),
+```@eval
+using Quadriceps, Markdown
+rs = vcat(Quadriceps.available(:gh), Quadriceps.available(:le))
+k(prefix) = count(r -> startswith(r.origin, prefix), rs)
+Markdown.parse("$(k("own")) of the $(length(rs)) rules were computed from scratch by the author. A further $(k("derived")) (Legendre) rules were obtained by node elimination started from Diallo and Worku's published rules. Finally, $(k("transcribed") + k("same-rule")) are rules from the literature (copied in, or found again by the author's search and recognized).")
+```
+
+The `origin` of each rule ([Stored rules](rules.md),
 [`Quadriceps.ruleinfo`](@ref), `data/index.tsv`, and the `source_id` in `data/rules.bin`) is one of:
 
 * `own` — computed by the author, with no published rule as its starting point;

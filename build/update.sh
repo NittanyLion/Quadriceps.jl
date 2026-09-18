@@ -12,7 +12,8 @@
 #      and raise a desktop notification, because they need a person);
 #   3. if files changed: runs the test suite; on success commits and pushes, on failure
 #      restores the tree and notifies;
-#   4. carries the data into the sibling Python and R packages (../quadriceps-py,
+#   4. carries the data (and RULES.md, FORMAT.md, NOTICE.md, the README's credits block) into the
+#      sibling Python and R packages (../quadriceps-py,
 #      ../quadriceps-r) when they exist: copy, run their tests, commit, push.
 #
 # Run it on ONE machine only (it needs the project's sync folder; the bank is the same
@@ -82,6 +83,14 @@ sibling() {
   sed 's|(credits.md)|(NOTICE.md)|' "$PKG/docs/src/rules.md" > "$dir/RULES.md"
   sed -e 's|(credits.md)|(NOTICE.md)|' -e 's|^# Data format|# Data format of rules.bin|' "$PKG/docs/src/format.md" > "$dir/FORMAT.md"
   cp "$PKG/NOTICE.md" "$dir/NOTICE.md"
+  # the GENERATED credits block of the twin's README, from this package's README
+  awk -v src="$PKG/README.md" '
+    BEGIN { while ((getline l < src) > 0) { if (l ~ /BEGIN GENERATED credits/) { on = 1; continue }
+                                            if (l ~ /END GENERATED credits/) on = 0
+                                            if (on) block = block l "\n" } }
+    /BEGIN GENERATED credits/ { print; printf "%s", block; skip = 1; next }
+    /END GENERATED credits/   { skip = 0 }
+    !skip' "$dir/README.md" > "$dir/README.md.new" && mv "$dir/README.md.new" "$dir/README.md"
   clean "$dir" && return 0
   if ( cd "$dir" && nice -n 19 "$@" ) >"$STATE/test-$(basename "$dir").log" 2>&1; then
     git -C "$dir" add -A

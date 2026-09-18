@@ -238,9 +238,9 @@ Quadriceps.nnodes(:gh, 10, 3; pragmatic = true)     # $(nn(:gh, 10, 5)), without
 Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)    # the factors, with their origins
 ```"""
 count(k) = sum(startswith(r.origin, k) for r in infos)
-credits = "$(count("own")) of the $(length(infos)) rules were computed by the author. $(count("transcribed") + count("same-rule")) are rules from the literature (copied in,\n" *
-          "or found again by the author's search and recognized), and $(count("derived")) Le rules were obtained by node\n" *
-          "elimination started from Diallo and Worku's published rules."
+credits = "$(count("own")) of the $(length(infos)) rules were computed from scratch by the author. A further $(count("derived")) (Legendre) rules were\n" *
+          "obtained by node elimination started from Diallo and Worku's published rules. Finally, $(count("transcribed") + count("same-rule")) are\n" *
+          "rules from the literature (copied in, or found again by the author's search and recognized)."
 readme = read(joinpath(PKG, "README.md"), String)
 updated = regenerate(regenerate(regenerate(readme, "coverage", coverage), "pragmatic", pragmatic), "credits", credits)
 updated ≠ readme && write(joinpath(PKG, "README.md"), updated)
