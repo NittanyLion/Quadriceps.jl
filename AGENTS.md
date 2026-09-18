@@ -58,9 +58,9 @@ only on the author's machines; everything else works from a plain clone.
   keyword `p` to the one-positional-argument methods (`ghpos(d; p = 7)`). Internally everything
   works in `p`. Do not make `q` mean the number of nodes returned.
 * **Normalized frame inside.** Files, cache, tensor products and `exactness_error` all use the
-  normalized frame: `N(0, I_d)` for GH, the uniform density on `[0,1]^d` for Le, weights
+  normalized frame: `N(0, I_d)` for GH, the uniform density on `[0,1]ᵈ` for Le, weights
   summing to 1. `normalize = false` is applied once, at the end, in `src/api.jl`
-  (GH: `x/√2`, `w·π^(d/2)`; Le: `2x - 1`, `w·2^d`). One-dimensional GH factors come from
+  (GH: `x/√2`, `w·πᵈᐟ²`; Le: `2x - 1`, `w·2ᵈ`). One-dimensional GH factors come from
   `gausshermite(q; normalize = true)` — FastGaussQuadrature's default is the other convention.
 * **`normalize = true` is the default**, unlike FastGaussQuadrature. This is deliberate.
 * **`pragmatic`.** `false`: a request that no stored rule covers throws an `ArgumentError`.
@@ -105,6 +105,9 @@ only on the author's machines; everything else works from a plain clone.
   the tests.
 
 ## Repository
+
+GitHub Actions (`.github/workflows/CI.yml`) runs the tests on every push to `main` and on pull
+requests; the unattended data updates trigger it too. Check `gh run list` after pushing.
 
 Private, `github.com/NittanyLion/Quadriceps.jl`, branch `main`. No license has been chosen yet;
 do not add one without the author. `Manifest.toml` files and `docs/build/` are not committed.

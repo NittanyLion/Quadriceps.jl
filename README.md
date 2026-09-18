@@ -1,5 +1,7 @@
 # Quadriceps.jl
 
+[![CI](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml)
+
 > **Paper:** J. Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
 >
 > **Data deposit:** Zenodo — DOI: **[ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA)** (link to be filled in on publication)
@@ -8,12 +10,12 @@ Positive-weight cubature rules in several dimensions, for two weights:
 
 | function | weight (default) | one-dimensional cousin |
 |---|---|---|
-| `ghpos(d, q)` | standard normal density `N(0, I_d)` on `R^d` | `gausshermite(q)` |
-| `lepos(d, q)` | uniform density on `[0,1]^d` | `gausslegendre(q)` |
+| `ghpos(d, q)` | standard normal density `N(0, I_d)` on `ℝᵈ` | `gausshermite(q)` |
+| `lepos(d, q)` | uniform density on `[0,1]ᵈ` | `gausslegendre(q)` |
 
-A rule of degree `p` is a set of `n` nodes `x_i ∈ R^d` and weights `w_i > 0` with
+A rule of degree `p` is a set of `n` nodes `x_i ∈ ℝᵈ` and weights `w_i > 0` with
 `Σ w_i f(x_i) = ∫ f(x) ω(x) dx` for every polynomial `f` of total degree `≤ p`. The product of
-`q`-node one-dimensional Gauss rules does this for `p = 2q - 1` with `q^d` nodes. The rules
+`q`-node one-dimensional Gauss rules does this for `p = 2q - 1` with `qᵈ` nodes. The rules
 stored here, the smallest positive-weight rules known to the author, do it with far fewer.
 
 <!-- BEGIN GENERATED coverage -->
@@ -61,7 +63,7 @@ ghpos(3; p = 7) == ghpos(3, 4)  # true: the keyword p requests a rule by its deg
 Both functions follow `gausshermite(q)` and `gausslegendre(q)` from FastGaussQuadrature.jl, with
 the dimension `d ≥ 1` in front. There, `q` is the number of nodes of the one-dimensional Gauss
 rule, which is exact to degree `2q - 1`. Here, `ghpos(d, q)` returns a `d`-dimensional rule of
-that same degree `p = 2q - 1`: a replacement for the `q^d`-node product grid, and for `d = 1`
+that same degree `p = 2q - 1`: a replacement for the `qᵈ`-node product grid, and for `d = 1`
 the `q`-node Gauss rule itself. `X` is an `n × d` matrix, `w` a vector of `n` positive weights.
 
 To ask for a degree instead, use the method with the keyword `p`: `ghpos(d; p = 7)`,
@@ -77,8 +79,8 @@ FastGaussQuadrature's default, with the same meaning of the keyword:
 
 | | `normalize = true` (default) | `normalize = false` (FastGaussQuadrature's convention) |
 |---|---|---|
-| `ghpos` | weight `(2π)^(-d/2) exp(-‖x‖²/2)`; weights sum to 1 | weight `exp(-‖x‖²)`; weights sum to `π^(d/2)` |
-| `lepos` | uniform density on `[0,1]^d`; weights sum to 1 | `∫ f(x) dx` over `[-1,1]^d`; weights sum to `2^d` |
+| `ghpos` | weight `(2π)⁻ᵈᐟ² exp(-‖x‖²/2)`; weights sum to 1 | weight `exp(-‖x‖²)`; weights sum to `πᵈᐟ²` |
+| `lepos` | uniform density on `[0,1]ᵈ`; weights sum to 1 | `∫ f(x) dx` over `[-1,1]ᵈ`; weights sum to `2ᵈ` |
 
 So `ghpos(1, q; normalize = false)` is `gausshermite(q)`, `ghpos(1, q)` is
 `gausshermite(q; normalize = true)`, and `lepos(1, q; normalize = false)` is `gausslegendre(q)`,
