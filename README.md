@@ -152,13 +152,28 @@ julia --project=docs docs/make.jl
 
 and open `docs/build/index.html`.
 
-## Rebuilding the data
+## Sister packages
 
-`build/build_data.jl` regenerates `data/` and `docs/src/rules.md` from the rule bank of the
-designed-quadrature project: for every `(d, p)` it takes the smallest rule that passes the
-checks, and keeps it if it has fewer nodes than every tensor product of lower-dimensional rules
-or attains Möller's bound.
+The same rules, with the same functions and conventions, are available for Python
+([quadriceps-py](https://github.com/NittanyLion/quadriceps-py), numpy only) and for R
+([quadriceps-r](https://github.com/NittanyLion/quadriceps-r), base R only). This package is the
+master copy of the data.
+
+## Keeping the data current
+
+`build/build_data.jl` regenerates `data/`, `docs/src/rules.md` and the generated blocks of this
+README from the rule bank of the designed-quadrature project: for every `(d, p)` it takes the
+smallest rule that passes the checks, and keeps it if it has fewer nodes than every tensor
+product of lower-dimensional rules or attains Möller's bound. It refuses to replace `data/` if a
+stored rule would disappear or grow, or if the set of third-party rules would change.
 
 ```
-julia --project=build build/build_data.jl [path to the project's sync folder]
+julia --project=build build/build_data.jl [--force] [path to the project's sync folder]
 ```
+
+`build/update.sh` does this unattended: it rebuilds, and when a rule changed it runs the tests,
+commits and pushes, then carries the data into the two sister packages, which it tests, commits
+and pushes as well. `build/update.sh --install` adds an hourly cron entry for it (on one machine
+only), `--remove` takes it out; the log is `~/.local/state/quadriceps/update.log`. Anything that
+needs a person (a regression, a credit change, failing tests, a failed push) raises a desktop
+notification and leaves the repositories untouched.

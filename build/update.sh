@@ -20,6 +20,7 @@
 # Log: ~/.local/state/quadriceps/update.log
 
 set -u
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 JULIA_NUM_THREADS=1   # stay out of the way
 PKG=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 SYNC=${QUADRICEPS_SYNC:-$HOME/Dropbox/oldDesignedQuadrature-sync}
 STATE=$HOME/.local/state/quadriceps; mkdir -p "$STATE"

@@ -19,7 +19,8 @@ code is small; it looks rules up, builds tensor products when asked, and checks 
 | `src/api.jl` | `ghpos`, `lepos`, `nnodes`, `ruleinfo`: the `(d, q)` methods and the `(d; p)` methods, and the `normalize = false` transforms |
 | `src/verify.jl` | `exactness_error`: largest relative monomial error against closed-form moments |
 | `data/<family>/*.csv`, `data/index.tsv` | the rules and their catalog — **generated, never edited by hand** |
-| `build/build_data.jl` | regenerates `data/` and `docs/src/rules.md` from the rule bank (own environment in `build/`) |
+| `build/build_data.jl` | regenerates `data/`, `docs/src/rules.md` and the generated blocks of `README.md` from the rule bank (own environment in `build/`) |
+| `build/update.sh` | the unattended updater (hourly cron on one machine): rebuild, test, commit, push, then sync the sister packages `../quadriceps-py` and `../quadriceps-r` |
 | `docs/` | Documenter.jl site (own environment); `docs/src/rules.md` is generated |
 | `test/runtests.jl` | checks every stored rule, both conventions, the fallback, the error paths |
 | `NOTICE.md` | third-party credit and the MIT notice that travels with the derived rules |
@@ -60,9 +61,13 @@ only on the author's machines; everything else works from a plain clone.
 
 ## Data rules
 
-* Do not edit `data/` or `docs/src/rules.md` by hand; change `build/build_data.jl` and rerun it.
-  The bank changes over time, so a rebuild may change node counts; update the numbers quoted
-  in `README.md` and `docs/src/` when it does.
+* Do not edit `data/`, `docs/src/rules.md` or the `GENERATED` blocks of `README.md` by hand;
+  change `build/build_data.jl` and rerun it. The bank changes over time and `build/update.sh`
+  commits the changes by itself, so never write a node count of a non-minimal rule into prose:
+  put it in a generated block (README) or compute it in an `@eval`/`@repl` block (docs).
+* This package is the master copy for the Python and R twins (`../quadriceps-py`,
+  `../quadriceps-r`); their data, `RULES.md` and `NOTICE.md` are copied from here. Change
+  behavior in all three together.
 * A rule is stored only if it has fewer nodes than every tensor product of lower-dimensional
   stored rules and Gauss rules, or attains Möller's bound. The bank's own tensor fills stay out.
 * Credit: the `origin` of a rule comes from the project's `rules/literature.tsv` (transcribed,
