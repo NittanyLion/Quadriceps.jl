@@ -106,6 +106,9 @@ only on the author's machines; everything else works from a plain clone.
 
 ## Repository
 
+`authored_by.svg` is the author's shield (the same file as in MemoryLayouts.jl); the README shows
+it after the other badges. Do not replace it with a generated shields.io badge.
+
 Quality gate: `Aqua.test_all(Quadriceps)` runs as part of the test suite (ambiguities, stale or
 unbounded dependencies, undefined exports, piracy); new dependencies need a `[compat]` entry.
 The logo is `docs/src/assets/logo.svg` (Documenter picks it up; the twins carry copies).
