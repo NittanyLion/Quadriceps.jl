@@ -1,0 +1,6 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Quadriceps = "9371e607-b390-4342-8322-9e25c25d5a03"
+
+[sources]
+Quadriceps = {path = ".."}
