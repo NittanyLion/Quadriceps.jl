@@ -36,11 +36,9 @@ rule, is in [`docs/src/rules.md`](docs/src/rules.md).
 
 ## Installation
 
-The repository is private. With access to it:
-
 ```julia
 using Pkg
-Pkg.add(url = "git@github.com:NittanyLion/Quadriceps.jl.git")
+Pkg.add("Quadriceps")
 ```
 
 Julia 1.10 or later. The only dependency is FastGaussQuadrature.jl.
