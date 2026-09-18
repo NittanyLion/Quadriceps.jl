@@ -18,13 +18,12 @@ approximate integral.
 The product of one-dimensional Gauss rules is such a rule with ``q^d`` nodes, where
 ``q = (p+1)/2``. The rules in this package need far fewer:
 
-| cell | product grid | stored rule |
-|:---|---:|---:|
-| GH, ``d = 3``, ``p = 7`` | 64 | 27 |
-| GH, ``d = 5``, ``p = 9`` | 3125 | 244 |
-| GH, ``d = 5``, ``p = 21`` | 161051 | 13199 |
-| Le, ``d = 2``, ``p = 77`` | 1521 | 1032 |
-| Le, ``d = 5``, ``p = 21`` | 161051 | 10984 |
+```@eval
+using Quadriceps, Markdown
+rows = ["| $(fam ≡ :gh ? "GH" : "Le"), ``d = $d``, ``q = $q`` | $(big(q)^d) | $(Quadriceps.nnodes(fam, d, q)) |"
+        for (fam, d, q) in ((:gh, 3, 4), (:gh, 5, 5), (:gh, 5, 11), (:le, 2, 39), (:le, 5, 11))]
+Markdown.parse("| cell | product grid | stored rule |\n|:---|---:|---:|\n" * join(rows, "\n"))
+```
 
 The package exports two functions, [`ghpos`](@ref) and [`lepos`](@ref), modeled on
 `gausshermite(q)` and `gausslegendre(q)` from FastGaussQuadrature.jl: `q` is the number of nodes

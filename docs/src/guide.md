@@ -96,23 +96,21 @@ each factor either a stored rule of dimension ``d_j`` and degree `≥ p` or a on
 Gauss rule, and returns the combination with the fewest nodes. The columns of `X` follow the
 order of the factors, and the first factor varies slowest along the rows.
 
-```julia
-julia> ghpos(7, 5)
-ERROR: ArgumentError: no stored positive-weight GH rule for d = 7, q = 5 (p = 9): no rules are stored for d = 7; …
-
-julia> X, w = ghpos(7, 5; pragmatic = true); size(X)
-(4392, 7)
-
-julia> [(r.d, r.n) for r in Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)]
-2-element Vector{Tuple{Int64, Int64}}:
- (2, 18)
- (5, 244)
+```@repl guide
+using Quadriceps
+ghpos(7, 5)
+X, w = ghpos(7, 5; pragmatic = true); size(X)
+[(r.d, r.n) for r in Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)]
+5^7     # the product grid
 ```
 
-The product grid for that cell has ``5^7 = 78125`` nodes. When the degree, not the dimension,
-is out of range, the saving is smaller, because a one-dimensional Gauss factor is unavoidable:
-`lepos(3, 24; pragmatic = true)` has 9312 nodes (a 24-node Gauss rule times the 388-node rule
-for ``d = 2``), against 13824 for the grid.
+When the degree, not the dimension, is out of range, the saving is smaller, because a
+one-dimensional Gauss factor is unavoidable:
+
+```@repl guide
+[(r.d, r.n) for r in Quadriceps.ruleinfo(:le, 3, 24; pragmatic = true)]
+Quadriceps.nnodes(:le, 3, 24; pragmatic = true), 24^3
+```
 
 `pragmatic = true` changes nothing for a request that a stored rule covers, with one proviso:
 the result is always the cheapest rule the package can build, so if a tensor product had
@@ -151,12 +149,11 @@ Everywhere else "smallest" means smallest known to the author, not smallest poss
 
 ## Inspecting the catalog
 
-```julia
+```@repl guide
 using Quadriceps: available, nnodes, ruleinfo
-
 [(r.p, r.n) for r in available(:le) if r.d == 4]     # degrees and node counts, Le, d = 4
-nnodes(:gh, 5, 7)                                     # 1135 (q = 7, degree 13)
-ruleinfo(:le, 3; p = 41)[1].origin                       # "derived: Diallo and Worku 2026, …"
+nnodes(:gh, 5, 7)                                     # q = 7, degree 13
+ruleinfo(:le, 3; p = 41)[1].origin
 ```
 
 Each rule is a plain text file `data/<family>/<family>_d<d>_p<p>_n<n>.csv`: comment lines

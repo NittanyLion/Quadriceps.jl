@@ -1,4 +1,4 @@
-# Quadriceps.jl rule catalog — written by build/build_data.jl on 2026-09-18; do not edit by hand
+# Quadriceps.jl rule catalog — written by build/build_data.jl; do not edit by hand
 family	d	p	n	moller	relerr	minweight	interior	origin	file
 gh	2	1	1	1	0.000e+00	1.000000e+00	yes	own	gh_d2_p1_n1.csv
 gh	2	3	4	4	2.220e-16	1.398499e-01	yes	own	gh_d2_p3_n4.csv

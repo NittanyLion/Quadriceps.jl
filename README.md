@@ -10,9 +10,11 @@ Positive-weight cubature rules in several dimensions, for two weights:
 A rule of degree `p` is a set of `n` nodes `x_i ∈ R^d` and weights `w_i > 0` with
 `Σ w_i f(x_i) = ∫ f(x) ω(x) dx` for every polynomial `f` of total degree `≤ p`. The product of
 `q`-node one-dimensional Gauss rules does this for `p = 2q - 1` with `q^d` nodes. The rules
-stored here do it with far fewer: 244 nodes instead of 3125 for the Gaussian weight at `d = 5, p = 9`, 10984
-instead of 161051 for the cube at `d = 5, p = 21`. They are the smallest positive-weight rules
-known to the author, 148 in all:
+stored here, the smallest positive-weight rules known to the author, do it with far fewer.
+
+<!-- BEGIN GENERATED coverage -->
+148 rules are stored: for example 244 nodes instead of 3125 for the Gaussian weight at
+`d = 5, q = 5`, and 10984 instead of 161051 for the cube at `d = 5, q = 11`.
 
 | `d` | GH | largest GH rule | Le | largest Le rule |
 |---|---|---|---|---|
@@ -20,6 +22,8 @@ known to the author, 148 in all:
 | 3 | `q ≤ 18` (`p ≤ 35`) | 4749 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
 | 4 | `q ≤ 12` (`p ≤ 23`) | 3238 nodes | `q ≤ 12` (`p ≤ 23`) | 3244 nodes |
 | 5 | `q ≤ 11` (`p ≤ 21`) | 13199 nodes | `q ≤ 11` (`p ≤ 21`) | 10984 nodes |
+
+<!-- END GENERATED coverage -->
 
 The full list, with node counts, Möller's lower bound, measured accuracy and the origin of each
 rule, is in [`docs/src/rules.md`](docs/src/rules.md).
@@ -87,14 +91,16 @@ Rules are stored for `2 ≤ d ≤ 5` up to the ceilings in the table above. For 
   result is a valid positive-weight rule of degree `p`. It is not small, but it is much
   smaller than the plain product grid whenever a stored rule can be a factor.
 
+<!-- BEGIN GENERATED pragmatic -->
 ```julia
 ghpos(7, 5)                             # ArgumentError: no stored rule in seven dimensions
-X, w = ghpos(7, 5; pragmatic = true)    # 4392 nodes: (d = 2, n = 18) × (d = 5, n = 244); the grid has 78125
-X, w = lepos(3, 24; pragmatic = true)   # 9312 nodes: Gauss (24) × (d = 2, n = 388); the grid has 13824
+X, w = ghpos(7, 5; pragmatic = true)    # 4392 nodes; the product grid has 78125
+X, w = lepos(3, 24; pragmatic = true)   # 9312 nodes; the product grid has 13824
 
 Quadriceps.nnodes(:gh, 10, 3; pragmatic = true)     # 1024, without building the rule
 Quadriceps.ruleinfo(:gh, 7, 5; pragmatic = true)    # the factors, with their origins
 ```
+<!-- END GENERATED pragmatic -->
 
 With `pragmatic = true` a request that a stored rule covers returns that stored rule, as without
 it. (The one exception: if a product were ever strictly cheaper than the stored rule, the
@@ -124,9 +130,12 @@ repeats the check for every rule. All nodes of the Le rules lie strictly inside 
 
 ## Whose rules these are
 
+<!-- BEGIN GENERATED credits -->
 122 of the 148 rules were computed by the author. 15 are rules from the literature (copied in,
 or found again by the author's search and recognized), and 11 Le rules were obtained by node
-elimination started from Diallo and Worku's published rules. `Quadriceps.ruleinfo` and the
+elimination started from Diallo and Worku's published rules.
+<!-- END GENERATED credits -->
+`Quadriceps.ruleinfo` and the
 `origin` column of `data/index.tsv` say which is which; cite the source named there when you
 use such a rule. [`NOTICE.md`](NOTICE.md) has the license notice that travels with the derived
 files, and [`docs/src/credits.md`](docs/src/credits.md) the references.

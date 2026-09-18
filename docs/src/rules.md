@@ -1,6 +1,6 @@
 # Stored rules
 
-Written by `build/build_data.jl` on 2026-09-18. `q`: the argument of `ghpos(d, q)` and `lepos(d, q)`;
+Written by `build/build_data.jl`. `q`: the argument of `ghpos(d, q)` and `lepos(d, q)`;
 `p = 2q - 1`: degree of exactness; `n`: number of nodes; `ρ = n^(1/d) / q`: the node count
 relative to the `q^d` Gauss product grid (1.00 is that grid, smaller
 is better); Möller: Möller's lower bound on `n` (**bold** `n`: bound attained, proven minimal);

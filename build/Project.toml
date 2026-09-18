@@ -1,5 +1,4 @@
 [deps]
-Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Quadriceps = "9371e607-b390-4342-8322-9e25c25d5a03"
 SHA = "ea8e919c-243c-51af-8825-aaa63cd721ce"
