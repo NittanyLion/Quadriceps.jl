@@ -120,10 +120,10 @@ le	3	27	964	616	5.551e-17	3.171086e-05	yes	derived: Diallo and Worku 2026, elimi
 le	3	29	1184	743	1.110e-16	1.128774e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p29_n1258 for the same cell	3	legendre_d3_p29_n1184.csv	9fc0ddf720eddca7cdaecd3aaeddadecb9131b1e290c06978e541e7237857da9
 le	3	31	1432	888	2.220e-16	1.334490e-05	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p31_n1478 for the same cell	3	legendre_d3_p31_n1432.csv	4221c7ca8715da286b970e17cc0a13742b00c8781db25a25b60bfe4fc8590949
 le	3	33	1714	1049	2.220e-16	6.970576e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p33_n1787 for the same cell	3	legendre_d3_p33_n1714.csv	4c9856a3fa6cd4e4a88332afeb2f3909a891d4e90cd331e0826181bdfa0230e0
-le	3	35	2028	1230	6.106e-14	9.991170e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell	3	legendre_d3_p35_n2028.csv	3c4e01dbae76026d2d962b09e030c59a0cae8456c2c0a7db5bb17ea8517b39b5
-le	3	37	2380	1429	6.717e-14	5.914547e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell	3	legendre_d3_p37_n2380.csv	0e2ace558f6fcce6eb27517e959b6cb454863837cfdaeaab367437f85d8928ad
-le	3	39	2770	1650	3.302e-13	4.411826e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell	3	legendre_d3_p39_n2770.csv	af12cc900505cb638370b7598a05642825d158d27a9c9b096298c1a08a63aa0e
-le	3	41	3200	1891	1.430e-13	3.560539e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell	3	legendre_d3_p41_n3200.csv	758fab5e18ffcf143148f76dc0468ae2f6ce8d5be7313eb2405fd5642dc4561b
+le	3	35	2028	1230	3.331e-16	9.991170e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell	3	legendre_d3_p35_n2028.csv	6286dfd0686d63f4ffbf6e71248067fe1f28da41676f384120f26234cab49289
+le	3	37	2380	1429	4.441e-16	5.914547e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell	3	legendre_d3_p37_n2380.csv	d657959f2d0c5d5832ffb1fd44b282e99315fd0369b1a360f4664500fc7c6dd3
+le	3	39	2770	1650	2.220e-16	4.411826e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell	3	legendre_d3_p39_n2770.csv	a7a7df5d76edf486ae5bbd21af9080992737cc98091f3211ebd7d49d75b8b041
+le	3	41	3200	1891	2.220e-16	3.560539e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell	3	legendre_d3_p41_n3200.csv	ebf95f3e2e9990234ba2add38a7bee758e264c0f513642a7e84a46dfeeaa06de
 le	3	43	3704	2156	1.665e-15	1.523870e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p43_n3870 for the same cell	3	legendre_d3_p43_n3704.csv	1528af845875dd5309eab8cfd92c604450cd7f81fc2afcd8d0dad743e64bb3cd
 le	3	45	4308	2443	9.992e-16	1.025680e-06	yes	derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p45_n4414 for the same cell	3	legendre_d3_p45_n4308.csv	a45ed1ef47a0b12d444d7b9aaaa50af4c18b949f1342fc46f24f6a3e0d504c23
 le	4	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d4_p1_n1.csv	6103f3fa1023cc75a72604c629fab0e191e1374cc886d4b77ef51f4c0457c6e5
@@ -136,7 +136,7 @@ le	4	13	416	259	4.441e-16	2.113866e-04	yes	own	0	legendre_d4_p13_n416.csv	3dcbe5
 le	4	15	690	400	1.110e-16	9.599123e-05	yes	own	0	legendre_d4_p15_n690.csv	a1d55a9df06a2c90975fc26c86dd9874282ace9d44145c7c6c4020726c10e97f
 le	4	17	1078	589	2.220e-16	3.643559e-05	yes	own	0	legendre_d4_p17_n1078.csv	36d568b973c52e36ce4cca5f27be468b0ef091e358f9e805e74fde38fb46167e
 le	4	19	1612	840	3.331e-16	2.058213e-05	yes	own	0	legendre_d4_p19_n1612.csv	3205fc94a23989cdd309545f5ade61ae19bd30f8b84a23b4562607630fb1aac3
-le	4	21	2322	1161	6.661e-16	1.039722e-05	yes	own	0	legendre_d4_p21_n2322.csv	3b8816f4bda5b2c55e474ba6a6a9c223c214c7d48625f460d245facf4a45b7c8
+le	4	21	2322	1161	1.110e-16	1.039722e-05	yes	own	0	legendre_d4_p21_n2322.csv	e75c0d1752104edf8d72e9431b951c3868d412924908bef9a059661f7c036c69
 le	4	23	3244	1568	1.528e-13	3.935392e-06	yes	own	0	legendre_d4_p23_n3244.csv	0bd21c4a417a1999eb65099ba76ad0c0027f1eac2e0bb865487cea48b7cebacd
 le	5	1	1	1	0.000e+00	1.000000e+00	yes	own	0	legendre_d5_p1_n1.csv	0c5a53d60fcf302f48ecdb8ee9adef8781db7777c27162ada6149c0201d47702
 le	5	3	10	10	2.220e-16	8.502385e-02	yes	own	0	legendre_d5_p3_n10.csv	6b1197719e240f45e3c90a80424915810ddb96c606c4c8d22104b694f60f7ee5

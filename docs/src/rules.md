@@ -159,10 +159,10 @@ published rule it is, or descends from (see [Credits](credits.md)).
 | 15 | 29 | 1184 | 0.71 | 743 | 1.1e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p29_n1258 for the same cell |
 | 16 | 31 | 1432 | 0.70 | 888 | 2.2e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p31_n1478 for the same cell |
 | 17 | 33 | 1714 | 0.70 | 1049 | 2.2e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p33_n1787 for the same cell |
-| 18 | 35 | 2028 | 0.70 | 1230 | 6.1e-14 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell |
-| 19 | 37 | 2380 | 0.70 | 1429 | 6.7e-14 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell |
-| 20 | 39 | 2770 | 0.70 | 1650 | 3.3e-13 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell |
-| 21 | 41 | 3200 | 0.70 | 1891 | 1.4e-13 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell |
+| 18 | 35 | 2028 | 0.70 | 1230 | 3.3e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p35_n2102 for the same cell |
+| 19 | 37 | 2380 | 0.70 | 1429 | 4.4e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p37_n2506 for the same cell |
+| 20 | 39 | 2770 | 0.70 | 1650 | 2.2e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p39_n2856 for the same cell |
+| 21 | 41 | 3200 | 0.70 | 1891 | 2.2e-16 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p41_n3338 for the same cell |
 | 22 | 43 | 3704 | 0.70 | 2156 | 1.7e-15 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p43_n3870 for the same cell |
 | 23 | 45 | 4308 | 0.71 | 2443 | 1.0e-15 | derived: Diallo and Worku 2026, elimination started from their rule dw_d3_p45_n4414 for the same cell |
 
@@ -180,7 +180,7 @@ published rule it is, or descends from (see [Credits](credits.md)).
 | 8 | 15 | 690 | 0.64 | 400 | 1.1e-16 | own |
 | 9 | 17 | 1078 | 0.64 | 589 | 2.2e-16 | own |
 | 10 | 19 | 1612 | 0.63 | 840 | 3.3e-16 | own |
-| 11 | 21 | 2322 | 0.63 | 1161 | 6.7e-16 | own |
+| 11 | 21 | 2322 | 0.63 | 1161 | 1.1e-16 | own |
 | 12 | 23 | 3244 | 0.63 | 1568 | 1.5e-13 | own |
 
 ### d = 5
