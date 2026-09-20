@@ -15,6 +15,7 @@ lepos
 
 ```@docs
 Quadriceps.available
+Quadriceps.extended
 Quadriceps.nnodes
 Quadriceps.ruleinfo
 Quadriceps.RuleInfo

@@ -27,6 +27,14 @@
 # The rules go into ONE binary file, data/rules.bin (format QUADRICEPS1, docs/src/format.md);
 # data/index.tsv is the catalog that goes with it. No per-rule text files are written.
 #
+# Beyond double precision: where the project holds an extended-precision file of the stored rule
+# (project/julia/rules_mp/<bank file>.mp.csv) whose Float64 rounding IS the stored rule, row for
+# row and bit for bit (judged on the file's full digits), the file rounded to IEEE binary128 goes into data/rules128.bin (same
+# format, float=binary128), with catalog data/index128.tsv. Its relerr128 comes from the
+# deposit's summary.csv (err_float128) when that names the same (d, p, n), else from the previous
+# index128.tsv when the file is unchanged, else it is measured here. Neither file takes part in
+# the regression and credit checks.
+#
 # Also rewrites docs/src/rules.md and the generated blocks of README.md. The output carries no
 # dates, so a rebuild from an unchanged bank changes no file.
 
@@ -145,6 +153,55 @@ open(joinpath(NEW, "index.tsv"), "w") do io
 end
 writebin(joinpath(NEW, "rules.bin"), rules)
 
+# --- beyond double precision: rules128.bin, index128.tsv -------------------------------------
+const MP = joinpath(SYNC, "project", "julia", "rules_mp")
+deposit128 = Dict{Tuple{Symbol,Int,Int,Int},Float64}()          # (family, d, p, n) => err_float128 of the deposit
+for (dir, fam) in (("gh", :gh), ("le", :le))
+    f = joinpath(SYNC, "publish", dir, "summary.csv"); isfile(f) || continue
+    L = readlines(f); h = split(L[1], ","); j = findfirst(==("err_float128"), h); j ≡ nothing && continue
+    back = length(h) - j                                         # counted from the end: quoted fields earlier hold commas
+    for l in L[2:end]
+        m = match(r"^\w+,(\d+),(\d+),\d+,(\d+),", l); m ≡ nothing && continue
+        e = tryparse(Float64, split(l, ",")[end-back])
+        e ≡ nothing || (deposit128[(fam, parse(Int, m[1]), parse(Int, m[2]), parse(Int, m[3]))] = e)
+    end
+end
+previous128 = Dict{Tuple{Symbol,Int,Int},Tuple{String,Float64}}()   # key => (sha256 of the extended file, relerr128)
+let f = joinpath(PKG, "data", "index128.tsv")
+    isfile(f) && for r in rows(f)
+        startswith(r[1], "family") || (previous128[(Symbol(r[1]), parse(Int, r[2]), parse(Int, r[3]))] = (String(r[7]), parse(Float64, r[5])))
+    end
+end
+rules128 = Dict{Tuple{Symbol,Int,Int},Tuple{Matrix{BigFloat},Vector{BigFloat},Int}}()
+lines128 = String[]; skipped128 = String[]
+for r in infos
+    key = (r.family, r.d, r.p)
+    f = joinpath(MP, replace(provenance[key][1], r".csv$" => ".mp.csv"))
+    isfile(f) || (push!(skipped128, "$(provenance[key][1]): no extended-precision file"); continue)
+    S = [split(strip(l), ',') for l in eachline(f) if occursin(r"^\s*[-+0-9.]", l)]
+    # identity with the stored rule is judged on the file's full digits (as the deposit does); what is stored is the
+    # binary128 rounding. Rounding THAT to Float64 can miss by one unit in the last place where a number of the file
+    # sits within 2^-113 of a Float64 tie (symmetrized coordinates of size 1e-30 that stand for zero), which is harmless.
+    F = [Float64(BigFloat(String(S[i][k]); precision = 512)) for i in eachindex(S), k in 1:r.d+1]
+    X = BigFloat[BigFloat(String(S[i][k]); precision = 113) for i in eachindex(S), k in 1:r.d]
+    w = BigFloat[BigFloat(String(S[i][r.d+1]); precision = 113) for i in eachindex(S)]
+    (size(X) == size(rules[key][1]) && F[:, 1:r.d] == rules[key][1] && F[:, r.d+1] == rules[key][2]) ||
+        (push!(skipped128, "$(provenance[key][1]): its extended-precision file does not round to it row for row"); continue)
+    sha = bytes2hex(sha256(read(f)))
+    err = get(deposit128, (r.family, r.d, r.p, r.n), nothing)
+    err ≡ nothing && haskey(previous128, key) && previous128[key][1] == sha && (err = previous128[key][2])
+    err ≡ nothing && (err = Float64(setprecision(() -> exactness_error(BigFloat.(X), BigFloat.(w), r.p, r.family), BigFloat, 320)))
+    rules128[key] = (X, w, r.source_id)
+    push!(lines128, @sprintf("%s\t%d\t%d\t%d\t%.3e\t%s\t%s", r.family, r.d, r.p, r.n, err, basename(f), sha))
+end
+open(joinpath(NEW, "index128.tsv"), "w") do io
+    println(io, "# Quadriceps.jl catalog of rules128.bin (IEEE binary128) — written by build/build_data.jl; do not edit by hand")
+    println(io, "# relerr128: largest relative monomial error of the rule rounded to binary128, in wider arithmetic; 2^-112 = 1.93e-34 is the machine epsilon")
+    println(io, "family\td\tp\tn\trelerr128\textendedfile\tsha256")
+    foreach(l -> println(io, l), lines128)
+end
+writebin(joinpath(NEW, "rules128.bin"), rules128; float = "binary128")
+
 # --- compare with what is stored now, then swap -----------------------------------------------
 old = readindex(joinpath(PKG, "data", "index.tsv"))
 kind(r) = first(split(r.origin, ':'))
@@ -173,6 +230,7 @@ fills = count(contains("not below the tensor product"), dropped)
 fills > 0 && println("left out: $fills bank rules that a tensor product of lower-dimensional rules matches")
 filter!(!contains("not below the tensor product"), dropped)
 isempty(dropped) || println("left out:\n  ", join(dropped, "\n  "))
+isempty(skipped128) || println("in Float64 only (not in rules128.bin):\n  ", join(skipped128, "\n  "))
 if !FORCE && !isempty(old) && !isempty(worse)
     println("REGRESSION, data/ left alone:\n  ", join(worse, "\n  ")); rm(NEW; recursive = true); exit(3)
 end

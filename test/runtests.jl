@@ -147,4 +147,57 @@ const GATE = 1e-11
         X, w = lepos(2, 5)
         @test exactness_error(big.(X), big.(w), 9, :le) < 1e-15
     end
+
+    @testset "binary128 codec" begin
+        enc(x) = Quadriceps.encode128(BigFloat(x; precision = 113))
+        @test enc(1) == UInt128(0x3fff) << 112
+        @test enc(-2.5) == (UInt128(1) << 127) | (UInt128(0x4000) << 112) | (UInt128(1) << 110)
+        @test enc("0.1") == 0x3ffb999999999999999999999999999a          # the binary128 nearest to 1/10
+        @test enc(0) == 0
+        for x ∈ (BigFloat(π; precision = 113), -BigFloat("7.0785769767068e-33"; precision = 113), BigFloat(2; precision = 113)^-40)
+            @test Quadriceps.decode128(Quadriceps.encode128(x)) == x
+        end
+        @test_throws ArgumentError Quadriceps.encode128(BigFloat(π; precision = 256))
+    end
+
+    @testset "number types beyond Float64" begin
+        eps128 = 2.0^-112
+        for fam ∈ (:gh, :le)
+            ext = Quadriceps.extended(fam)
+            @test length(ext) ≥ length(available(fam)) - 2
+            pos = fam ≡ :gh ? ghpos : lepos
+            for r ∈ ext
+                r.n ≤ 300 || continue
+                @test r.relerr128 ≤ 10eps128
+                X, w = pos(BigFloat, r.d; p = r.p)
+                X64, w64 = pos(r.d; p = r.p)
+                @test size(X) == size(X64) && eltype(X) ≡ BigFloat && all(>(0), w)
+                # the binary128 rule rounds to the Float64 rule: bit for bit, or one unit in the last place off
+                @test all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(X, X64)) && all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(w, w64))
+                err = setprecision(() -> exactness_error(BigFloat.(X), BigFloat.(w), r.p, fam), BigFloat, 320)
+                @test err ≤ 10eps128
+                @test isapprox(Float64(err), r.relerr128; rtol = 1e-2) || r.relerr128 == 0
+            end
+        end
+        @test eltype(ghpos(Float32, 3, 4)[1]) ≡ Float32 && Float32.(ghpos(3, 4)[2]) == ghpos(Float32, 3, 4)[2]
+        @test ghpos(Float64, 3, 4) == ghpos(3, 4) && lepos(Float64, 2; p = 9) == lepos(2, 5)
+        @test_throws ArgumentError ghpos(BigFloat, 2; p = 39)             # stored in Float64 only
+        # one-dimensional Gauss rules, refined beyond Float64
+        for (pos, fam, fgq) ∈ ((ghpos, :gh, q -> gausshermite(q; normalize = true)), (lepos, :le, q -> (g = gausslegendre(q); ((g[1] .+ 1) ./ 2, g[2] ./ 2))))
+            for q ∈ (1, 2, 7, 30)
+                X, w = pos(BigFloat, 1, q)
+                @test exactness_error(X, w, 2q - 1, fam) < 1e-60
+                x0, w0 = fgq(q)
+                @test Float64.(vec(X)) ≈ x0 && Float64.(w) ≈ w0
+            end
+        end
+        # frames and tensor products in T
+        X, w = ghpos(BigFloat, 3, 4; normalize = false)
+        @test abs(sum(w) - sqrt(big(π))^3) < 1e-32 && Float64.(X) ≈ ghpos(3, 4; normalize = false)[1]
+        X, w = lepos(BigFloat, 2, 5; normalize = false)
+        @test abs(sum(w) - 4) < 1e-32 && all(x -> -1 < x < 1, X)
+        X, w = ghpos(BigFloat, 7, 3; pragmatic = true)
+        @test eltype(w) ≡ BigFloat && size(X) == (nnodes(:gh, 7, 3; pragmatic = true), 7) && abs(sum(w) - 1) < 1e-32
+        @test exactness_error(X, w, 5, :gh) < 10eps128
+    end
 end

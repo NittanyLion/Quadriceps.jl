@@ -6,14 +6,14 @@ function degree(q::Integer)
     2q - 1
 end
 
-function rule(family::Symbol, d::Integer, p::Integer, pragmatic::Bool)
+function rule(::Type{T}, family::Symbol, d::Integer, p::Integer, pragmatic::Bool) where {T<:AbstractFloat}
     parts, n = plan(INDEX, family, d, p, pragmatic)
-    materialize(family, parts, n)
+    materialize(T, family, parts, n)
 end
 
 """
-    ghpos(d, q; normalize = true, pragmatic = false) -> X, w
-    ghpos(d; p, normalize = true, pragmatic = false) -> X, w
+    ghpos([T = Float64,] d, q; normalize = true, pragmatic = false) -> X, w
+    ghpos([T = Float64,] d; p, normalize = true, pragmatic = false) -> X, w
 
 Positive-weight cubature rule for the Gaussian weight in `d` dimensions: the smallest one the
 package has.
@@ -55,6 +55,24 @@ for every polynomial `f` of total degree `≤ p` (up to rounding; see
   `pragmatic = true` the product is also returned in the rare case that it has strictly fewer
   nodes than the stored rule, so the result is always the cheapest the package can build.
 
+# Number type
+
+The optional first argument `T` is the element type of `X` and `w`. Beyond `Float64` — say
+`Float128` of Quadmath.jl, `Double64` of DoubleFloats.jl, or `BigFloat` — the rule comes from
+the package's quadruple-precision data: every node and weight is the stored extended-precision
+rule correctly rounded to IEEE binary128 (113 bits, about 34 digits); rounded on to `Float64` it
+is the `Float64` rule (to the last bit, except that a coordinate of size `1e-30` standing for
+zero can come out one unit in the last place off). A `BigFloat` result therefore carries 34 correct
+digits, not more. One-dimensional Gauss factors are computed to that accuracy as well.
+[`Quadriceps.extended`](@ref) lists the cells stored this way, with the measured error of each
+in that format; asking for a cell that is held in `Float64` only is an `ArgumentError`.
+
+```julia
+using Quadmath
+X, w = ghpos(Float128, 3, 4)             # the 27-node rule in quadruple precision
+Float64.(X) ≈ ghpos(3, 4)[1]             # true: the same rule
+```
+
 # Details
 
 * `d = 1` returns the Gauss–Hermite rule with `q` (or `p ÷ 2 + 1`) nodes, as an `n × 1`
@@ -76,21 +94,23 @@ X, w = ghpos(7, 5; pragmatic = true)     # d = 7 as (d = 2) × (d = 5)
 
 See also [`lepos`](@ref), [`Quadriceps.nnodes`](@ref), [`Quadriceps.available`](@ref).
 """
-ghpos(d::Integer, q::Integer; normalize::Bool = true, pragmatic::Bool = false) =
-    ghpos(d; p = degree(q), normalize, pragmatic)
+ghpos(d::Integer, q::Integer; kw...) = ghpos(Float64, d, q; kw...)
+ghpos(d::Integer; kw...) = ghpos(Float64, d; kw...)
+ghpos(::Type{T}, d::Integer, q::Integer; normalize::Bool = true, pragmatic::Bool = false) where {T<:AbstractFloat} =
+    ghpos(T, d; p = degree(q), normalize, pragmatic)
 
-function ghpos(d::Integer; p::Integer, normalize::Bool = true, pragmatic::Bool = false)
-    X, w = rule(:gh, d, p, pragmatic)
+function ghpos(::Type{T}, d::Integer; p::Integer, normalize::Bool = true, pragmatic::Bool = false) where {T<:AbstractFloat}
+    X, w = rule(T, :gh, d, p, pragmatic)
     if !normalize                       # ∫ f(x) exp(-|x|²) dx = π^(d/2) E f(Z/√2)
-        X ./= sqrt(2.0)
-        w .*= π^(d / 2)
+        X ./= sqrt(T(2))
+        w .*= T(π)^(T(d) / 2)
     end
     X, w
 end
 
 """
-    lepos(d, q; normalize = true, pragmatic = false) -> X, w
-    lepos(d; p, normalize = true, pragmatic = false) -> X, w
+    lepos([T = Float64,] d, q; normalize = true, pragmatic = false) -> X, w
+    lepos([T = Float64,] d; p, normalize = true, pragmatic = false) -> X, w
 
 Positive-weight cubature rule for the uniform weight on a `d`-dimensional cube: the smallest
 one the package has.
@@ -117,7 +137,7 @@ polynomial `f` of total degree `≤ p` (up to rounding; see [`Quadriceps.ruleinf
   covers is an `ArgumentError`; with `true`, the cheapest tensor product of lower-dimensional
   rules (stored rules and one-dimensional Gauss–Legendre rules) is returned instead.
 
-The details listed under [`ghpos`](@ref) apply here too. All nodes of every stored Le rule lie
+The optional number type `T` and the details listed under [`ghpos`](@ref) apply here too. All nodes of every stored Le rule lie
 inside the cube.
 
 # Examples
@@ -132,14 +152,16 @@ X, w = lepos(6, 6; pragmatic = true)     # d = 6 from a product of stored rules
 
 See also [`ghpos`](@ref), [`Quadriceps.nnodes`](@ref), [`Quadriceps.available`](@ref).
 """
-lepos(d::Integer, q::Integer; normalize::Bool = true, pragmatic::Bool = false) =
-    lepos(d; p = degree(q), normalize, pragmatic)
+lepos(d::Integer, q::Integer; kw...) = lepos(Float64, d, q; kw...)
+lepos(d::Integer; kw...) = lepos(Float64, d; kw...)
+lepos(::Type{T}, d::Integer, q::Integer; normalize::Bool = true, pragmatic::Bool = false) where {T<:AbstractFloat} =
+    lepos(T, d; p = degree(q), normalize, pragmatic)
 
-function lepos(d::Integer; p::Integer, normalize::Bool = true, pragmatic::Bool = false)
-    X, w = rule(:le, d, p, pragmatic)
+function lepos(::Type{T}, d::Integer; p::Integer, normalize::Bool = true, pragmatic::Bool = false) where {T<:AbstractFloat}
+    X, w = rule(T, :le, d, p, pragmatic)
     if !normalize                       # [0,1]^d → [-1,1]^d
         @. X = 2X - 1
-        w .*= 2.0^d
+        w .*= T(2)^d
     end
     X, w
 end

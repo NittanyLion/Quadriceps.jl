@@ -95,6 +95,19 @@ columns: `family`, `d`, `p`, `n`, `moller` (Möller's lower bound, `-1` where no
 the file of the project's rule bank that the rule was taken from. The packages read the catalog
 for the metadata and `rules.bin` for the numbers, and refuse to load if the two disagree.
 
+## Quadruple precision: `rules128.bin` and `index128.tsv`
+
+`rules128.bin` is a second file of the same format with `float=binary128` in its header: every
+number is 16 little-endian bytes, the IEEE 754 binary128 (quadruple precision) rounding of the
+project's extended-precision rule, so `nbytes = n*(d+1)*16`. A C `__float128`, a Fortran
+`real(16)` or a Julia `Float128` array reads a block directly. It holds the cells that have an
+extended-precision file whose double-precision rounding is the rule in `rules.bin`, row for
+row. `index128.tsv` is its catalog: `family`, `d`, `p`, `n`, `relerr128` (largest relative
+monomial error of the binary128 rule, measured in wider arithmetic; the machine epsilon of the
+format is `2^-112 ≈ 1.93e-34`), and `extendedfile` and `sha256`, which name the project's file
+the numbers were rounded from. The Julia package reads both; the Python and R packages do not
+ship them.
+
 ## A reader in a few lines
 
 Python, standard library only:

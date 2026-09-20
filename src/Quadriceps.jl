@@ -22,7 +22,7 @@ X, w = lepos(2, 5)        # degree 9 on the unit square: 17 nodes instead of 25
 The second argument `q` is the number of nodes of the one-dimensional Gauss rule whose
 exactness is wanted, as in `gausshermite(q)`; the degree is `p = 2q - 1`.
 
-Unexported but public: [`Quadriceps.available`](@ref), [`Quadriceps.nnodes`](@ref),
+Unexported but public: [`Quadriceps.available`](@ref), [`Quadriceps.extended`](@ref), [`Quadriceps.nnodes`](@ref),
 [`Quadriceps.ruleinfo`](@ref), [`Quadriceps.exactness_error`](@ref).
 """
 module Quadriceps
@@ -32,10 +32,11 @@ using FastGaussQuadrature: gausshermite, gausslegendre
 export ghpos, lepos
 
 include("index.jl")
+include("extended.jl")
 include("plan.jl")
 include("api.jl")
 include("verify.jl")
 
-VERSION ≥ v"1.11.0-DEV.469" && eval(Meta.parse("public available, nnodes, ruleinfo, exactness_error, RuleInfo"))
+VERSION ≥ v"1.11.0-DEV.469" && eval(Meta.parse("public available, extended, nnodes, ruleinfo, exactness_error, RuleInfo"))
 
 end # module

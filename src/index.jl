@@ -82,7 +82,7 @@ const BIN = BinIndex()
 
 binpath() = joinpath(datadir(), "rules.bin")
 
-function readbinindex(path::AbstractString)
+function readbinindex(path::AbstractString; float::AbstractString = "binary64", width::Int = 8)
     bin = BinIndex()
     isfile(path) || return bin
     open(path) do io
@@ -90,11 +90,11 @@ function readbinindex(path::AbstractString)
         tok = split(header)
         (!isempty(tok) && tok[1] == MAGIC) || error("$path: not a $MAGIC file")
         kv = Dict(String.(split(t, '='; limit = 2)) for t in tok[2:end] if occursin('=', t))
-        (kv["fmt"] == "1" && kv["endian"] == "little" && kv["float"] == "binary64" && kv["index_fields"] == string(NIDX)) ||
+        (kv["fmt"] == "1" && kv["endian"] == "little" && kv["float"] == float && kv["index_fields"] == string(NIDX)) ||
             error("$path: unsupported $MAGIC variant: $header")
         for _ in 1:parse(Int, kv["cells"])
             f, d, p, q, n, off, nb, sid = (Int(ltoh(read(io, Int64))) for _ in 1:NIDX)
-            nb == n * (d + 1) * 8 || error("$path: cell d=$d p=$p has nbytes=$nb, expected $(n * (d + 1) * 8)")
+            nb == n * (d + 1) * width || error("$path: cell d=$d p=$p has nbytes=$nb, expected $(n * (d + 1) * width)")
             bin[(FAMILIES[f+1], d, p)] = BinEntry(n, off, nb, sid)
         end
     end
@@ -114,15 +114,16 @@ function readblock(path::AbstractString, e::BinEntry, d::Integer)
 end
 
 # Write rules (key => (X, w, source_id)) as a QUADRICEPS1 file; cells in (family, d, p) order.
-function writebin(path::AbstractString, rules::AbstractDict)
+function writebin(path::AbstractString, rules::AbstractDict; float::AbstractString = "binary64")
+    width = float == "binary64" ? 8 : 16
     order = sort!(collect(keys(rules)); by = k -> (findfirst(==(k[1]), FAMILIES), k[2], k[3]))
-    header = "$MAGIC fmt=1 endian=little cells=$(length(order)) index_fields=$NIDX float=binary64 " *
+    header = "$MAGIC fmt=1 endian=little cells=$(length(order)) index_fields=$NIDX float=$float " *
              "order=row-major layout=x1..xd,w families=0:gh,1:le\n"
     offset = sizeof(header) + length(order) * NIDX * 8
     open(path, "w") do io
         write(io, header)
         for k in order
-            X, _, sid = rules[k]; n, d = size(X); nb = n * (d + 1) * 8
+            X, _, sid = rules[k]; n, d = size(X); nb = n * (d + 1) * width
             for v in (findfirst(==(k[1]), FAMILIES) - 1, d, k[3], (k[3] + 1) ÷ 2, n, offset, nb, sid)
                 write(io, htol(Int64(v)))
             end
@@ -131,8 +132,8 @@ function writebin(path::AbstractString, rules::AbstractDict)
         for k in order
             X, w, _ = rules[k]
             for i in axes(X, 1)
-                for c in axes(X, 2); write(io, htol(Float64(X[i, c]))); end
-                write(io, htol(Float64(w[i])))
+                for c in axes(X, 2); write(io, htol(width == 8 ? Float64(X[i, c]) : encode128(X[i, c]))); end
+                write(io, htol(width == 8 ? Float64(w[i]) : encode128(w[i])))
             end
         end
     end
@@ -140,12 +141,14 @@ function writebin(path::AbstractString, rules::AbstractDict)
 end
 
 function __init__()
-    empty!(INDEX); empty!(BIN); empty!(CACHE)
+    empty!(INDEX); empty!(BIN); empty!(CACHE); empty!(BIN128); empty!(INDEX128); empty!(CACHE128)
     merge!(INDEX, readindex(joinpath(datadir(), "index.tsv")))
     merge!(BIN, readbinindex(binpath()))
     for (k, info) in INDEX
         (haskey(BIN, k) && BIN[k].n == info.n) || error("Quadriceps: data/index.tsv and data/rules.bin disagree at $k")
     end
+    merge!(BIN128, readbinindex(bin128path(); float = "binary128", width = 16))
+    merge!(INDEX128, readindex128(joinpath(datadir(), "index128.tsv")))
     nothing
 end
 

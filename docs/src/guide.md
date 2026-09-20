@@ -135,13 +135,34 @@ are built, every rule is checked:
 
 That threshold is a gate, not the accuracy achieved. The measured error of each rule is
 recorded in the catalog and shown in [Stored rules](rules.md): most are between ``10^{-16}``
-and ``10^{-15}``. The largest GH rules for ``d = 2`` (``p ≥ 33``) and ``d = 3`` (``p ≥ 31``)
-are the least accurate, between ``10^{-12}`` and ``10^{-11}``; their error is a property of the
-stored nodes and weights, not of the arithmetic of the check.
+and ``10^{-15}``. The few rules that have no
+extended-precision file behind them (see below) are the least accurate, up to ``10^{-11}``;
+their error is a property of the stored nodes and weights, not of the arithmetic of the check.
 [`Quadriceps.exactness_error`](@ref) repeats the measurement, in extended precision if given
 `BigFloat` arrays, and the test suite runs it on every stored rule.
 
 All nodes of the Le rules lie strictly inside the cube. GH nodes are unrestricted.
+
+### Beyond double precision
+
+`ghpos` and `lepos` take a number type as an optional first argument:
+
+```julia
+using Quadmath                            # Float128; DoubleFloats.Double64 and BigFloat work the same way
+X, w = ghpos(Float128, 3, 4)
+X, w = lepos(Float128, 5; p = 21)
+```
+
+For a type wider than `Float64` the numbers come from `data/rules128.bin`, which holds the
+project's extended-precision rules (40 digits for GH, 80 for Le) correctly rounded to IEEE
+binary128: 113 bits, about 34 significant digits. A `BigFloat` result carries those 34 digits
+and no more. The error of each rule in that format is recorded too
+([`Quadriceps.extended`](@ref)): at most 4.6 machine epsilons of binary128
+(``2^{-112} ≈ 1.9·10^{-34}``) for GH and 0.2 for Le, the same multiples of the machine epsilon
+as in double precision, so nothing is lost to the rules themselves. One-dimensional Gauss
+factors (`d = 1`, and `pragmatic = true`) are computed to the same accuracy. The few stored
+rules without an extended-precision file are served in `Float64` only, and asking for them in
+a wider type is an `ArgumentError`.
 
 A rule with `n` equal to Möller's lower bound is proven minimal: no rule of that degree, with
 or without positive weights, has fewer nodes. Those are marked in [Stored rules](rules.md).

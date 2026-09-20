@@ -87,7 +87,8 @@ end
 function tensor(rules)
     n = prod(length(w) for (_, w) in rules)
     d = sum(size(X, 2) for (X, _) in rules)
-    X = Matrix{Float64}(undef, n, d); w = ones(n)
+    T = eltype(first(rules)[2])
+    X = Matrix{T}(undef, n, d); w = ones(T, n)
     rep = n; col = 0
     for (Xk, wk) in rules
         nk = length(wk); rep ÷= nk
@@ -102,11 +103,13 @@ function tensor(rules)
     X, w
 end
 
-function materialize(family::Symbol, parts::Vector{Atom}, n::BigInt)
+materialize(family::Symbol, parts::Vector{Atom}, n::BigInt) = materialize(Float64, family, parts, n)
+
+function materialize(::Type{T}, family::Symbol, parts::Vector{Atom}, n::BigInt) where {T<:AbstractFloat}
     d = sum(a.d for a in parts)
-    bytes = n * (d + 1) * 8
+    bytes = n * (d + 1) * (isbitstype(T) ? sizeof(T) : 64)
     bytes ≤ Sys.total_memory() ||
         throw(ArgumentError("the cheapest rule for this request has $n nodes, which does not fit in memory"))
-    rules = [a.info ≡ nothing ? gauss1d(family, a.n) : stored(a.info) for a in parts]
-    length(rules) == 1 ? (copy(rules[1][1]), copy(rules[1][2])) : tensor(rules)
+    rules = [a.info ≡ nothing ? gauss1d(T, family, a.n) : stored(T, a.info) for a in parts]   # fresh arrays
+    length(rules) == 1 ? rules[1] : tensor(rules)
 end
