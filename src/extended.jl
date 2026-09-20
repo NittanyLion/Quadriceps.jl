@@ -54,6 +54,9 @@ function readindex128(path::AbstractString)
 end
 
 # The stored rule in extended precision (113-bit BigFloats, shared: callers convert, which copies).
+# Since the 2026-09-19 QUAD_ONLY policy the catalog holds no cell without a binary128 rule (the
+# builder leaves such a cell out), so the error below is a guard against damaged data, not a case
+# a caller can reach through ghpos / lepos.
 function stored128(info::RuleInfo)
     key = (info.family, info.d, info.p)
     (haskey(BIN128, key) && BIN128[key].n == info.n) ||

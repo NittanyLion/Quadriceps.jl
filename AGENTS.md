@@ -41,7 +41,7 @@ code is small; it looks rules up, builds tensor products when asked, and checks 
 ## Commands
 
 ```
-julia --project=. -e 'using Pkg; Pkg.test()'                      # about 30 s; checks all 148 rules
+julia --project=. -e 'using Pkg; Pkg.test()'                      # about 30 s; checks all 146 rules
 julia --project=build build/build_data.jl [sync folder]           # rebuild data/ and docs/src/rules.md
 julia --project=docs docs/make.jl                                 # build the docs into docs/build/
 ```
@@ -116,5 +116,5 @@ The logo is `docs/src/assets/logo.svg` (Documenter picks it up; the twins carry 
 GitHub Actions (`.github/workflows/CI.yml`) runs the tests on every push to `main` and on pull
 requests; the unattended data updates trigger it too. Check `gh run list` after pushing.
 
-Private, `github.com/NittanyLion/Quadriceps.jl`, branch `main`. No license has been chosen yet;
-do not add one without the author. `Manifest.toml` files and `docs/build/` are not committed.
+Private, `github.com/NittanyLion/Quadriceps.jl`, branch `main`. MIT license (`LICENSE`, author's choice
+2026-09-19); `NOTICE.md` carries the notices of the rules that descend from published ones. `Manifest.toml` files and `docs/build/` are not committed.

@@ -181,7 +181,14 @@ const GATE = 1e-11
         end
         @test eltype(ghpos(Float32, 3, 4)[1]) ≡ Float32 && Float32.(ghpos(3, 4)[2]) == ghpos(Float32, 3, 4)[2]
         @test ghpos(Float64, 3, 4) == ghpos(3, 4) && lepos(Float64, 2; p = 9) == lepos(2, 5)
-        @test_throws ArgumentError ghpos(BigFloat, 2; p = 39)             # stored in Float64 only
+        # QUAD_ONLY: every catalog cell is in the binary128 catalog too, so no stored cell is Float64 only
+        @test Set((r.d, r.p) for fam ∈ (:gh, :le) for r ∈ Quadriceps.available(fam)) ==
+              Set((r.d, r.p) for fam ∈ (:gh, :le) for r ∈ Quadriceps.extended(fam))
+        # GH d=2 p=39 and p=41 are not stored (QUAD_ONLY): a request for either rises to the p=43 rule,
+        # and `pragmatic` rebuilds the degree from the 20² / 21² product grid, in any type
+        @test size(ghpos(BigFloat, 2; p = 39)[1], 1) == size(ghpos(2; p = 43)[1], 1) == 482
+        @test size(ghpos(BigFloat, 2; p = 39, pragmatic = true)[1], 1) == 400
+        @test size(ghpos(BigFloat, 2; p = 41, pragmatic = true)[1], 1) == 441
         # one-dimensional Gauss rules, refined beyond Float64
         for (pos, fam, fgq) ∈ ((ghpos, :gh, q -> gausshermite(q; normalize = true)), (lepos, :le, q -> (g = gausslegendre(q); ((g[1] .+ 1) ./ 2, g[2] ./ 2))))
             for q ∈ (1, 2, 7, 30)

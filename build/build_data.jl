@@ -35,6 +35,14 @@
 # index128.tsv when the file is unchanged, else it is measured here. Neither file takes part in
 # the regression and credit checks.
 #
+# QUAD_ONLY (user, 2026-09-19: "I want 146 everywhere"): a cell whose extended-precision file is
+# missing, or does not round to the stored rule, would ship in Float64 only, so `ghpos(Float128,
+# …)` would answer for some cells and not others. Such a cell is left out of the package
+# altogether — index.tsv and index128.tsv then hold the same cells. It dropped GH d=2 p=39 (n=394)
+# and p=41 (n=439), the only two without a file. A request for degree 39 or 41 at d = 2 then rises
+# to the stored p=43 rule (482 nodes), or, with `pragmatic = true`, rebuilds the degree from the
+# 20² / 21² product grid (400 and 441 nodes) — in any number type either way.
+#
 # Also rewrites docs/src/rules.md and the generated blocks of README.md. The output carries no
 # dates, so a rebuild from an unchanged bank changes no file.
 
@@ -140,18 +148,8 @@ for key in sort!(collect(keys(cands)); by = k -> (k[2], k[3], k[1]))      # lowe
     end
 end
 
-# --- index ----------------------------------------------------------------------------------
+# --- index (written below, after QUAD_ONLY has had its say) -----------------------------------
 infos = sort!(collect(values(index)); by = r -> (r.family, r.d, r.p))
-open(joinpath(NEW, "index.tsv"), "w") do io
-    println(io, "# Quadriceps.jl rule catalog — written by build/build_data.jl; do not edit by hand")
-    println(io, "# the rules themselves are in rules.bin; bankfile and sha256 name the bank file each rule was taken from")
-    println(io, "family\td\tp\tn\tmoller\trelerr\tminweight\tinterior\torigin\tsource_id\tbankfile\tsha256")
-    for r in infos
-        @printf(io, "%s\t%d\t%d\t%d\t%d\t%.3e\t%.6e\t%s\t%s\t%d\t%s\t%s\n", r.family, r.d, r.p, r.n, r.moller, r.relerr,
-                r.minweight, r.interior ? "yes" : "no", r.origin, r.source_id, provenance[(r.family, r.d, r.p)]...)
-    end
-end
-writebin(joinpath(NEW, "rules.bin"), rules)
 
 # --- beyond double precision: rules128.bin, index128.tsv -------------------------------------
 const MP = joinpath(SYNC, "project", "julia", "rules_mp")
@@ -194,6 +192,25 @@ for r in infos
     rules128[key] = (X, w, r.source_id)
     push!(lines128, @sprintf("%s\t%d\t%d\t%d\t%.3e\t%s\t%s", r.family, r.d, r.p, r.n, err, basename(f), sha))
 end
+# --- QUAD_ONLY: ship a cell only if it is also in rules128.bin (see the header) ----------------
+for r in infos
+    key = (r.family, r.d, r.p)
+    haskey(rules128, key) && continue
+    push!(dropped, "$(provenance[key][1]): no extended-precision file, so the cell is not shipped (QUAD_ONLY)")
+    delete!(index, key); delete!(rules, key); delete!(provenance, key)
+end
+infos = sort!(collect(values(index)); by = r -> (r.family, r.d, r.p))
+
+open(joinpath(NEW, "index.tsv"), "w") do io
+    println(io, "# Quadriceps.jl rule catalog — written by build/build_data.jl; do not edit by hand")
+    println(io, "# the rules themselves are in rules.bin; bankfile and sha256 name the bank file each rule was taken from")
+    println(io, "family\td\tp\tn\tmoller\trelerr\tminweight\tinterior\torigin\tsource_id\tbankfile\tsha256")
+    for r in infos
+        @printf(io, "%s\t%d\t%d\t%d\t%d\t%.3e\t%.6e\t%s\t%s\t%d\t%s\t%s\n", r.family, r.d, r.p, r.n, r.moller, r.relerr,
+                r.minweight, r.interior ? "yes" : "no", r.origin, r.source_id, provenance[(r.family, r.d, r.p)]...)
+    end
+end
+writebin(joinpath(NEW, "rules.bin"), rules)
 open(joinpath(NEW, "index128.tsv"), "w") do io
     println(io, "# Quadriceps.jl catalog of rules128.bin (IEEE binary128) — written by build/build_data.jl; do not edit by hand")
     println(io, "# relerr128: largest relative monomial error of the rule rounded to binary128, in wider arithmetic; 2^-112 = 1.93e-34 is the machine epsilon")
@@ -230,7 +247,7 @@ fills = count(contains("not below the tensor product"), dropped)
 fills > 0 && println("left out: $fills bank rules that a tensor product of lower-dimensional rules matches")
 filter!(!contains("not below the tensor product"), dropped)
 isempty(dropped) || println("left out:\n  ", join(dropped, "\n  "))
-isempty(skipped128) || println("in Float64 only (not in rules128.bin):\n  ", join(skipped128, "\n  "))
+isempty(skipped128) || println("no binary128 rule, so left out of the package (QUAD_ONLY):\n  ", join(skipped128, "\n  "))
 if !FORCE && !isempty(old) && !isempty(worse)
     println("REGRESSION, data/ left alone:\n  ", join(worse, "\n  ")); rm(NEW; recursive = true); exit(3)
 end

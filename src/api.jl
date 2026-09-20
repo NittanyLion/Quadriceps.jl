@@ -65,7 +65,8 @@ is the `Float64` rule (to the last bit, except that a coordinate of size `1e-30`
 zero can come out one unit in the last place off). A `BigFloat` result therefore carries 34 correct
 digits, not more. One-dimensional Gauss factors are computed to that accuracy as well.
 [`Quadriceps.extended`](@ref) lists the cells stored this way, with the measured error of each
-in that format; asking for a cell that is held in `Float64` only is an `ArgumentError`.
+in that format: every stored rule is one of them, so `T` never fails on a cell the `Float64` call
+answers.
 
 ```julia
 using Quadmath

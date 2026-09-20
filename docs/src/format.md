@@ -29,7 +29,7 @@ begins with the magic `QUADRICEPS1` and continues as space-separated `key=value`
 |---|---|---|
 | `fmt` | `1` | format version |
 | `endian` | `little` | byte order of every integer and float |
-| `cells` | e.g. `148` | number of rules |
+| `cells` | e.g. `146` | number of rules |
 | `index_fields` | `8` | integers per index record |
 | `float` | `binary64` | IEEE 754 double precision |
 | `order` | `row-major` | node by node, see below |

@@ -23,7 +23,7 @@ A rule of degree `p` is a set of `n` nodes `x_i ∈ ℝᵈ` and weights `w_i > 0
 stored here, the smallest positive-weight rules known to the author, do it with far fewer.
 
 <!-- BEGIN GENERATED coverage -->
-148 rules are stored: for example 244 nodes instead of 3125 for the Gaussian weight at
+146 rules are stored: for example 244 nodes instead of 3125 for the Gaussian weight at
 `d = 5, q = 5`, and 10984 instead of 161051 for the cube at `d = 5, q = 11`.
 
 | `d` | GH | largest GH rule | Le | largest Le rule |
@@ -141,7 +141,7 @@ repeats the check for every rule. All nodes of the Le rules lie strictly inside 
 ## Whose rules these are
 
 <!-- BEGIN GENERATED credits -->
-122 of the 148 rules were computed from scratch by the author. A further 11 (Legendre) rules were
+120 of the 146 rules were computed from scratch by the author. A further 11 (Legendre) rules were
 obtained by node elimination started from Diallo and Worku's published rules. Finally, 15 are
 rules from the literature (copied in, or found again by the author's search and recognized).
 <!-- END GENERATED credits -->
@@ -187,3 +187,8 @@ and pushes as well. `build/update.sh --install` adds an hourly cron entry for it
 only), `--remove` takes it out; the log is `~/.local/state/quadriceps/update.log`. Anything that
 needs a person (a regression, a credit change, failing tests, a failed push) raises a desktop
 notification and leaves the repositories untouched.
+
+## License
+
+MIT; see [`LICENSE`](LICENSE). The rules that descend from, or coincide with, published rules
+carry their sources' notices in [`NOTICE.md`](NOTICE.md).
