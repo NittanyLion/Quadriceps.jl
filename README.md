@@ -8,7 +8,7 @@
 
 > **Paper:** Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
 >
-> **Data deposit:** Zenodo — DOI: **[ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA)** (link to be filled in on publication)
+> **Data deposit:** Zenodo — DOI: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)** (reserved; the link resolves once the record is published)
 
 Positive-weight cubature rules in several dimensions, for two weights:
 

@@ -3,7 +3,8 @@
 !!! note "Paper and data deposit"
     Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv:
     [ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA); Zenodo deposit, DOI:
-    [ZENODO-DOI-TBA](https://doi.org/ZENODO-DOI-TBA). Both links will be filled in on publication.
+    [10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864) (reserved; it resolves once the record is published).
+    The arXiv link will be filled in on publication.
 
 Positive-weight cubature rules in several dimensions, for the Gaussian weight and for the
 uniform weight on the cube.
