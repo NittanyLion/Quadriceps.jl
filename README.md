@@ -8,7 +8,7 @@
 
 > **Paper:** Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
 >
-> **Data deposit:** Zenodo — DOI: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)** (reserved; the link resolves once the record is published)
+> **Data deposit:** Zenodo — DOI: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)**
 
 Positive-weight cubature rules in several dimensions, for two weights:
 
@@ -131,12 +131,31 @@ that a product matches.)
 
 ## Accuracy
 
-Rules are stored in double precision. Every stored rule was checked when the data were built:
-all weights positive, and the largest relative monomial error over all monomials of degree
+The default data, `data/rules.bin`, are in double precision (quadruple: next section). Every
+stored rule was checked when the data were built: all weights positive, and the largest relative monomial error over all monomials of degree
 `≤ p` below `1e-11`. Most rules sit at `1e-16`–`1e-15`; the largest GH rules at `d = 2, 3` are
 the least accurate, at `1e-12`–`1e-11`. The measured value of each rule is in the catalog
 (`relerr` in `Quadriceps.ruleinfo`, and the table in `docs/src/rules.md`), and the test suite
 repeats the check for every rule. All nodes of the Le rules lie strictly inside the cube.
+
+## Quadruple precision and beyond
+
+The number type is an optional first argument of `ghpos` and `lepos`. Beyond `Float64` the rule
+comes from a second data file, `data/rules128.bin`, which holds every rule correctly rounded to
+IEEE binary128 (113 bits, about 34 digits); the package decodes it and converts to the type asked
+for, so it needs no extra dependency of its own — bring the type:
+
+```julia
+using Quadriceps, Quadmath              # Float128; Double64 of DoubleFloats.jl and BigFloat work the same way
+X, w = ghpos(Float128, 3, 4)            # the 27-node rule in quadruple precision
+X, w = lepos(Float128, 5; p = 21)
+Float64.(X) ≈ ghpos(3, 4)[1]            # true: the same rule, rounded
+```
+
+A `BigFloat` result carries those 34 digits, not more. Every stored rule is available this way,
+so the typed call never fails where the `Float64` call succeeds; `Quadriceps.extended` lists the
+cells with the measured error of each in that format. The rules to 80 digits are in the Zenodo
+deposit named at the top of this file.
 
 ## Whose rules these are
 
