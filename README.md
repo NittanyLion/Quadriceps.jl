@@ -132,9 +132,9 @@ that a product matches.)
 ## Accuracy
 
 The default data, `data/rules.bin`, are in double precision (quadruple: next section). Every
-stored rule was checked when the data were built: all weights positive, and the largest relative monomial error over all monomials of degree
-`≤ p` below `1e-11`. Most rules sit at `1e-16`–`1e-15`; the largest GH rules at `d = 2, 3` are
-the least accurate, at `1e-12`–`1e-11`. The measured value of each rule is in the catalog
+stored rule was checked when the data were built: all weights positive, and the largest relative
+monomial error over all monomials of degree `≤ p` below `1e-11`. Most rules sit at
+`1e-16`–`1e-15`; the largest GH rules at `d = 2, 3` are the least accurate, at `1e-12`–`1e-11`. The measured value of each rule is in the catalog
 (`relerr` in `Quadriceps.ruleinfo`, and the table in `docs/src/rules.md`), and the test suite
 repeats the check for every rule. All nodes of the Le rules lie strictly inside the cube.
 
