@@ -37,7 +37,7 @@ stored here, the smallest positive-weight rules known to the author, do it with 
 <!-- END GENERATED coverage -->
 
 The full list, with node counts, Möller's lower bound, measured accuracy and the origin of each
-rule, is in the documentation's [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules/)
+rule, is in the documentation's [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules.html)
 page (source: [`docs/src/rules.md`](docs/src/rules.md)). These are exactly the rules of the Zenodo
 deposit; the package ships nothing that is not deposited there.
 
@@ -127,7 +127,7 @@ that a product matches.)
 * Every call returns fresh arrays. A rule is read from the data file on first use and cached.
 * All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog, and
   their quadruple-precision roundings in `data/rules128.bin` with `data/index128.tsv`; the
-  [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/) page specifies both.
+  [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html) page specifies both.
 * Unexported helpers: `Quadriceps.available(family)` lists the stored rules,
   `Quadriceps.nnodes(family, d, q; pragmatic)` gives a node count without building the rule,
   `Quadriceps.ruleinfo(family, d, q; pragmatic)` describes the rule and its origin (both also
@@ -176,8 +176,8 @@ Float64.(X) ≈ ghpos(3, 4)[1]            # true: the same rule, rounded
 Every stored rule is available in both ways, so the typed call never fails where the `Float64`
 call succeeds; `Quadriceps.extended(family)` lists the cells with both errors (`relerr128`,
 `relerr80`). Without network access, ask for a type of at most 113 bits, which needs no download.
-Details: the [guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide/#Beyond-double-precision)
-and the [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/).
+Details: the [guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide.html#Beyond-double-precision)
+and the [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html).
 
 ## Whose rules these are
 
@@ -196,14 +196,14 @@ files, and [`docs/src/credits.md`](docs/src/credits.md) the references.
 The documentation is at <https://NittanyLion.github.io/Quadriceps.jl/dev/>, rebuilt by CI on
 every push to `main`:
 
-* [Guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide/) — installation, the two
+* [Guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide.html) — installation, the two
   functions, `normalize`, `pragmatic`, accuracy, number types beyond `Float64`;
-* [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules/) — every rule with its
+* [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules.html) — every rule with its
   node count, Möller's bound, measured error and origin;
-* [Data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/) — `rules.bin`,
+* [Data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html) — `rules.bin`,
   `rules128.bin`, the catalogs and the deposit artifacts, enough to write a reader in any language;
-* [Reference](https://NittanyLion.github.io/Quadriceps.jl/dev/api/) — the docstrings;
-* [Credits](https://NittanyLion.github.io/Quadriceps.jl/dev/credits/) — whose rules these are.
+* [Reference](https://NittanyLion.github.io/Quadriceps.jl/dev/api.html) — the docstrings;
+* [Credits](https://NittanyLion.github.io/Quadriceps.jl/dev/credits.html) — whose rules these are.
 
 `docs/` holds the Documenter.jl source. Build it locally with
 
