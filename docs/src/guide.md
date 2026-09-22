@@ -154,16 +154,37 @@ X, w = ghpos(Float128, 3, 4)
 X, w = lepos(Float128, 5; p = 21)
 ```
 
-For a type wider than `Float64` the numbers come from `data/rules128.bin`, which holds the
-project's extended-precision rules (40 digits for GH, 80 for Le) correctly rounded to IEEE
-binary128: 113 bits, about 34 significant digits. A `BigFloat` result carries those 34 digits
-and no more. The error of each rule in that format is recorded too
-([`Quadriceps.extended`](@ref)): at most 4.6 machine epsilons of binary128
-(``2^{-112} ≈ 1.9·10^{-34}``) for GH and 0.2 for Le, the same multiples of the machine epsilon
-as in double precision, so nothing is lost to the rules themselves. One-dimensional Gauss
-factors (`d = 1`, and `pragmatic = true`) are computed to the same accuracy. The few stored
-rules without an extended-precision file are served in `Float64` only, and asking for them in
-a wider type is an `ArgumentError`.
+Which data serve the request depends on how many significant bits the type holds
+(`precision(T)`; a type without that method counts as wide):
+
+* **up to 113 bits** — `Float128`, `Double64`, `BigFloat` under `setprecision(BigFloat, 113)` —
+  come from `data/rules128.bin`, shipped with the package: every rule correctly rounded to IEEE
+  binary128 (113 bits, about 34 significant digits). For `Float128` the conversion is exact.
+  The error of each rule in that format is recorded ([`Quadriceps.extended`](@ref),
+  `relerr128`): at most 4.6 machine epsilons of binary128 (``2^{-112} ≈ 1.9·10^{-34}``) for GH and
+  0.2 for Le, the same multiples of the machine epsilon as in double precision, so nothing is
+  lost to the rules themselves.
+* **more than 113 bits** — `BigFloat` at its default 256 bits, `Float64x4` of MultiFloats.jl, … —
+  receive the **80-digit rules** of the Zenodo deposit itself. Those files are not in the
+  package: they are declared as lazy artifacts (`Artifacts.toml`), so the first such call for a
+  family downloads its archive from Zenodo (record 10.5281/zenodo.22881864; 2.4 MB for GH, 15 MB
+  for Le), which Pkg verifies against its SHA-256 and keeps in the artifact store; later calls,
+  and later sessions, read it from there. The files are parsed into 320-bit `BigFloat`s and
+  converted to the type asked for, so the result carries the deposit's 80 digits and no more —
+  a `BigFloat` at 1000 bits is still an 80-digit rule. The deposit's measured error of each
+  80-digit rule is `relerr80` in [`Quadriceps.extended`](@ref): below ``10^{-68}`` for every
+  rule. Without network access, ask for a type of at most 113 bits, which needs no download.
+
+One-dimensional Gauss factors (`d = 1`, and `pragmatic = true`) are computed to the accuracy
+of the data they are combined with. Every stored cell is available this way: the typed call
+never fails where the `Float64` call succeeds.
+
+```julia
+X, w = ghpos(BigFloat, 3, 4)              # 80 digits, from the deposit (downloaded once)
+X, w = setprecision(BigFloat, 113) do
+    ghpos(BigFloat, 3, 4)                 # 34 digits, from the package's own data, no download
+end
+```
 
 A rule with `n` equal to Möller's lower bound is proven minimal: no rule of that degree, with
 or without positive weights, has fewer nodes. Those are marked in [Stored rules](rules.md).

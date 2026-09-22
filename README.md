@@ -2,6 +2,7 @@
 
 # Quadriceps.jl
 
+[![Docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://NittanyLion.github.io/Quadriceps.jl/dev/)
 [![CI](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/NittanyLion/Quadriceps.jl/actions/workflows/CI.yml)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 ![authored by: JP](authored_by.svg)
@@ -23,20 +24,22 @@ A rule of degree `p` is a set of `n` nodes `x_i ∈ ℝᵈ` and weights `w_i > 0
 stored here, the smallest positive-weight rules known to the author, do it with far fewer.
 
 <!-- BEGIN GENERATED coverage -->
-146 rules are stored: for example 244 nodes instead of 3125 for the Gaussian weight at
+142 rules are stored: for example 244 nodes instead of 3125 for the Gaussian weight at
 `d = 5, q = 5`, and 10984 instead of 161051 for the cube at `d = 5, q = 11`.
 
 | `d` | GH | largest GH rule | Le | largest Le rule |
 |---|---|---|---|---|
-| 2 | `q ≤ 22` (`p ≤ 43`) | 482 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
-| 3 | `q ≤ 18` (`p ≤ 35`) | 4749 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
+| 2 | `q ≤ 17` (`p ≤ 33`) | 208 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
+| 3 | `q ≤ 17` (`p ≤ 33`) | 2226 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
 | 4 | `q ≤ 12` (`p ≤ 23`) | 3238 nodes | `q ≤ 12` (`p ≤ 23`) | 3244 nodes |
 | 5 | `q ≤ 11` (`p ≤ 21`) | 13199 nodes | `q ≤ 11` (`p ≤ 21`) | 10984 nodes |
 
 <!-- END GENERATED coverage -->
 
 The full list, with node counts, Möller's lower bound, measured accuracy and the origin of each
-rule, is in [`docs/src/rules.md`](docs/src/rules.md).
+rule, is in the documentation's [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules/)
+page (source: [`docs/src/rules.md`](docs/src/rules.md)). These are exactly the rules of the Zenodo
+deposit; the package ships nothing that is not deposited there.
 
 ## Installation
 
@@ -45,7 +48,9 @@ using Pkg
 Pkg.add("Quadriceps")
 ```
 
-Julia 1.10 or later. The only dependency is FastGaussQuadrature.jl.
+Julia 1.10 or later. The only dependency outside the standard library is FastGaussQuadrature.jl.
+The package ships its rules in double and quadruple precision; the 80-digit rules are fetched
+from the Zenodo deposit the first time they are asked for (see below).
 
 ## Use
 
@@ -120,8 +125,9 @@ that a product matches.)
 * `d = 1` gives the Gauss rule with `q` nodes (`p ÷ 2 + 1` when `p` is given), as an `n × 1`
   matrix.
 * Every call returns fresh arrays. A rule is read from the data file on first use and cached.
-* All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog;
-  [`docs/src/format.md`](docs/src/format.md) specifies the format.
+* All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog, and
+  their quadruple-precision roundings in `data/rules128.bin` with `data/index128.tsv`; the
+  [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/) page specifies both.
 * Unexported helpers: `Quadriceps.available(family)` lists the stored rules,
   `Quadriceps.nnodes(family, d, q; pragmatic)` gives a node count without building the rule,
   `Quadriceps.ruleinfo(family, d, q; pragmatic)` describes the rule and its origin (both also
@@ -140,31 +146,43 @@ inside the cube. The gate applied when the data are built, and again by the test
 rule, is `1e-11`. The measured value of each rule is in the catalog (`relerr` in
 `Quadriceps.ruleinfo`, and the table in `docs/src/rules.md`).
 
-## Quadruple precision and beyond
+## Beyond double precision: quadruple, and 80 digits
 
-The number type is an optional first argument of `ghpos` and `lepos`. Beyond `Float64` the rule
-comes from a second data file, `data/rules128.bin`, which holds every rule correctly rounded to
-IEEE binary128 (113 bits, about 34 digits); the package decodes it and converts to the type asked
-for, so it needs no extra dependency of its own — bring the type:
+The number type is an optional first argument of `ghpos` and `lepos`; bring the type, the
+package has no dependency on it. Which data answer depends on how many significant bits the type
+holds (`precision(T)`):
+
+* **up to 113 bits** — `Float128` of Quadmath.jl, `Double64` of DoubleFloats.jl, `BigFloat` under
+  `setprecision(BigFloat, 113)` — come from `data/rules128.bin`, shipped with the package: every
+  rule correctly rounded to IEEE binary128 (113 bits, about 34 digits), exact for `Float128`. In
+  that format the error is below `8.8e-34` for every GH rule (4.5 units in the last place; the
+  worst is `d = 2`, `p = 31`) and below `3.3e-35` for every Le rule (a sixth of a unit).
+* **more than 113 bits** — `BigFloat` at its default 256 bits, `Float64x4` of MultiFloats.jl, … —
+  receive the **80-digit rules of the Zenodo deposit itself**. They are not in the package: the
+  deposit's two archives are declared as lazy artifacts, so the first such call for a family
+  downloads its archive from Zenodo (2.4 MB for GH, 15 MB for Le), verified by Pkg and kept in
+  the artifact store; later calls read it from there. The result carries the deposit's 80 digits
+  and no more, whatever the precision of the type; the deposit's measured error of every
+  80-digit rule is below `1e-68`.
 
 ```julia
-using Quadriceps, Quadmath              # Float128; Double64 of DoubleFloats.jl and BigFloat work the same way
-X, w = ghpos(Float128, 3, 4)            # the 27-node rule in quadruple precision
-X, w = lepos(Float128, 5; p = 21)
+using Quadriceps, Quadmath
+X, w = ghpos(Float128, 3, 4)            # the 27-node rule in quadruple precision, no download
+X, w = ghpos(BigFloat, 3, 4)            # the same rule to 80 digits, from the deposit (fetched once)
+X, w = lepos(BigFloat, 5; p = 21)
 Float64.(X) ≈ ghpos(3, 4)[1]            # true: the same rule, rounded
 ```
 
-A `BigFloat` result carries those 34 digits, not more. Every stored rule is available this way,
-so the typed call never fails where the `Float64` call succeeds; `Quadriceps.extended` lists the
-cells with the measured error of each in that format: below `8.8e-34` for every GH rule (4.5 units
-in the last place of binary128; the worst is `d = 2`, `p = 31`) and below `3.3e-35` for every Le
-rule (a sixth of a unit). The rules to 80 digits are in the Zenodo deposit named at the top of
-this file.
+Every stored rule is available in both ways, so the typed call never fails where the `Float64`
+call succeeds; `Quadriceps.extended(family)` lists the cells with both errors (`relerr128`,
+`relerr80`). Without network access, ask for a type of at most 113 bits, which needs no download.
+Details: the [guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide/#Beyond-double-precision)
+and the [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/).
 
 ## Whose rules these are
 
 <!-- BEGIN GENERATED credits -->
-120 of the 146 rules were computed from scratch by the author. A further 11 (Legendre) rules were
+116 of the 142 rules were computed from scratch by the author. A further 11 (Legendre) rules were
 obtained by node elimination started from Diallo and Worku's published rules. Finally, 15 are
 rules from the literature (copied in, or found again by the author's search and recognized).
 <!-- END GENERATED credits -->
@@ -175,8 +193,19 @@ files, and [`docs/src/credits.md`](docs/src/credits.md) the references.
 
 ## Documentation
 
-`docs/` holds a Documenter.jl site: a guide, the API reference, the table of stored rules and
-the credits. Build it locally with
+The documentation is at <https://NittanyLion.github.io/Quadriceps.jl/dev/>, rebuilt by CI on
+every push to `main`:
+
+* [Guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide/) — installation, the two
+  functions, `normalize`, `pragmatic`, accuracy, number types beyond `Float64`;
+* [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules/) — every rule with its
+  node count, Möller's bound, measured error and origin;
+* [Data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format/) — `rules.bin`,
+  `rules128.bin`, the catalogs and the deposit artifacts, enough to write a reader in any language;
+* [Reference](https://NittanyLion.github.io/Quadriceps.jl/dev/api/) — the docstrings;
+* [Credits](https://NittanyLion.github.io/Quadriceps.jl/dev/credits/) — whose rules these are.
+
+`docs/` holds the Documenter.jl source. Build it locally with
 
 ```
 julia --project=docs -e 'using Pkg; Pkg.instantiate()'

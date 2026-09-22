@@ -1,14 +1,16 @@
 name = "Quadriceps"
 uuid = "9371e607-b390-4342-8322-9e25c25d5a03"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Joris Pinkse <pinkse@gmail.com>"]
 
 [deps]
 FastGaussQuadrature = "442a2c76-b920-505d-bb47-c5924d526838"
+LazyArtifacts = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 
 [compat]
 Aqua = "0.8"
 FastGaussQuadrature = "1"
+LazyArtifacts = "1"
 Test = "1"
 julia = "1.10"
 

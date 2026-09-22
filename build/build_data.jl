@@ -43,6 +43,15 @@
 # to the stored p=43 rule (482 nodes), or, with `pragmatic = true`, rebuilds the degree from the
 # 20² / 21² product grid (400 and 441 nodes) — in any number type either way.
 #
+# ZENODO_ONLY (user, 2026-09-22: "remove all rules that are not in zenodo from all packages"): a
+# cell is shipped only if the published deposit (SYNC/publish/<gh|le>/summary.csv, the files of
+# Zenodo record 10.5281/zenodo.22881864) holds a rule with the same (d, p, n). The package then
+# describes exactly the deposited rules, and the 80-digit rule of every stored cell can be fetched
+# from the deposit at run time (the lazy artifacts in Artifacts.toml; src/extended.jl). It dropped
+# the four GH cells above the deposit's ceilings, d=2 p=35, 37, 43 and d=3 p=35. The binary128 rule
+# is now read from the deposit's own file, rules_extended/<name>.mp.csv, and index128.tsv records
+# that file's name and sha256 together with the deposit's error of the 80-digit rule (relerr80).
+#
 # Also rewrites docs/src/rules.md and the generated blocks of README.md. The output carries no
 # dates, so a rebuild from an unchanged bank changes no file.
 
@@ -82,6 +91,30 @@ function source_id(org)
 end
 
 rows(path) = [split(l, '\t') for l in eachline(path) if !isempty(l) && !startswith(l, '#')]
+
+# --- the deposit: (family, d, p, n) => (err_float128, err_extended) from publish/<gh|le>/summary.csv ---
+# ZENODO_ONLY: only these cells are shipped. The summary's quoted fields earlier in a row hold
+# commas, so the two error columns are counted from the end of the row.
+const DEPOSIT = Dict{Tuple{Symbol,Int,Int,Int},Tuple{Float64,Float64}}()
+const DEPDIR = Dict(:gh => "gh", :le => "le")
+for (fam, dir) in DEPDIR
+    f = joinpath(SYNC, "publish", dir, "summary.csv")
+    isfile(f) || error("no deposit summary at $f; ZENODO_ONLY cannot decide what to ship")
+    L = readlines(f); h = split(L[1], ",")
+    j128 = findfirst(==("err_float128"), h); jext = findfirst(==("err_extended"), h)
+    (j128 ≡ nothing || jext ≡ nothing) && error("$f lacks err_float128 / err_extended")
+    for l in L[2:end]
+        m = match(r"^\w+,(\d+),(\d+),\d+,(\d+),", l); m ≡ nothing && continue
+        c = split(l, ",")
+        e128 = tryparse(Float64, c[end-(length(h)-j128)]); eext = tryparse(Float64, c[end-(length(h)-jext)])
+        (e128 ≡ nothing || eext ≡ nothing) && continue
+        DEPOSIT[(fam, parse(Int, m[1]), parse(Int, m[2]), parse(Int, m[3]))] = (e128, eext)
+    end
+end
+isempty(DEPOSIT) && error("the deposit summaries list no cells")
+# the deposit's extended-precision file of a cell: rules_extended/<hermite|legendre>_d<d>_p<p>_q<q>_n<n>.mp.csv
+depositfile(fam, d, p, n) = joinpath(SYNC, "publish", DEPDIR[fam],
+                                     "rules_extended", "$(fam ≡ :gh ? "hermite" : "legendre")_d$(d)_p$(p)_q$((p + 1) ÷ 2)_n$(n).mp.csv")
 
 # --- bank: every candidate per cell, smallest first ---------------------------------------
 cands = Dict{Tuple{Symbol,Int,Int},Vector{Tuple{Int,String}}}()
@@ -133,6 +166,7 @@ for key in sort!(collect(keys(cands)); by = k -> (k[2], k[3], k[1]))      # lowe
         minimum(w) > 0 || (push!(dropped, "$f: nonpositive weight $(minimum(w))"); continue)
         err = exactness_error(X, w, p, fam)
         err < GATE || (push!(dropped, @sprintf("%s: relative error %.1e", f, err)); continue)
+        haskey(DEPOSIT, (fam, d, p, n)) || (push!(dropped, "$f: not in the Zenodo deposit (ZENODO_ONLY)"); continue)
         mb = get(moller, (d, p), -1)
         tcost = d == 1 ? typemax(Int) : minimum(cheapest(index, fam, j, p)[2] * cheapest(index, fam, d - j, p)[2] for j in 1:d÷2)
         if !(n < tcost || n == mb)
@@ -152,30 +186,14 @@ end
 infos = sort!(collect(values(index)); by = r -> (r.family, r.d, r.p))
 
 # --- beyond double precision: rules128.bin, index128.tsv -------------------------------------
-const MP = joinpath(SYNC, "project", "julia", "rules_mp")
-deposit128 = Dict{Tuple{Symbol,Int,Int,Int},Float64}()          # (family, d, p, n) => err_float128 of the deposit
-for (dir, fam) in (("gh", :gh), ("le", :le))
-    f = joinpath(SYNC, "publish", dir, "summary.csv"); isfile(f) || continue
-    L = readlines(f); h = split(L[1], ","); j = findfirst(==("err_float128"), h); j ≡ nothing && continue
-    back = length(h) - j                                         # counted from the end: quoted fields earlier hold commas
-    for l in L[2:end]
-        m = match(r"^\w+,(\d+),(\d+),\d+,(\d+),", l); m ≡ nothing && continue
-        e = tryparse(Float64, split(l, ",")[end-back])
-        e ≡ nothing || (deposit128[(fam, parse(Int, m[1]), parse(Int, m[2]), parse(Int, m[3]))] = e)
-    end
-end
-previous128 = Dict{Tuple{Symbol,Int,Int},Tuple{String,Float64}}()   # key => (sha256 of the extended file, relerr128)
-let f = joinpath(PKG, "data", "index128.tsv")
-    isfile(f) && for r in rows(f)
-        startswith(r[1], "family") || (previous128[(Symbol(r[1]), parse(Int, r[2]), parse(Int, r[3]))] = (String(r[7]), parse(Float64, r[5])))
-    end
-end
+# The binary128 rule is the deposit's 80-digit file rounded; that file is what the lazy artifact
+# serves at run time, so its name and sha256 go into index128.tsv for the package to verify.
 rules128 = Dict{Tuple{Symbol,Int,Int},Tuple{Matrix{BigFloat},Vector{BigFloat},Int}}()
 lines128 = String[]; skipped128 = String[]
 for r in infos
     key = (r.family, r.d, r.p)
-    f = joinpath(MP, replace(provenance[key][1], r".csv$" => ".mp.csv"))
-    isfile(f) || (push!(skipped128, "$(provenance[key][1]): no extended-precision file"); continue)
+    f = depositfile(r.family, r.d, r.p, r.n)
+    isfile(f) || (push!(skipped128, "$(provenance[key][1]): the deposit has no extended-precision file $(basename(f))"); continue)
     S = [split(strip(l), ',') for l in eachline(f) if occursin(r"^\s*[-+0-9.]", l)]
     # identity with the stored rule is judged on the file's full digits (as the deposit does); what is stored is the
     # binary128 rounding. Rounding THAT to Float64 can miss by one unit in the last place where a number of the file
@@ -186,11 +204,9 @@ for r in infos
     (size(X) == size(rules[key][1]) && F[:, 1:r.d] == rules[key][1] && F[:, r.d+1] == rules[key][2]) ||
         (push!(skipped128, "$(provenance[key][1]): its extended-precision file does not round to it row for row"); continue)
     sha = bytes2hex(sha256(read(f)))
-    err = get(deposit128, (r.family, r.d, r.p, r.n), nothing)
-    err ≡ nothing && haskey(previous128, key) && previous128[key][1] == sha && (err = previous128[key][2])
-    err ≡ nothing && (err = Float64(setprecision(() -> exactness_error(BigFloat.(X), BigFloat.(w), r.p, r.family), BigFloat, 320)))
+    err128, err80 = DEPOSIT[(r.family, r.d, r.p, r.n)]
     rules128[key] = (X, w, r.source_id)
-    push!(lines128, @sprintf("%s\t%d\t%d\t%d\t%.3e\t%s\t%s", r.family, r.d, r.p, r.n, err, basename(f), sha))
+    push!(lines128, @sprintf("%s\t%d\t%d\t%d\t%.3e\t%s\t%s\t%.3e", r.family, r.d, r.p, r.n, err128, basename(f), sha, err80))
 end
 # --- QUAD_ONLY: ship a cell only if it is also in rules128.bin (see the header) ----------------
 for r in infos
@@ -214,7 +230,9 @@ writebin(joinpath(NEW, "rules.bin"), rules)
 open(joinpath(NEW, "index128.tsv"), "w") do io
     println(io, "# Quadriceps.jl catalog of rules128.bin (IEEE binary128) — written by build/build_data.jl; do not edit by hand")
     println(io, "# relerr128: largest relative monomial error of the rule rounded to binary128, in wider arithmetic; 2^-112 = 1.93e-34 is the machine epsilon")
-    println(io, "family\td\tp\tn\trelerr128\textendedfile\tsha256")
+    println(io, "# extendedfile, sha256: the deposit's 80-digit file (rules_extended/ in the Zenodo archive) the binary128 rule was rounded from;")
+    println(io, "# relerr80: the deposit's measured error of that 80-digit rule (err_extended in its summary.csv)")
+    println(io, "family\td\tp\tn\trelerr128\textendedfile\tsha256\trelerr80")
     foreach(l -> println(io, l), lines128)
 end
 writebin(joinpath(NEW, "rules128.bin"), rules128; float = "binary128")

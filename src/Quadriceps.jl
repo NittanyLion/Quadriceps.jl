@@ -28,6 +28,7 @@ Unexported but public: [`Quadriceps.available`](@ref), [`Quadriceps.extended`](@
 module Quadriceps
 
 using FastGaussQuadrature: gausshermite, gausslegendre
+using LazyArtifacts                       # the 80-digit rules, fetched from Zenodo on first use (Artifacts.toml)
 
 export ghpos, lepos
 

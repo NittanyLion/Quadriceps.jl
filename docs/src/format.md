@@ -29,7 +29,7 @@ begins with the magic `QUADRICEPS1` and continues as space-separated `key=value`
 |---|---|---|
 | `fmt` | `1` | format version |
 | `endian` | `little` | byte order of every integer and float |
-| `cells` | e.g. `146` | number of rules |
+| `cells` | e.g. `142` | number of rules |
 | `index_fields` | `8` | integers per index record |
 | `float` | `binary64` | IEEE 754 double precision |
 | `order` | `row-major` | node by node, see below |
@@ -99,14 +99,26 @@ for the metadata and `rules.bin` for the numbers, and refuse to load if the two 
 
 `rules128.bin` is a second file of the same format with `float=binary128` in its header: every
 number is 16 little-endian bytes, the IEEE 754 binary128 (quadruple precision) rounding of the
-project's extended-precision rule, so `nbytes = n*(d+1)*16`. A C `__float128`, a Fortran
-`real(16)` or a Julia `Float128` array reads a block directly. It holds the cells that have an
-extended-precision file whose double-precision rounding is the rule in `rules.bin`, row for
-row. `index128.tsv` is its catalog: `family`, `d`, `p`, `n`, `relerr128` (largest relative
-monomial error of the binary128 rule, measured in wider arithmetic; the machine epsilon of the
-format is `2^-112 ≈ 1.93e-34`), and `extendedfile` and `sha256`, which name the project's file
-the numbers were rounded from. The Julia package reads both; the Python and R packages do not
-ship them.
+deposit's 80-digit rule, so `nbytes = n*(d+1)*16`. A C `__float128`, a Fortran `real(16)` or a
+Julia `Float128` array reads a block directly. It holds every cell of `rules.bin`: each stored
+rule is the double-precision rounding of its 80-digit file, row for row. `index128.tsv` is its
+catalog: `family`, `d`, `p`, `n`, `relerr128` (largest relative monomial error of the binary128
+rule, measured in wider arithmetic; the machine epsilon of the format is `2^-112 ≈ 1.93e-34`),
+`extendedfile` and `sha256`, which name the deposit's 80-digit file the numbers were rounded from
+(`rules_extended/` in the Zenodo archive) and give its SHA-256, and `relerr80`, the deposit's
+measured error of that 80-digit rule. The Julia package reads both; the Python and R packages do
+not ship them.
+
+## Eighty digits: the deposit's files as artifacts
+
+The 80-digit rules are not in the package. `Artifacts.toml` declares the two archives of the
+Zenodo deposit (`gh.tar.xz`, `le.tar.xz` of record 10.5281/zenodo.22881864) as lazy artifacts,
+with the SHA-256 of each archive and the git tree hash of its contents; Pkg downloads an archive
+the first time a rule is requested in a type wider than 113 bits, verifies it, and keeps it in
+the artifact store. Inside, `gh/rules_extended/` and `le/rules_extended/` hold one text file per
+cell, named in `index128.tsv`: comment lines, a header `x1,…,xd,w`, then `n` rows of `d+1`
+decimal numbers with 80 significant digits, in the row order of `rules.bin`. The deposit's own
+`README.md` and `COLUMNS.md` describe the rest of the archive.
 
 ## A reader in a few lines
 

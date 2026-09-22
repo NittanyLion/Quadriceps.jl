@@ -1,0 +1,21 @@
+# The 80-digit rules: the two archives of the Zenodo deposit (record 10.5281/zenodo.22881864),
+# fetched lazily — only when ghpos / lepos is asked for a number type wider than 113 bits — and
+# verified by Pkg against the SHA-256 of the archive and the git tree hash of its contents.
+# The hashes are those of the published record's files; a new version of the deposit is a new
+# record, so these entries change only when the package moves to it. See src/extended.jl.
+
+[quadriceps_gh]
+git-tree-sha1 = "2d1af546713ad90b7b9e9c6bb85426610f6fcacc"
+lazy = true
+
+    [[quadriceps_gh.download]]
+    url = "https://zenodo.org/records/22881864/files/gh.tar.xz?download=1"
+    sha256 = "a607c1ec39f00749852011e4d699bc3e3f3da2b410485b3e4c309be4d3e6f4aa"
+
+[quadriceps_le]
+git-tree-sha1 = "239265501ca1ea757faa2f4847a28cdbe4de888d"
+lazy = true
+
+    [[quadriceps_le.download]]
+    url = "https://zenodo.org/records/22881864/files/le.tar.xz?download=1"
+    sha256 = "19b4321061c8bc4ba413b2d16a558f2c126730f59c15a2a7b6065a0137f0c81c"

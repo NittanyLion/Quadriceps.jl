@@ -15,3 +15,5 @@ makedocs(
     ],
     checkdocs = :exports,
 )
+
+deploydocs(repo = "github.com/NittanyLion/Quadriceps.jl.git", devbranch = "main", push_preview = false)

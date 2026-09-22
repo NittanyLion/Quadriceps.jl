@@ -91,13 +91,16 @@ const GATE = 1e-11
         # a stored cell is returned unchanged
         @test ghpos(4, 5; pragmatic = true) == ghpos(4, 5)
         @test lepos(2, 11; pragmatic = true) == lepos(2, 11)
-        # beyond the stored degrees: a valid rule, cheaper than the product grid
-        q = maximum((r.p + 1) ÷ 2 for r in available(:gh) if r.d == 3) + 1; p = 2q - 1
-        X, w = ghpos(3, q; pragmatic = true)
-        @test size(X) == (nnodes(:gh, 3, q; pragmatic = true), 3)
+        # beyond the stored degrees: a valid rule, cheaper than the product grid (d = 4: the split 2 + 2
+        # into stored d = 2 rules beats the grid; at d = 3 the stored d = 2 rules end at the same degree as
+        # the d = 3 ones, so the fallback there is the bare grid)
+        q = maximum((r.p + 1) ÷ 2 for r in available(:gh) if r.d == 4) + 1; p = 2q - 1
+        X, w = ghpos(4, q; pragmatic = true)
+        @test size(X) == (nnodes(:gh, 4, q; pragmatic = true), 4)
         @test all(>(0), w) && sum(w) ≈ 1
         @test exactness_error(X, w, p, :gh) < GATE
-        @test size(X, 1) < q^3
+        @test size(X, 1) < q^4
+        @test nnodes(:gh, 3, 18; pragmatic = true) == 18^3                # d = 3, q = 18: nothing beats the grid
         # beyond the stored dimensions
         for (fam, f) in ((:gh, ghpos), (:le, lepos)), (d, q) in ((6, 4), (7, 3), (8, 2))
             X, w = f(d, q; pragmatic = true)
@@ -160,36 +163,40 @@ const GATE = 1e-11
         @test_throws ArgumentError Quadriceps.encode128(BigFloat(π; precision = 256))
     end
 
-    @testset "number types beyond Float64" begin
+    @testset "number types beyond Float64: the binary128 data" begin
         eps128 = 2.0^-112
-        for fam ∈ (:gh, :le)
-            ext = Quadriceps.extended(fam)
-            @test length(ext) ≥ length(available(fam)) - 2
-            pos = fam ≡ :gh ? ghpos : lepos
-            for r ∈ ext
-                r.n ≤ 300 || continue
-                @test r.relerr128 ≤ 10eps128
-                X, w = pos(BigFloat, r.d; p = r.p)
-                X64, w64 = pos(r.d; p = r.p)
-                @test size(X) == size(X64) && eltype(X) ≡ BigFloat && all(>(0), w)
-                # the binary128 rule rounds to the Float64 rule: bit for bit, or one unit in the last place off
-                @test all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(X, X64)) && all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(w, w64))
-                err = setprecision(() -> exactness_error(BigFloat.(X), BigFloat.(w), r.p, fam), BigFloat, 320)
-                @test err ≤ 10eps128
-                @test isapprox(Float64(err), r.relerr128; rtol = 1e-2) || r.relerr128 == 0
+        @test Quadriceps.bits(Float64) == 53 && !Quadriceps.wide(Float64)
+        setprecision(BigFloat, 113) do                # ≤ 113 bits: the package's own rules128.bin, no download
+            @test !Quadriceps.wide(BigFloat)
+            for fam ∈ (:gh, :le)
+                ext = Quadriceps.extended(fam)
+                @test length(ext) == length(available(fam))
+                pos = fam ≡ :gh ? ghpos : lepos
+                for r ∈ ext
+                    @test r.relerr128 ≤ 10eps128 && r.relerr80 < 1e-66
+                    r.n ≤ 300 || continue
+                    X, w = pos(BigFloat, r.d; p = r.p)
+                    X64, w64 = pos(r.d; p = r.p)
+                    @test size(X) == size(X64) && eltype(X) ≡ BigFloat && precision(w[1]) == 113 && all(>(0), w)
+                    # the binary128 rule rounds to the Float64 rule: bit for bit, or one unit in the last place off
+                    @test all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(X, X64)) && all(abs(Float64(a) - b) ≤ eps(b) for (a, b) ∈ zip(w, w64))
+                    err = setprecision(() -> exactness_error(BigFloat.(X), BigFloat.(w), r.p, fam), BigFloat, 320)
+                    @test err ≤ 10eps128
+                    @test isapprox(Float64(err), r.relerr128; rtol = 1e-2) || r.relerr128 == 0
+                end
             end
+            # ZENODO_ONLY: GH d=2 stops at p=33 (the deposit's ceiling); beyond it there is nothing stored,
+            # and `pragmatic` rebuilds the degree from the 20² / 21² product grid, in any type
+            @test_throws ArgumentError ghpos(BigFloat, 2; p = 39)
+            @test size(ghpos(BigFloat, 2; p = 39, pragmatic = true)[1], 1) == 400
+            @test size(ghpos(BigFloat, 2; p = 41, pragmatic = true)[1], 1) == 441
         end
         @test eltype(ghpos(Float32, 3, 4)[1]) ≡ Float32 && Float32.(ghpos(3, 4)[2]) == ghpos(Float32, 3, 4)[2]
         @test ghpos(Float64, 3, 4) == ghpos(3, 4) && lepos(Float64, 2; p = 9) == lepos(2, 5)
-        # QUAD_ONLY: every catalog cell is in the binary128 catalog too, so no stored cell is Float64 only
+        # every catalog cell is in the binary128 catalog too, so no stored cell is Float64 only
         @test Set((r.d, r.p) for fam ∈ (:gh, :le) for r ∈ Quadriceps.available(fam)) ==
               Set((r.d, r.p) for fam ∈ (:gh, :le) for r ∈ Quadriceps.extended(fam))
-        # GH d=2 p=39 and p=41 are not stored (QUAD_ONLY): a request for either rises to the p=43 rule,
-        # and `pragmatic` rebuilds the degree from the 20² / 21² product grid, in any type
-        @test size(ghpos(BigFloat, 2; p = 39)[1], 1) == size(ghpos(2; p = 43)[1], 1) == 482
-        @test size(ghpos(BigFloat, 2; p = 39, pragmatic = true)[1], 1) == 400
-        @test size(ghpos(BigFloat, 2; p = 41, pragmatic = true)[1], 1) == 441
-        # one-dimensional Gauss rules, refined beyond Float64
+        # one-dimensional Gauss rules, refined beyond Float64 (default BigFloat: the wide path)
         for (pos, fam, fgq) ∈ ((ghpos, :gh, q -> gausshermite(q; normalize = true)), (lepos, :le, q -> (g = gausslegendre(q); ((g[1] .+ 1) ./ 2, g[2] ./ 2))))
             for q ∈ (1, 2, 7, 30)
                 X, w = pos(BigFloat, 1, q)
@@ -206,5 +213,47 @@ const GATE = 1e-11
         X, w = ghpos(BigFloat, 7, 3; pragmatic = true)
         @test eltype(w) ≡ BigFloat && size(X) == (nnodes(:gh, 7, 3; pragmatic = true), 7) && abs(sum(w) - 1) < 1e-32
         @test exactness_error(X, w, 5, :gh) < 10eps128
+    end
+
+    @testset "80 digits from the Zenodo deposit" begin
+        @test precision(BigFloat) == 256 && Quadriceps.wide(BigFloat)      # the default BigFloat is wide
+        for fam ∈ (:gh, :le)
+            dir = Quadriceps.depositdir(fam)                                  # the lazy artifact: fetched on first use
+            @test isdir(joinpath(dir, "rules_extended")) && isfile(joinpath(dir, "README.md"))
+            for r ∈ Quadriceps.extended(fam)
+                info = Quadriceps.INDEX[(fam, r.d, r.p)]
+                X80, w80 = Quadriceps.stored80(info)
+                @test size(X80) == (r.n, r.d) && precision(w80[1]) == Quadriceps.PREC80 && all(>(0), w80)
+                @test abs(sum(w80) - 1) < 1e-66                                    # the files carry 80 digits: ~1e-70
+                # the 80-digit rule rounds to the binary128 rule exactly (and so to the Float64 rule)
+                X128, w128 = Quadriceps.stored128(info)
+                @test all(BigFloat(a; precision = 113) == b for (a, b) ∈ zip(X80, X128)) &&
+                      all(BigFloat(a; precision = 113) == b for (a, b) ∈ zip(w80, w128))
+                fam ≡ :le && @test all(x -> 0 < x < 1, X80)
+                if r.n ≤ 300
+                    err = setprecision(() -> exactness_error(X80, w80, r.p, fam), BigFloat, 400)
+                    @test err < 1e-66
+                    @test isapprox(Float64(err), r.relerr80; rtol = 0.2) || err < 1e-75
+                end
+            end
+        end
+        # through the API: a default BigFloat is the 80-digit rule rounded to 256 bits …
+        X, w = ghpos(BigFloat, 3, 4)
+        X80, w80 = Quadriceps.stored80(Quadriceps.INDEX[(:gh, 3, 7)])
+        @test precision(w[1]) == 256 && X == BigFloat.(X80) && w == BigFloat.(w80)
+        @test setprecision(() -> exactness_error(X, w, 7, :gh), BigFloat, 400) < 1e-66
+        # … at 1000 bits it is the same 80-digit rule, not a better one …
+        X2, w2 = setprecision(() -> ghpos(BigFloat, 3, 4), BigFloat, 1000)
+        @test precision(w2[1]) == 1000 && [BigFloat(x; precision = 256) for x ∈ w2] == w
+        # … and at 113 bits it is the package's binary128 rule
+        @test setprecision(() -> ghpos(BigFloat, 3, 4)[2], BigFloat, 113) == Quadriceps.stored128(Quadriceps.INDEX[(:gh, 3, 7)])[2]
+        # frames and one-dimensional factors keep up with the data
+        X, w = lepos(BigFloat, 2, 5; normalize = false)
+        @test abs(sum(w) - 4) < 1e-66 && all(x -> -1 < x < 1, X)
+        X, w = lepos(BigFloat, 6, 3; pragmatic = true)                      # a product of stored and Gauss factors
+        @test size(X, 2) == 6 && abs(sum(w) - 1) < 1e-66 && exactness_error(X, w, 5, :le) < 1e-66
+        # results are copies of the cache
+        X, w = ghpos(BigFloat, 2, 3); w .= 0
+        @test all(>(0), ghpos(BigFloat, 2, 3)[2])
     end
 end
