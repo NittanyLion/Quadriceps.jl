@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="t">
+<title id="t">Quadriceps logo: a barbell with four plates a side, all weights positive, around the seven-node cubature rule of degree five</title>
+<rect x="6" y="244" width="500" height="24" rx="12" fill="#7b8794"/>
+<rect x="142" y="91" width="32" height="330" rx="10" fill="#CB3C33"/>
+<rect x="147" y="101" width="6" height="310" rx="3" fill="#fff" opacity=".22"/>
+<rect x="104" y="122" width="32" height="268" rx="10" fill="#389826"/>
+<rect x="109" y="132" width="6" height="248" rx="3" fill="#fff" opacity=".22"/>
+<rect x="66" y="153" width="32" height="206" rx="10" fill="#9558B2"/>
+<rect x="71" y="163" width="6" height="186" rx="3" fill="#fff" opacity=".22"/>
+<rect x="28" y="184" width="32" height="144" rx="10" fill="#4063D8"/>
+<rect x="33" y="194" width="6" height="124" rx="3" fill="#fff" opacity=".22"/>
+<rect x="8" y="233" width="14" height="46" rx="5" fill="#52606d"/>
+<rect x="338" y="91" width="32" height="330" rx="10" fill="#CB3C33"/>
+<rect x="343" y="101" width="6" height="310" rx="3" fill="#fff" opacity=".22"/>
+<rect x="376" y="122" width="32" height="268" rx="10" fill="#389826"/>
+<rect x="381" y="132" width="6" height="248" rx="3" fill="#fff" opacity=".22"/>
+<rect x="414" y="153" width="32" height="206" rx="10" fill="#9558B2"/>
+<rect x="419" y="163" width="6" height="186" rx="3" fill="#fff" opacity=".22"/>
+<rect x="452" y="184" width="32" height="144" rx="10" fill="#4063D8"/>
+<rect x="457" y="194" width="6" height="124" rx="3" fill="#fff" opacity=".22"/>
+<rect x="490" y="233" width="14" height="46" rx="5" fill="#52606d"/>
+<circle cx="256" cy="256" r="74" fill="#fff" stroke="#52606d" stroke-width="6"/>
+<circle cx="301.0" cy="282.0" r="9" fill="#CB3C33"/>
+<circle cx="256.0" cy="308.0" r="9" fill="#389826"/>
+<circle cx="211.0" cy="282.0" r="9" fill="#9558B2"/>
+<circle cx="211.0" cy="230.0" r="9" fill="#CB3C33"/>
+<circle cx="256.0" cy="204.0" r="9" fill="#389826"/>
+<circle cx="301.0" cy="230.0" r="9" fill="#9558B2"/>
+<circle cx="256" cy="256" r="21" fill="#1f2933"/>
+</svg>
