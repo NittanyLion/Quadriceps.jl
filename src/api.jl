@@ -62,26 +62,25 @@ depend on how many significant bits `T` holds (`precision(T)`; a type without th
 counts as wide):
 
 * up to 113 bits — `Float128` of Quadmath.jl, `Double64` of DoubleFloats.jl, `BigFloat` under
-  `setprecision(BigFloat, 113)` — are served from the package's own quadruple-precision data:
-  every node and weight is the 80-digit rule correctly rounded to IEEE binary128 (113 bits,
-  about 34 digits), and for `Float128` the conversion is exact;
+  `setprecision(BigFloat, 113)` — are served from `data/rules128.bin`: every node and weight is
+  the 80-digit rule correctly rounded to IEEE binary128 (113 bits, about 34 digits), and for
+  `Float128` the conversion is exact;
 * more than 113 bits — `BigFloat` at its default 256 bits, `Float64x4` of MultiFloats.jl, … —
-  receive the 80-digit rules of the Zenodo deposit itself (record 10.5281/zenodo.22881864). Those
-  files are lazy artifacts: the first such call for a family downloads its archive from Zenodo
-  (2.4 MB for GH, 15 MB for Le), verified by Pkg and kept in the artifact store; later calls read
-  it from there. The result carries 80 correct digits, whatever the precision of `T`.
+  are served from `data/rules80.bin`: the 80-digit rules of the Zenodo deposit (record
+  10.5281/zenodo.22881864) themselves, held in a 40-byte binary format. The result carries 80
+  correct digits, whatever the precision of `T`.
 
-Rounded on to `Float64` either is the `Float64` rule (to the last bit, except that a coordinate
-of size `1e-30` standing for zero can come out one unit in the last place off). One-dimensional
-Gauss factors are computed to the accuracy of the data they are combined with.
-[`Quadriceps.extended`](@ref) lists the cells with the measured error of each rule in both
-formats: every stored rule is one of them, so `T` never fails on a cell the `Float64` call
-answers. Without network access, ask for a type of at most 113 bits.
+Both files ship with the package; nothing is fetched from anywhere. Rounded on to `Float64`
+either is the `Float64` rule (to the last bit, except that a coordinate of size `1e-30` standing
+for zero can come out one unit in the last place off). One-dimensional Gauss factors are
+computed to the accuracy of the data they are combined with. [`Quadriceps.extended`](@ref) lists
+the cells with the measured error of each rule in both formats: every stored rule is one of
+them, so `T` never fails on a cell the `Float64` call answers.
 
 ```julia
 using Quadmath
-X, w = ghpos(Float128, 3, 4)             # the 27-node rule in quadruple precision, no download
-X, w = ghpos(BigFloat, 3, 4)             # the same rule to 80 digits, from the deposit
+X, w = ghpos(Float128, 3, 4)             # the 27-node rule in quadruple precision
+X, w = ghpos(BigFloat, 3, 4)             # the same rule to 80 digits
 Float64.(X) ≈ ghpos(3, 4)[1]             # true: the same rule
 ```
 

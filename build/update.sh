@@ -79,7 +79,7 @@ sibling() {
   clean "$dir" || { say "$dir: working tree not clean; skipped"; return 0; }
   git -C "$dir" pull -q --ff-only || { notify "git pull failed in $dir"; return 1; }
   mkdir -p "$dir/$data"
-  rsync -a --delete --exclude rules128.bin --exclude index128.tsv "$PKG/data/" "$dir/$data/"   # quadruple precision: Julia only
+  rsync -a --delete --exclude rules128.bin --exclude rules80.bin --exclude index128.tsv "$PKG/data/" "$dir/$data/"   # beyond double precision: Julia only
   sed 's|(credits.md)|(NOTICE.md)|' "$PKG/docs/src/rules.md" > "$dir/RULES.md"
   sed -e 's|(credits.md)|(NOTICE.md)|' -e 's|^# Data format|# Data format of rules.bin|' "$PKG/docs/src/format.md" > "$dir/FORMAT.md"
   cp "$PKG/NOTICE.md" "$dir/NOTICE.md"

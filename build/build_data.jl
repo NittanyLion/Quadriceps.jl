@@ -39,24 +39,26 @@
 # missing, or does not round to the stored rule, would ship in Float64 only, so `ghpos(Float128,
 # …)` would answer for some cells and not others. Such a cell is left out of the package
 # altogether — index.tsv and index128.tsv then hold the same cells. It dropped GH d=2 p=39 (n=394)
-# and p=41 (n=439), the only two without a file. A request for degree 39 or 41 at d = 2 then rises
-# to the stored p=43 rule (482 nodes), or, with `pragmatic = true`, rebuilds the degree from the
-# 20² / 21² product grid (400 and 441 nodes) — in any number type either way.
+# and p=41 (n=439), the only two without a file. (Since ZENODO_ONLY, below, GH d=2 ends at p=33; a
+# request for a higher degree there is an error, or with `pragmatic = true` the product grid —
+# 20² / 21² nodes for degree 39 / 41 — in any number type either way.)
 #
 # ZENODO_ONLY (user, 2026-09-22: "remove all rules that are not in zenodo from all packages"): a
 # cell is shipped only if the published deposit (SYNC/publish/<gh|le>/summary.csv, the files of
 # Zenodo record 10.5281/zenodo.22881864) holds a rule with the same (d, p, n). The package then
-# describes exactly the deposited rules, and the 80-digit rule of every stored cell can be fetched
-# from the deposit at run time (the lazy artifacts in Artifacts.toml; src/extended.jl). It dropped
-# the four GH cells above the deposit's ceilings, d=2 p=35, 37, 43 and d=3 p=35. The binary128 rule
-# is now read from the deposit's own file, rules_extended/<name>.mp.csv, and index128.tsv records
-# that file's name and sha256 together with the deposit's error of the 80-digit rule (relerr80).
+# describes exactly the deposited rules. It dropped the four GH cells above the deposit's ceilings,
+# d=2 p=35, 37, 43 and d=3 p=35. The binary128 rule is read from the deposit's own file,
+# rules_extended/<name>.mp.csv, and the same file, parsed to PREC80 bits, goes into
+# data/rules80.bin (float=binary320: the binary128 layout with a 304-bit fraction, 40 bytes a
+# number; src/extended.jl) so that the package serves the 80-digit rules itself, from its own
+# data — never from the network. index128.tsv is the catalog of both wide files: the deposit
+# file's name and sha256 and the deposit's errors relerr128 and relerr80.
 #
 # Also rewrites docs/src/rules.md and the generated blocks of README.md. The output carries no
 # dates, so a rebuild from an unchanged bank changes no file.
 
 using Quadriceps, Printf, SHA
-using Quadriceps: RuleInfo, Catalog, cheapest, readindex, readbinindex, readblock, writebin, exactness_error
+using Quadriceps: RuleInfo, Catalog, cheapest, readindex, readbinindex, readblock, writebin, exactness_error, PREC80
 
 const GATE = 1e-11
 const PKG  = dirname(@__DIR__)
@@ -185,10 +187,11 @@ end
 # --- index (written below, after QUAD_ONLY has had its say) -----------------------------------
 infos = sort!(collect(values(index)); by = r -> (r.family, r.d, r.p))
 
-# --- beyond double precision: rules128.bin, index128.tsv -------------------------------------
-# The binary128 rule is the deposit's 80-digit file rounded; that file is what the lazy artifact
-# serves at run time, so its name and sha256 go into index128.tsv for the package to verify.
+# --- beyond double precision: rules128.bin, rules80.bin, index128.tsv ---------------------------
+# Both wide files come from the deposit's 80-digit file: rules128.bin is its binary128 rounding,
+# rules80.bin the file parsed to PREC80 bits; index128.tsv names the file and its sha256.
 rules128 = Dict{Tuple{Symbol,Int,Int},Tuple{Matrix{BigFloat},Vector{BigFloat},Int}}()
+rules80 = Dict{Tuple{Symbol,Int,Int},Tuple{Matrix{BigFloat},Vector{BigFloat},Int}}()   # the 80-digit rules, PREC80 bits
 lines128 = String[]; skipped128 = String[]
 for r in infos
     key = (r.family, r.d, r.p)
@@ -201,11 +204,14 @@ for r in infos
     F = [Float64(BigFloat(String(S[i][k]); precision = 512)) for i in eachindex(S), k in 1:r.d+1]
     X = BigFloat[BigFloat(String(S[i][k]); precision = 113) for i in eachindex(S), k in 1:r.d]
     w = BigFloat[BigFloat(String(S[i][r.d+1]); precision = 113) for i in eachindex(S)]
+    X80 = BigFloat[BigFloat(String(S[i][k]); precision = PREC80) for i in eachindex(S), k in 1:r.d]
+    w80 = BigFloat[BigFloat(String(S[i][r.d+1]); precision = PREC80) for i in eachindex(S)]
     (size(X) == size(rules[key][1]) && F[:, 1:r.d] == rules[key][1] && F[:, r.d+1] == rules[key][2]) ||
         (push!(skipped128, "$(provenance[key][1]): its extended-precision file does not round to it row for row"); continue)
     sha = bytes2hex(sha256(read(f)))
     err128, err80 = DEPOSIT[(r.family, r.d, r.p, r.n)]
     rules128[key] = (X, w, r.source_id)
+    rules80[key] = (X80, w80, r.source_id)
     push!(lines128, @sprintf("%s\t%d\t%d\t%d\t%.3e\t%s\t%s\t%.3e", r.family, r.d, r.p, r.n, err128, basename(f), sha, err80))
 end
 # --- QUAD_ONLY: ship a cell only if it is also in rules128.bin (see the header) ----------------
@@ -236,6 +242,7 @@ open(joinpath(NEW, "index128.tsv"), "w") do io
     foreach(l -> println(io, l), lines128)
 end
 writebin(joinpath(NEW, "rules128.bin"), rules128; float = "binary128")
+writebin(joinpath(NEW, "rules80.bin"), rules80; float = "binary320")
 
 # --- compare with what is stored now, then swap -----------------------------------------------
 old = readindex(joinpath(PKG, "data", "index.tsv"))

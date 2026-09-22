@@ -165,24 +165,23 @@ Which data serve the request depends on how many significant bits the type holds
   0.2 for Le, the same multiples of the machine epsilon as in double precision, so nothing is
   lost to the rules themselves.
 * **more than 113 bits** — `BigFloat` at its default 256 bits, `Float64x4` of MultiFloats.jl, … —
-  receive the **80-digit rules** of the Zenodo deposit itself. Those files are not in the
-  package: they are declared as lazy artifacts (`Artifacts.toml`), so the first such call for a
-  family downloads its archive from Zenodo (record 10.5281/zenodo.22881864; 2.4 MB for GH, 15 MB
-  for Le), which Pkg verifies against its SHA-256 and keeps in the artifact store; later calls,
-  and later sessions, read it from there. The files are parsed into 320-bit `BigFloat`s and
-  converted to the type asked for, so the result carries the deposit's 80 digits and no more —
-  a `BigFloat` at 1000 bits is still an 80-digit rule. The deposit's measured error of each
-  80-digit rule is `relerr80` in [`Quadriceps.extended`](@ref): below ``10^{-68}`` for every
-  rule. Without network access, ask for a type of at most 113 bits, which needs no download.
+  come from `data/rules80.bin`, also shipped with the package: the **80-digit rules** of the
+  Zenodo deposit (record 10.5281/zenodo.22881864) themselves, each number held in a 40-byte
+  binary format with a 305-bit significand ([Data format](format.md)). They are decoded into
+  305-bit `BigFloat`s and converted to the type asked for, so the result carries the deposit's
+  80 digits and no more — a `BigFloat` at 1000 bits is still an 80-digit rule. The deposit's
+  measured error of each 80-digit rule is `relerr80` in [`Quadriceps.extended`](@ref): below
+  ``10^{-68}`` for every rule.
 
+Both files are part of the package; no call ever reads anything from outside it.
 One-dimensional Gauss factors (`d = 1`, and `pragmatic = true`) are computed to the accuracy
-of the data they are combined with. Every stored cell is available this way: the typed call
-never fails where the `Float64` call succeeds.
+of the data they are combined with. Every stored cell is available in both ways: the typed
+call never fails where the `Float64` call succeeds.
 
 ```julia
-X, w = ghpos(BigFloat, 3, 4)              # 80 digits, from the deposit (downloaded once)
+X, w = ghpos(BigFloat, 3, 4)              # 80 digits
 X, w = setprecision(BigFloat, 113) do
-    ghpos(BigFloat, 3, 4)                 # 34 digits, from the package's own data, no download
+    ghpos(BigFloat, 3, 4)                 # 34 digits, the binary128 rule
 end
 ```
 

@@ -48,9 +48,9 @@ using Pkg
 Pkg.add("Quadriceps")
 ```
 
-Julia 1.10 or later. The only dependency outside the standard library is FastGaussQuadrature.jl.
-The package ships its rules in double and quadruple precision; the 80-digit rules are fetched
-from the Zenodo deposit the first time they are asked for (see below).
+Julia 1.10 or later. The only dependency is FastGaussQuadrature.jl. The package ships its rules
+in double precision, in quadruple precision and to 80 digits, all in its own data files (see
+below); it never reads anything from outside itself.
 
 ## Use
 
@@ -125,9 +125,10 @@ that a product matches.)
 * `d = 1` gives the Gauss rule with `q` nodes (`p ÷ 2 + 1` when `p` is given), as an `n × 1`
   matrix.
 * Every call returns fresh arrays. A rule is read from the data file on first use and cached.
-* All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog, and
-  their quadruple-precision roundings in `data/rules128.bin` with `data/index128.tsv`; the
-  [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html) page specifies both.
+* All rules live in one binary file, `data/rules.bin`, with `data/index.tsv` as its catalog;
+  their quadruple-precision roundings are in `data/rules128.bin` and the 80-digit rules in
+  `data/rules80.bin`, with `data/index128.tsv` as the catalog of both. The
+  [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html) page specifies all three.
 * Unexported helpers: `Quadriceps.available(family)` lists the stored rules,
   `Quadriceps.nnodes(family, d, q; pragmatic)` gives a node count without building the rule,
   `Quadriceps.ruleinfo(family, d, q; pragmatic)` describes the rule and its origin (both also
@@ -158,25 +159,25 @@ holds (`precision(T)`):
   that format the error is below `8.8e-34` for every GH rule (4.5 units in the last place; the
   worst is `d = 2`, `p = 31`) and below `3.3e-35` for every Le rule (a sixth of a unit).
 * **more than 113 bits** — `BigFloat` at its default 256 bits, `Float64x4` of MultiFloats.jl, … —
-  receive the **80-digit rules of the Zenodo deposit itself**. They are not in the package: the
-  deposit's two archives are declared as lazy artifacts, so the first such call for a family
-  downloads its archive from Zenodo (2.4 MB for GH, 15 MB for Le), verified by Pkg and kept in
-  the artifact store; later calls read it from there. The result carries the deposit's 80 digits
-  and no more, whatever the precision of the type; the deposit's measured error of every
-  80-digit rule is below `1e-68`.
+  come from `data/rules80.bin`, also shipped with the package: the **80-digit rules of the Zenodo
+  deposit themselves**, each number in a 40-byte binary format with a 305-bit significand. The
+  result carries the deposit's 80 digits and no more, whatever the precision of the type; the
+  deposit's measured error of every 80-digit rule is below `1e-68`.
+
+All three data files are inside the package; it never reads anything from anywhere else.
 
 ```julia
 using Quadriceps, Quadmath
-X, w = ghpos(Float128, 3, 4)            # the 27-node rule in quadruple precision, no download
-X, w = ghpos(BigFloat, 3, 4)            # the same rule to 80 digits, from the deposit (fetched once)
+X, w = ghpos(Float128, 3, 4)            # the 27-node rule in quadruple precision
+X, w = ghpos(BigFloat, 3, 4)            # the same rule to 80 digits
 X, w = lepos(BigFloat, 5; p = 21)
 Float64.(X) ≈ ghpos(3, 4)[1]            # true: the same rule, rounded
 ```
 
 Every stored rule is available in both ways, so the typed call never fails where the `Float64`
 call succeeds; `Quadriceps.extended(family)` lists the cells with both errors (`relerr128`,
-`relerr80`). Without network access, ask for a type of at most 113 bits, which needs no download.
-Details: the [guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide.html#Beyond-double-precision)
+`relerr80`). Details: the
+[guide](https://NittanyLion.github.io/Quadriceps.jl/dev/guide.html#Beyond-double-precision)
 and the [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html).
 
 ## Whose rules these are
@@ -201,7 +202,7 @@ every push to `main`:
 * [Stored rules](https://NittanyLion.github.io/Quadriceps.jl/dev/rules.html) — every rule with its
   node count, Möller's bound, measured error and origin;
 * [Data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.html) — `rules.bin`,
-  `rules128.bin`, the catalogs and the deposit artifacts, enough to write a reader in any language;
+  `rules128.bin`, `rules80.bin` and the catalogs, enough to write a reader in any language;
 * [Reference](https://NittanyLion.github.io/Quadriceps.jl/dev/api.html) — the docstrings;
 * [Credits](https://NittanyLion.github.io/Quadriceps.jl/dev/credits.html) — whose rules these are.
 

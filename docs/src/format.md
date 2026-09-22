@@ -106,19 +106,26 @@ catalog: `family`, `d`, `p`, `n`, `relerr128` (largest relative monomial error o
 rule, measured in wider arithmetic; the machine epsilon of the format is `2^-112 ≈ 1.93e-34`),
 `extendedfile` and `sha256`, which name the deposit's 80-digit file the numbers were rounded from
 (`rules_extended/` in the Zenodo archive) and give its SHA-256, and `relerr80`, the deposit's
-measured error of that 80-digit rule. The Julia package reads both; the Python and R packages do
-not ship them.
+measured error of that 80-digit rule. The Julia package reads these files; the Python and R
+packages do not ship them.
 
-## Eighty digits: the deposit's files as artifacts
+## Eighty digits: `rules80.bin`
 
-The 80-digit rules are not in the package. `Artifacts.toml` declares the two archives of the
-Zenodo deposit (`gh.tar.xz`, `le.tar.xz` of record 10.5281/zenodo.22881864) as lazy artifacts,
-with the SHA-256 of each archive and the git tree hash of its contents; Pkg downloads an archive
-the first time a rule is requested in a type wider than 113 bits, verifies it, and keeps it in
-the artifact store. Inside, `gh/rules_extended/` and `le/rules_extended/` hold one text file per
-cell, named in `index128.tsv`: comment lines, a header `x1,…,xd,w`, then `n` rows of `d+1`
-decimal numbers with 80 significant digits, in the row order of `rules.bin`. The deposit's own
-`README.md` and `COLUMNS.md` describe the rest of the archive.
+`rules80.bin` is a third file of the same format with `float=binary320`: the 80-digit rules of
+the Zenodo deposit themselves (its files `rules_extended/<name>.mp.csv`, named in
+`index128.tsv`, which is the catalog of this file too — both wide files hold the same cells in
+the same row order). Every number is 40 little-endian bytes in the layout of binary128 widened
+to a 304-bit fraction: from the most significant bit, 1 sign bit, 15 exponent bits with bias
+16383, then 304 fraction bits with an implicit leading 1, so a 305-bit significand of about 91
+decimal digits; zero is all bits zero, and there are no subnormals, infinities or NaNs. So
+`nbytes = n*(d+1)*40`. Each number is the deposit's 80-digit decimal correctly rounded to that
+significand, which changes it by less than one part in ``2^{305}``. A reader takes the 40 bytes
+as a 320-bit unsigned integer `b` (little-endian) and forms
+`(-1)^sign · (1 + fraction / 2^304) · 2^(exponent - 16383)`; in Julia, `Quadriceps.decode320`
+does this from five `UInt64` words (least significant first) into a 305-bit `BigFloat`.
+
+All three files, `rules.bin`, `rules128.bin` and `rules80.bin`, ship inside the package; the
+package reads nothing from anywhere else.
 
 ## A reader in a few lines
 

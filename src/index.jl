@@ -69,6 +69,19 @@ end
 #   data     per cell n*(d+1) little-endian Float64, row-major: x_1 … x_d, w for each node
 const MAGIC = "QUADRICEPS1"
 const NIDX = 8
+# bytes per number for each `float` a header may declare; src/extended.jl encodes the wide ones
+const FLOATWIDTH = Dict("binary64" => 8, "binary128" => 16, "binary320" => 40)
+
+# One number of the given width, little-endian.
+function writefloat(io::IO, x, width::Int)
+    if width == 8
+        write(io, htol(Float64(x)))
+    elseif width == 16
+        write(io, htol(encode128(x)))
+    else
+        foreach(word -> write(io, htol(word)), encode320(x))
+    end
+end
 
 struct BinEntry
     n::Int
@@ -115,7 +128,7 @@ end
 
 # Write rules (key => (X, w, source_id)) as a QUADRICEPS1 file; cells in (family, d, p) order.
 function writebin(path::AbstractString, rules::AbstractDict; float::AbstractString = "binary64")
-    width = float == "binary64" ? 8 : 16
+    width = FLOATWIDTH[float]
     order = sort!(collect(keys(rules)); by = k -> (findfirst(==(k[1]), FAMILIES), k[2], k[3]))
     header = "$MAGIC fmt=1 endian=little cells=$(length(order)) index_fields=$NIDX float=$float " *
              "order=row-major layout=x1..xd,w families=0:gh,1:le\n"
@@ -132,8 +145,8 @@ function writebin(path::AbstractString, rules::AbstractDict; float::AbstractStri
         for k in order
             X, w, _ = rules[k]
             for i in axes(X, 1)
-                for c in axes(X, 2); write(io, htol(width == 8 ? Float64(X[i, c]) : encode128(X[i, c]))); end
-                write(io, htol(width == 8 ? Float64(w[i]) : encode128(w[i])))
+                for c in axes(X, 2); writefloat(io, X[i, c], width); end
+                writefloat(io, w[i], width)
             end
         end
     end
@@ -141,14 +154,18 @@ function writebin(path::AbstractString, rules::AbstractDict; float::AbstractStri
 end
 
 function __init__()
-    empty!(INDEX); empty!(BIN); empty!(CACHE); empty!(BIN128); empty!(INDEX128); empty!(CACHE128)
+    empty!(INDEX); empty!(BIN); empty!(CACHE); empty!(BIN128); empty!(BIN80); empty!(INDEX128); empty!(CACHE128); empty!(CACHE80)
     merge!(INDEX, readindex(joinpath(datadir(), "index.tsv")))
     merge!(BIN, readbinindex(binpath()))
     for (k, info) in INDEX
         (haskey(BIN, k) && BIN[k].n == info.n) || error("Quadriceps: data/index.tsv and data/rules.bin disagree at $k")
     end
     merge!(BIN128, readbinindex(bin128path(); float = "binary128", width = 16))
+    merge!(BIN80, readbinindex(bin80path(); float = "binary320", width = 40))
     merge!(INDEX128, readindex128(joinpath(datadir(), "index128.tsv")))
+    for (k, e) in BIN128                                    # (build_data.jl loads the package before writing the file)
+        isfile(bin80path()) && !(haskey(BIN80, k) && BIN80[k].n == e.n) && error("Quadriceps: data/rules128.bin and data/rules80.bin disagree at $k")
+    end
     nothing
 end
 

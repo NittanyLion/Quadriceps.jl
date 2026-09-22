@@ -166,7 +166,7 @@ const GATE = 1e-11
     @testset "number types beyond Float64: the binary128 data" begin
         eps128 = 2.0^-112
         @test Quadriceps.bits(Float64) == 53 && !Quadriceps.wide(Float64)
-        setprecision(BigFloat, 113) do                # ≤ 113 bits: the package's own rules128.bin, no download
+        setprecision(BigFloat, 113) do                # ≤ 113 bits: the binary128 data, rules128.bin
             @test !Quadriceps.wide(BigFloat)
             for fam ∈ (:gh, :le)
                 ext = Quadriceps.extended(fam)
@@ -215,11 +215,30 @@ const GATE = 1e-11
         @test exactness_error(X, w, 5, :gh) < 10eps128
     end
 
-    @testset "80 digits from the Zenodo deposit" begin
+    @testset "binary320 codec" begin
+        using Quadriceps: encode320, decode320, PREC80
+        enc(x) = encode320(BigFloat(x; precision = PREC80))
+        @test enc(1) == (0, 0, 0, 0, UInt64(0x3fff) << 48)                    # exponent field in the top word
+        @test enc(0) == (0, 0, 0, 0, 0)
+        @test enc(-2.5)[5] == (UInt64(1) << 63) | (UInt64(0x4000) << 48) | (UInt64(1) << 46)   # 1.01b: second fraction bit
+        for x ∈ (BigFloat(π; precision = PREC80), -BigFloat("7.0785769767068e-33"; precision = PREC80),
+                 BigFloat(2; precision = PREC80)^-40, BigFloat("0." * "1234567890"^8; precision = PREC80))
+            @test decode320(enc(x)) == x
+        end
+        @test_throws ArgumentError encode320(BigFloat(π; precision = 400))
+        # the deposit's 80-digit decimals survive the round trip to within the format's last bit
+        s = "9.3173579904737320568086554096983364255055931636511679768181393607476690421431501e-01"
+        @test abs(decode320(encode320(BigFloat(s; precision = PREC80))) - BigFloat(s; precision = 512)) < BigFloat(2)^-304
+    end
+
+    @testset "80 digits: rules80.bin" begin
+        using Quadriceps: bin80path, BIN80, BIN128
         @test precision(BigFloat) == 256 && Quadriceps.wide(BigFloat)      # the default BigFloat is wide
+        @test startswith(readline(bin80path()), "QUADRICEPS1 fmt=1 endian=little cells=$(length(INDEX)) index_fields=8 float=binary320")
+        @test keys(BIN80) == keys(BIN128) == keys(INDEX)
+        @test all(BIN80[k].n == e.n && BIN80[k].nbytes == e.n * (k[2] + 1) * 40 for (k, e) ∈ BIN128)
+        @test filesize(bin80path()) == maximum(e.offset + e.nbytes for e ∈ values(BIN80))
         for fam ∈ (:gh, :le)
-            dir = Quadriceps.depositdir(fam)                                  # the lazy artifact: fetched on first use
-            @test isdir(joinpath(dir, "rules_extended")) && isfile(joinpath(dir, "README.md"))
             for r ∈ Quadriceps.extended(fam)
                 info = Quadriceps.INDEX[(fam, r.d, r.p)]
                 X80, w80 = Quadriceps.stored80(info)
