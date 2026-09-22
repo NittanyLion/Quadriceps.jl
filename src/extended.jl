@@ -107,7 +107,7 @@ end
 
 # --- the catalog and the two stores -----------------------------------------------------------------
 
-# index128.tsv: family d p n relerr128 extendedfile sha256 relerr80 (the last three since v0.2).
+# index128.tsv: family d p n relerr128 extendedfile sha256 relerr80 (the last three were added before the first registered version).
 function readindex128(path::AbstractString)
     out = Dict{Tuple{Symbol,Int,Int},Ext}()
     isfile(path) || return out

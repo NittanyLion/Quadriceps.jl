@@ -1,6 +1,6 @@
 name = "Quadriceps"
 uuid = "9371e607-b390-4342-8322-9e25c25d5a03"
-version = "0.2.0"
+version = "0.1.0"
 authors = ["Joris Pinkse <pinkse@gmail.com>"]
 
 [deps]
