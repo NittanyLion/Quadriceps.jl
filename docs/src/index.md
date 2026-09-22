@@ -1,10 +1,9 @@
 # Quadriceps.jl
 
 !!! note "Paper and data deposit"
-    Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv:
-    [ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA); Zenodo deposit, DOI:
-    [10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864).
-    The arXiv link will be filled in on publication.
+    Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026), Zenodo, DOI:
+    [10.5281/zenodo.22904159](https://doi.org/10.5281/zenodo.22904159); the rules to 80 digits,
+    Zenodo, DOI: [10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864).
 
 Positive-weight cubature rules in several dimensions, for the Gaussian weight and for the
 uniform weight on the cube.

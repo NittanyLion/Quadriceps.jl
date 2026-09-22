@@ -7,7 +7,7 @@
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 ![authored by: JP](authored_by.svg)
 
-> **Paper:** Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* — arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)** (link to be filled in on publication)
+> **Paper:** Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026) — Zenodo, DOI: **[10.5281/zenodo.22904159](https://doi.org/10.5281/zenodo.22904159)**
 >
 > **Data deposit:** Zenodo — DOI: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)**
 

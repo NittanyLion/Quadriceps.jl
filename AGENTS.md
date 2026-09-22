@@ -2,19 +2,17 @@
 
 Guidance for coding agents (and people) working in this repository.
 
-## Paper and deposit — links to fill in
+## Paper and deposit
 
-The rules are described in Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules*,
-and deposited on Zenodo. Neither is public yet. The Zenodo DOI is reserved (2026-09-21) and resolves
-once the record is published; the arXiv link is still a placeholder:
+The rules are described in Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026),
+and deposited on Zenodo. All three records are published:
 
-* arXiv: **[ARXIV-LINK-TBA](https://arxiv.org/abs/ARXIV-LINK-TBA)**
-* Zenodo: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)**
+* paper: **[10.5281/zenodo.22904159](https://doi.org/10.5281/zenodo.22904159)** (concept DOI: it always resolves to the latest version)
+* rules, to 80 digits: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)** (one record for both weight families)
+* software snapshot of all five packages, v0.1.0: **[10.5281/zenodo.22883240](https://doi.org/10.5281/zenodo.22883240)**
 
-When the author supplies the arXiv link, replace the token `ARXIV-LINK-TBA` everywhere it occurs
-(`grep -rn 'LINK-TBA' .`), in all three packages (Quadriceps.jl, quadriceps-py, quadriceps-r), and
-drop the "to be filled in" remarks; once the Zenodo record is published, drop the "reserved" remarks too. Keep the block at the top
-of `README.md`.
+The paper is not on arXiv; do not add or look for an arXiv link. Keep the block at the top of
+`README.md` in step with this one, in all three packages (Quadriceps.jl, quadriceps-py, quadriceps-r).
 
 ## What this is
 
