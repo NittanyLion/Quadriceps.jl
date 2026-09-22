@@ -132,12 +132,13 @@ that a product matches.)
 ## Accuracy
 
 The default data, `data/rules.bin`, are in double precision (quadruple: next section). Every
-stored rule was checked when the data were built: all weights positive, and the largest relative
-monomial error over all monomials of degree `≤ p` below `1e-11`. Most rules sit at
-`1e-16`–`1e-15`; the largest GH rules at `d = 2, 3` are the least accurate, at `1e-12`–`1e-11`.
-The measured value of each rule is in the catalog
-(`relerr` in `Quadriceps.ruleinfo`, and the table in `docs/src/rules.md`), and the test suite
-repeats the check for every rule. All nodes of the Le rules lie strictly inside the cube.
+rule is its extended-precision rule rounded to `Float64`, so what remains of its error is
+rounding: the largest relative monomial error over all monomials of degree `≤ p` is below
+`5.2e-15` for every GH rule (most are `1e-16`–`1e-15`; the worst is `d = 5`, `p = 21`) and below
+`4.5e-16` for every Le rule. All weights are positive, and all nodes of the Le rules lie strictly
+inside the cube. The gate applied when the data are built, and again by the test suite on every
+rule, is `1e-11`. The measured value of each rule is in the catalog (`relerr` in
+`Quadriceps.ruleinfo`, and the table in `docs/src/rules.md`).
 
 ## Quadruple precision and beyond
 
@@ -155,8 +156,10 @@ Float64.(X) ≈ ghpos(3, 4)[1]            # true: the same rule, rounded
 
 A `BigFloat` result carries those 34 digits, not more. Every stored rule is available this way,
 so the typed call never fails where the `Float64` call succeeds; `Quadriceps.extended` lists the
-cells with the measured error of each in that format. The rules to 80 digits are in the Zenodo
-deposit named at the top of this file.
+cells with the measured error of each in that format: below `8.8e-34` for every GH rule (4.5 units
+in the last place of binary128; the worst is `d = 2`, `p = 31`) and below `3.3e-35` for every Le
+rule (a sixth of a unit). The rules to 80 digits are in the Zenodo deposit named at the top of
+this file.
 
 ## Whose rules these are
 

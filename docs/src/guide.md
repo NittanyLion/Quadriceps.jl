@@ -134,10 +134,11 @@ are built, every rule is checked:
   is below ``10^{-11}``.
 
 That threshold is a gate, not the accuracy achieved. The measured error of each rule is
-recorded in the catalog and shown in [Stored rules](rules.md): most are between ``10^{-16}``
-and ``10^{-15}``. The few rules that have no
-extended-precision file behind them (see below) are the least accurate, up to ``10^{-11}``;
-their error is a property of the stored nodes and weights, not of the arithmetic of the check.
+recorded in the catalog and shown in [Stored rules](rules.md): every rule is its
+extended-precision rule (see below) rounded to `Float64`, and the largest error is
+``5.2 \cdot 10^{-15}`` for GH (``d = 5``, ``p = 21``) and ``4.5 \cdot 10^{-16}`` for Le; most are
+between ``10^{-16}`` and ``10^{-15}``. In the binary128 data the largest is ``8.8 \cdot 10^{-34}``
+(GH, 4.5 units in the last place) and ``3.3 \cdot 10^{-35}`` (Le, a sixth of a unit).
 [`Quadriceps.exactness_error`](@ref) repeats the measurement, in extended precision if given
 `BigFloat` arrays, and the test suite runs it on every stored rule.
 
