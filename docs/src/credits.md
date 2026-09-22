@@ -44,6 +44,14 @@ derived files.
 * S. I. Konyaev, Ninth-order quadrature formulas invariant with respect to the icosahedral
   group (in Russian), *Dokl. Akad. Nauk SSSR* **233** (1977) 784–787. — GH ``d = 3``,
   ``p = 9``.
+* J. Pinkse, Positive weight Hermite and Legendre quadrature rules (2026), arXiv:ARXIV-LINK-TBA;
+  the rules to 80 digits are deposited at Zenodo, DOI 10.5281/zenodo.22881864. — Every rule
+  whose origin is `own` (116 of the 142: all cells not listed under another source), and the
+  eleven Le rules whose origin is `derived` — ``d = 2``, ``p = 77`` and ``d = 3``,
+  ``p = 27, 29, …, 45`` — where the author's node elimination started from Diallo and Worku's
+  published rule for the same cell and went below its node count: the count is the author's,
+  the starting point is theirs, and both should be cited (see the Diallo and Worku entry and
+  `NOTICE.md`).
 * A. H. Stroud, *Approximate Calculation of Multiple Integrals*, Prentice-Hall (1971). — GH
   ``d = 2``, ``p = 5``; ``d = 3``, ``p = 5, 7``; ``d = 4``, ``p = 7``; ``d = 5``, ``p = 3, 7``.
 * A. H. Stroud and D. Secrest, Approximate integration formulas for certain spherically

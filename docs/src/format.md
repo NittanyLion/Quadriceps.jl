@@ -71,8 +71,8 @@ rule sum to 1.
 
 | id | meaning |
 |---|---|
-| 0 | the package author's own rule |
-| 3 | derived: the author's node elimination started from Diallo and Worku's (2026) rule for the same cell |
+| 0 | the package author's own rule — J. Pinkse (2026), see [Credits](credits.md) |
+| 3 | derived: the author's (J. Pinkse) node elimination started from Diallo and Worku's (2026) rule for the same cell; cite both |
 | 10 | Stroud 1971 |
 | 11 | Stroud and Secrest 1963 |
 | 12 | Haegemans and Piessens 1976 |
