@@ -44,7 +44,7 @@ derived files.
 * S. I. Konyaev, Ninth-order quadrature formulas invariant with respect to the icosahedral
   group (in Russian), *Dokl. Akad. Nauk SSSR* **233** (1977) 784–787. — GH ``d = 3``,
   ``p = 9``.
-* J. Pinkse, Positive weight Hermite and Legendre quadrature rules (2026), Zenodo, DOI 10.5281/zenodo.22904159;
+* J. Pinkse, Positive weight Hermite and Legendre quadrature rules (2026), arXiv:2609.26840, Zenodo, DOI 10.5281/zenodo.22904159;
   the rules to 80 digits are deposited at Zenodo, DOI 10.5281/zenodo.22881864. — Every rule
   whose origin is `own` (116 of the 142: all cells not listed under another source), and the
   eleven Le rules whose origin is `derived` — ``d = 2``, ``p = 77`` and ``d = 3``,

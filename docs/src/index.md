@@ -1,7 +1,7 @@
 # Quadriceps.jl
 
 !!! note "Paper and data deposit"
-    Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026), Zenodo, DOI:
+    Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026), [arXiv:2609.26840](https://arxiv.org/abs/2609.26840); Zenodo, DOI:
     [10.5281/zenodo.22904159](https://doi.org/10.5281/zenodo.22904159); the rules to 80 digits,
     Zenodo, DOI: [10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864).
 

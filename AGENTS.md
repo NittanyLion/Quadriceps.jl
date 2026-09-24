@@ -5,13 +5,13 @@ Guidance for coding agents (and people) working in this repository.
 ## Paper and deposit
 
 The rules are described in Joris Pinkse, *Positive weight Hermite and Legendre quadrature rules* (2026),
-and deposited on Zenodo. All three records are published:
+on arXiv as **[arXiv:2609.26840](https://arxiv.org/abs/2609.26840)** and deposited on Zenodo. All three Zenodo records are published:
 
 * paper: **[10.5281/zenodo.22904159](https://doi.org/10.5281/zenodo.22904159)** (concept DOI: it always resolves to the latest version)
 * rules, to 80 digits: **[10.5281/zenodo.22881864](https://doi.org/10.5281/zenodo.22881864)** (one record for both weight families)
 * software snapshot of all five packages, v0.1.0: **[10.5281/zenodo.22883240](https://doi.org/10.5281/zenodo.22883240)**
 
-The paper is not on arXiv; do not add or look for an arXiv link. Keep the block at the top of
+Cite the paper by its arXiv identifier and its Zenodo DOI together. Keep the block at the top of
 `README.md` in step with this one, in all three packages (Quadriceps.jl, quadriceps-py, quadriceps-r).
 
 ## What this is
