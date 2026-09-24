@@ -2,8 +2,9 @@
 
 All rules are stored in one binary file, `rules.bin` (`data/rules.bin` in Quadriceps.jl,
 `src/quadriceps/data/rules.bin` in the Python package, `inst/extdata/rules.bin` in the R
-package; the three files are byte-identical). Next to it, `index.tsv` is the catalog: one line
-of metadata per rule. There are no per-rule text files.
+package, `quadriceps_rules.bin` in the Stata package; the four files are byte-identical). Next
+to it, `index.tsv` (`quadriceps_index.tsv` in the Stata package) is the catalog: one line of
+metadata per rule. There are no per-rule text files.
 
 The format, `QUADRICEPS1`, is the `GHBEST1` layout of the designed-quadrature project
 (`bestknown_gh/NOTES.md` §7 there) with a family field added to the index. It is specified
@@ -106,8 +107,8 @@ catalog: `family`, `d`, `p`, `n`, `relerr128` (largest relative monomial error o
 rule, measured in wider arithmetic; the machine epsilon of the format is `2^-112 ≈ 1.93e-34`),
 `extendedfile` and `sha256`, which name the deposit's 80-digit file the numbers were rounded from
 (`rules_extended/` in the Zenodo archive) and give its SHA-256, and `relerr80`, the deposit's
-measured error of that 80-digit rule. The Julia package reads these files; the Python and R
-packages do not ship them.
+measured error of that 80-digit rule. The Julia package reads these files; the Python, R and
+Stata packages do not ship them.
 
 ## Eighty digits: `rules80.bin`
 

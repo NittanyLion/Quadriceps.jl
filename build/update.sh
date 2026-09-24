@@ -13,8 +13,9 @@
 #   3. if files changed: runs the test suite; on success commits and pushes, on failure
 #      restores the tree and notifies;
 #   4. carries the data (and RULES.md, FORMAT.md, NOTICE.md, the README's credits block) into the
-#      sibling Python and R packages (../quadriceps-py,
-#      ../quadriceps-r) when they exist: copy, run their tests, commit, push.
+#      sibling Python, R and Stata packages (../quadriceps-py, ../quadriceps-r,
+#      ../quadriceps-stata) when they exist: copy, run their tests, commit, push. The Stata
+#      package has no tests that can run here (no Stata), so its copy is committed untested.
 #
 # Run it on ONE machine only (it needs the project's sync folder; the bank is the same
 # everywhere, and two machines would race to push the same commit).
@@ -73,13 +74,20 @@ if ! clean "$PKG"; then
 fi
 
 # Sibling packages: same data, their own tests.  sibling <dir> <data dir inside it> <test command…>
+# A data dir of "-" means flat files at the package root under the package's own names (Stata:
+# net install has no subdirectories, so the files are quadriceps_rules.bin and quadriceps_index.tsv).
 sibling() {
   local dir=$1 data=$2; shift 2
   [ -d "$dir/.git" ] || return 0
   clean "$dir" || { say "$dir: working tree not clean; skipped"; return 0; }
   git -C "$dir" pull -q --ff-only || { notify "git pull failed in $dir"; return 1; }
-  mkdir -p "$dir/$data"
-  rsync -a --delete --exclude rules128.bin --exclude rules80.bin --exclude index128.tsv "$PKG/data/" "$dir/$data/"   # beyond double precision: Julia only
+  if [ "$data" = "-" ]; then
+    cp "$PKG/data/rules.bin" "$dir/quadriceps_rules.bin"
+    cp "$PKG/data/index.tsv" "$dir/quadriceps_index.tsv"
+  else
+    mkdir -p "$dir/$data"
+    rsync -a --delete --exclude rules128.bin --exclude rules80.bin --exclude index128.tsv "$PKG/data/" "$dir/$data/"   # beyond double precision: Julia only
+  fi
   sed 's|(credits.md)|(NOTICE.md)|' "$PKG/docs/src/rules.md" > "$dir/RULES.md"
   sed -e 's|(credits.md)|(NOTICE.md)|' -e 's|^# Data format|# Data format of rules.bin|' "$PKG/docs/src/format.md" > "$dir/FORMAT.md"
   cp "$PKG/NOTICE.md" "$dir/NOTICE.md"
@@ -103,4 +111,5 @@ sibling() {
 }
 sibling "$PKG/../quadriceps-py" src/quadriceps/data python3 -m pytest -q
 sibling "$PKG/../quadriceps-r"  inst/extdata        Rscript tests/run_tests.R
+sibling "$PKG/../quadriceps-stata" -                 true                        # no Stata here: committed untested
 say "done"

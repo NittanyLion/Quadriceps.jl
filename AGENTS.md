@@ -12,7 +12,7 @@ on arXiv as **[arXiv:2609.26840](https://arxiv.org/abs/2609.26840)** and deposit
 * software snapshot of all five packages, v0.1.0: **[10.5281/zenodo.22883240](https://doi.org/10.5281/zenodo.22883240)**
 
 Cite the paper by its arXiv identifier and its Zenodo DOI together. Keep the block at the top of
-`README.md` in step with this one, in all three packages (Quadriceps.jl, quadriceps-py, quadriceps-r).
+`README.md` in step with this one, in all four packages (Quadriceps.jl, quadriceps-py, quadriceps-r, quadriceps-stata).
 
 ## What this is
 
@@ -32,7 +32,7 @@ code is small; it looks rules up, builds tensor products when asked, and checks 
 | `src/verify.jl` | `exactness_error`: largest relative monomial error against closed-form moments |
 | `data/rules.bin`, `data/index.tsv` | all rules in one binary file, and their catalog — **generated, never edited by hand**; format in `docs/src/format.md` |
 | `build/build_data.jl` | regenerates `data/`, `docs/src/rules.md` and the generated blocks of `README.md` from the rule bank (own environment in `build/`) |
-| `build/update.sh` | the unattended updater (hourly cron on one machine): rebuild, test, commit, push, then sync the sister packages `../quadriceps-py` and `../quadriceps-r` |
+| `build/update.sh` | the unattended updater (hourly cron on one machine): rebuild, test, commit, push, then sync the sister packages `../quadriceps-py`, `../quadriceps-r` and `../quadriceps-stata` |
 | `docs/` | Documenter.jl site (own environment); `docs/src/rules.md` is generated |
 | `test/runtests.jl` | checks every stored rule, both conventions, the fallback, the error paths |
 | `NOTICE.md` | third-party credit and the MIT notice that travels with the derived rules |
@@ -82,9 +82,11 @@ only on the author's machines; everything else works from a plain clone.
   change `build/build_data.jl` and rerun it. The bank changes over time and `build/update.sh`
   commits the changes by itself, so never write a node count of a non-minimal rule into prose:
   put it in a generated block (README) or compute it in an `@eval`/`@repl` block (docs).
-* This package is the master copy for the Python and R twins (`../quadriceps-py`,
-  `../quadriceps-r`); their data, `RULES.md` and `NOTICE.md` are copied from here. Change
-  behavior in all three together.
+* This package is the master copy for the Python, R and Stata twins (`../quadriceps-py`,
+  `../quadriceps-r`, `../quadriceps-stata`); their data, `RULES.md` and `NOTICE.md` are copied
+  from here. Change behavior in all four together. The Stata twin cannot be tested here (no
+  Stata); its data files carry the package's name (`quadriceps_rules.bin`, `quadriceps_index.tsv`)
+  because `net install` flattens directories.
 * A rule is stored only if it has fewer nodes than every tensor product of lower-dimensional
   stored rules and Gauss rules, or attains Möller's bound. The bank's own tensor fills stay out.
 * Credit: the `origin` of a rule comes from the project's `rules/literature.tsv` (transcribed,
