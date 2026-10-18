@@ -38,9 +38,10 @@ esac
 exec 9>"$STATE/lock"; flock -n 9 || exit 0
 exec >>"$LOG" 2>&1
 say()    { echo "$(date '+%F %T') $*"; }
-notify() { say "NOTIFY: $*"
-           DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus} \
-             notify-send -u critical "Quadriceps update" "$*" 2>/dev/null || true; }
+# 2026-10-14 (user: "please turn off all these Quadriceps gnome panel notifications"):
+# notify() is LOG-ONLY — no notify-send, no desktop popup, on any machine.  Read the
+# NOTIFY lines in $LOG instead (they repeat hourly while a condition persists).
+notify() { say "NOTIFY: $*"; }
 
 # Released Julia only: the project's launcher picks the newest 1.13.x; fall back to juliaup's default.
 J=$(bash "$SYNC/project/julia/symq_julia.sh" 2>/dev/null | tail -1)
