@@ -29,7 +29,7 @@ stored here, the smallest positive-weight rules known to the author, do it with 
 
 | `d` | GH | largest GH rule | Le | largest Le rule |
 |---|---|---|---|---|
-| 2 | `q ≤ 17` (`p ≤ 33`) | 208 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
+| 2 | `q ≤ 17` (`p ≤ 33`) | 198 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
 | 3 | `q ≤ 17` (`p ≤ 33`) | 2226 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
 | 4 | `q ≤ 12` (`p ≤ 23`) | 3238 nodes | `q ≤ 12` (`p ≤ 23`) | 3244 nodes |
 | 5 | `q ≤ 11` (`p ≤ 21`) | 13199 nodes | `q ≤ 11` (`p ≤ 21`) | 10984 nodes |
@@ -183,8 +183,8 @@ and the [data format](https://NittanyLion.github.io/Quadriceps.jl/dev/format.htm
 ## Whose rules these are
 
 <!-- BEGIN GENERATED credits -->
-116 of the 142 rules were computed from scratch by the author. A further 11 (Legendre) rules were
-obtained by node elimination started from Diallo and Worku's published rules. Finally, 15 are
+115 of the 142 rules were computed from scratch by the author. A further 11 (Legendre) rules were
+obtained by node elimination started from Diallo and Worku's published rules. Finally, 16 are
 rules from the literature (copied in, or found again by the author's search and recognized).
 <!-- END GENERATED credits -->
 `Quadriceps.ruleinfo` and the

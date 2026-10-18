@@ -16,14 +16,14 @@ gh	2	23	97	84	7.086e-16	4.220105e-13	yes	own	0	hermite_d2_p23_n97.csv	0fc954146c
 gh	2	25	114	97	7.720e-16	9.411532e-11	yes	own	0	hermite_d2_p25_n114.csv	7cf8815f10256c632e948a242dab9abc6f196fdf319c56817157dba85fa690f4
 gh	2	27	132	112	1.018e-15	3.993119e-15	yes	own	0	hermite_d2_p27_n132.csv	8081ec57041435e3d2d3b52963ea9596e3a9c55dd6896797c83247b812514887
 gh	2	29	153	127	1.080e-15	3.739485e-14	yes	own	0	hermite_d2_p29_n153.csv	92cd3b6cc13cdd69e84f9f1d21a9b8800acae895e370bdd3ee6e613b310cba56
-gh	2	31	178	144	6.176e-16	2.977893e-13	yes	own	0	hermite_d2_p31_n178.csv	5f12c5b2bbab3b797cd3e928ca7a1de8b513d7f75869e5d85da0e090e02be0f0
-gh	2	33	208	161	1.119e-15	2.691462e-13	yes	own	0	hermite_d2_p33_n208.csv	abe920b042a5b8b3200c093009c3b458d0ca2fcc8db34cbeae2c2c8cf56b965d
+gh	2	31	172	144	8.890e-16	1.399907e-12	yes	own	0	hermite_d2_p31_n172.csv	0dd4ea3215e82e65a47018cb6333368b3d821a73ec78e5c7b63750b22e41737c
+gh	2	33	198	161	7.892e-16	4.860045e-13	yes	own	0	hermite_d2_p33_n198.csv	1fe2438eef9b02d50ca08337c251ab84ed21f91ee06c5e7d8176434ae6805c09
 gh	3	1	1	1	0.000e+00	1.000000e+00	yes	own	0	hermite_d3_p1_n1.csv	942a59f571ad2c25936dea810d597465c58902cdeb06fc0c5a205fb507043cf5
 gh	3	3	6	6	2.776e-17	1.491498e-01	yes	own	0	hermite_d3_p3_n6.csv	d9ccff33815cd7e17fa192800d4dc5a858df5242c47260102cdeff9ac0df0b7f
 gh	3	5	13	13	2.220e-16	5.000000e-02	yes	transcribed: Stroud 1971, icosahedral (closed form)	10	hermite_d3_p5_n13.csv	eeb90a7a85fec610f52dcaf183915b8b1ece5f17145bfae4a5f286d2407a5b0c
 gh	3	7	27	26	4.441e-16	5.195469e-04	yes	same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1)	10	hermite_d3_p7_n27.csv	0399820a930c4d446c2cd7428d7d4402a46d5cd0f95f7af40510ab4cb6faa4e9
 gh	3	9	45	43	2.999e-16	4.629630e-04	yes	same-rule: Konyaev 1977, rule 1 for the weight exp(-rho^2) (identified 2026-09-16 against the closed form printed in Dokl. Akad. Nauk SSSR 233 no. 5, 784-787; same up to rotation, node displacement 9.7e-16)	15	hermite_d3_p9_n45.csv	3e7085dfc28c4d5c5c4f2280aeef23abea7143d894f53ba9972020eeadb44c54
-gh	3	11	77	68	7.895e-16	1.239467e-07	yes	own	0	hermite_d3_p11_n77.csv	eabda338e4d7535cf99dc8411c73dae7ccec9c5508d47b5e0f8ee203eda1bad4
+gh	3	11	77	68	7.895e-16	1.239467e-07	yes	same-rule: Beckers and Haegemans 1986 (Report TW 85, KU Leuven) / Beckers 1992 (PhD thesis), ECF e3r2-11-77 (identified 2026-10-09 against the ECF node file, B_3-canonical gap < 1e-8 after x*sqrt(2), w/pi^(3/2))	99	hermite_d3_p11_n77.csv	eabda338e4d7535cf99dc8411c73dae7ccec9c5508d47b5e0f8ee203eda1bad4
 gh	3	13	128	99	4.932e-16	2.264376e-06	yes	own	0	hermite_d3_p13_n128.csv	d2c6565f200fff152c43fba71483f9ee0a4fc89a1cb65a8d4f23ef3d71a8326b
 gh	3	15	184	140	6.015e-16	3.411525e-13	yes	own	0	hermite_d3_p15_n184.csv	433fe520341ff5d9173ea16d05c547f66acf421d9874eac5717da766b72f2a41
 gh	3	17	264	189	6.461e-16	3.913587e-09	yes	own	0	hermite_d3_p17_n264.csv	23e348ced37fca8bcfd7407e52289d6dbddcfc1b32f84a6e7f5aba5f2eaa652d

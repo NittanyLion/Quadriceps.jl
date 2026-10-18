@@ -24,6 +24,10 @@ derived files.
 
 ## Sources of the stored rules
 
+* M. Beckers and A. Haegemans, Construction of three-dimensional invariant cubature formulae,
+  Report TW 85, Department of Computer Science, Katholieke Universiteit Leuven (1986); node
+  file `e3r2-11-77` of Cools' Encyclopaedia of Cubature Formulas. — GH ``d = 3``, ``p = 11``
+  (the author's search re-found it; identified node for node on 2026-10-09).
 * R. Cools and A. Haegemans, Another step forward in searching for cubature formulae with a
   minimal number of knots for the square, *Computing* **40** (1988) 139–146; and Construction
   of symmetric cubature formulae with the number of knots (almost) equal to Möller's lower
@@ -46,7 +50,7 @@ derived files.
   ``p = 9``.
 * J. Pinkse, Positive weight Hermite and Legendre quadrature rules (2026), arXiv:2609.26840, Zenodo, DOI 10.5281/zenodo.22904159;
   the rules to 80 digits are deposited at Zenodo, DOI 10.5281/zenodo.22881864. — Every rule
-  whose origin is `own` (116 of the 142: all cells not listed under another source), and the
+  whose origin is `own` (115 of the 142: all cells not listed under another source), and the
   eleven Le rules whose origin is `derived` — ``d = 2``, ``p = 77`` and ``d = 3``,
   ``p = 27, 29, …, 45`` — where the author's node elimination started from Diallo and Worku's
   published rule for the same cell and went below its node count: the count is the author's,

@@ -28,8 +28,8 @@ published rule it is, or descends from (see [Credits](credits.md)).
 | 13 | 25 | 114 | 0.82 | 97 | 7.7e-16 | own |
 | 14 | 27 | 132 | 0.82 | 112 | 1.0e-15 | own |
 | 15 | 29 | 153 | 0.82 | 127 | 1.1e-15 | own |
-| 16 | 31 | 178 | 0.83 | 144 | 6.2e-16 | own |
-| 17 | 33 | 208 | 0.85 | 161 | 1.1e-15 | own |
+| 16 | 31 | 172 | 0.82 | 144 | 8.9e-16 | own |
+| 17 | 33 | 198 | 0.83 | 161 | 7.9e-16 | own |
 
 ### d = 3
 
@@ -40,7 +40,7 @@ published rule it is, or descends from (see [Credits](credits.md)).
 | 3 | 5 | **13** | 0.78 | 13 | 2.2e-16 | transcribed: Stroud 1971, icosahedral (closed form) |
 | 4 | 7 | 27 | 0.75 | 26 | 4.4e-16 | same-rule: Stroud 1971, E_n^{r^2}:7-1 option 1 (identified 2026-09-11 vs Burkardt en_r2_07_1) |
 | 5 | 9 | 45 | 0.71 | 43 | 3.0e-16 | same-rule: Konyaev 1977, rule 1 for the weight exp(-rho^2) (identified 2026-09-16 against the closed form printed in Dokl. Akad. Nauk SSSR 233 no. 5, 784-787; same up to rotation, node displacement 9.7e-16) |
-| 6 | 11 | 77 | 0.71 | 68 | 7.9e-16 | own |
+| 6 | 11 | 77 | 0.71 | 68 | 7.9e-16 | same-rule: Beckers and Haegemans 1986 (Report TW 85, KU Leuven) / Beckers 1992 (PhD thesis), ECF e3r2-11-77 (identified 2026-10-09 against the ECF node file, B_3-canonical gap < 1e-8 after x*sqrt(2), w/pi^(3/2)) |
 | 7 | 13 | 128 | 0.72 | 99 | 4.9e-16 | own |
 | 8 | 15 | 184 | 0.71 | 140 | 6.0e-16 | own |
 | 9 | 17 | 264 | 0.71 | 189 | 6.5e-16 | own |
