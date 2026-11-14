@@ -84,7 +84,7 @@ published rule it is, or descends from (see [Credits](credits.md)).
 | 8 | 15 | 1767 | 0.56 | 992 | 1.3e-15 | own |
 | 9 | 17 | 3754 | 0.58 | 1581 | 2.2e-15 | own |
 | 10 | 19 | 6854 | 0.59 | 2422 | 3.7e-15 | own |
-| 11 | 21 | 13199 | 0.61 | 3583 | 5.1e-15 | own |
+| 11 | 21 | 10757 | 0.58 | 3583 | 5.4e-15 | own |
 
 ## Le — uniform weight on the cube
 
