@@ -29,7 +29,7 @@ stored here, the smallest positive-weight rules known to the author, do it with 
 
 | `d` | GH | largest GH rule | Le | largest Le rule |
 |---|---|---|---|---|
-| 2 | `q ≤ 17` (`p ≤ 33`) | 198 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
+| 2 | `q ≤ 17` (`p ≤ 33`) | 194 nodes | `q ≤ 39` (`p ≤ 77`) | 1032 nodes |
 | 3 | `q ≤ 17` (`p ≤ 33`) | 2226 nodes | `q ≤ 23` (`p ≤ 45`) | 4308 nodes |
 | 4 | `q ≤ 12` (`p ≤ 23`) | 3238 nodes | `q ≤ 12` (`p ≤ 23`) | 3244 nodes |
 | 5 | `q ≤ 11` (`p ≤ 21`) | 13199 nodes | `q ≤ 11` (`p ≤ 21`) | 10984 nodes |
